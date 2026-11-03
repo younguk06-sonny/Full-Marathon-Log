@@ -162,6 +162,30 @@
 .mx .fold[open] .fb:after{transform:translateY(1px) rotate(-135deg)}
 .mx .fold .c,.mx .fold[open] .o{display:none}
 .mx .fold[open] .c{display:inline}
+.mx .def{margin:8px 0 0;font-size:11.5px;line-height:1.5;color:var(--rb-muted)}
+.mx .zones{margin-top:8px;font-size:11px;color:var(--rb-muted)}
+.mx .zones .zr{display:grid;grid-template-columns:repeat(5,1fr);gap:3px;margin-bottom:6px}
+.mx .zones .zc{border-radius:6px;padding:3px 2px;min-width:0;overflow-wrap:anywhere;text-align:center;line-height:1.25;background:var(--rb-bg);border:1px solid transparent}
+.mx .zones .zc i{display:block;height:4px;border-radius:2px;margin:0 2px 3px}
+.mx .zones .zc.me{border-color:var(--rb-ink);color:var(--rb-ink);font-weight:700}
+.mx .zones .zme{color:var(--rb-ink2)}
+.mx .zones .zme b{color:var(--rb-ink)}
+.mx .formula{display:inline-block;margin:6px 0;padding:4px 10px;border-radius:8px;background:var(--rb-bg);color:var(--rb-ink);font-size:14px;font-weight:700}
+.mx .goalin select{font:inherit;font-size:15px;font-weight:700;padding:6px 10px;border:1px solid var(--rb-line);border-radius:10px;background:var(--rb-bg);color:var(--rb-ink);min-width:8rem}
+.mx .goalin .rg-custom{display:none}
+.mx .goalin .rg-custom.show{display:flex}
+.mx .rg-presets{display:flex;flex-wrap:wrap;gap:6px;margin:-4px 0 12px}
+.mx .rg-presets button{font:inherit;font-size:12.5px;border:1px solid var(--rb-line);background:var(--rb-card);color:var(--rb-ink2);padding:5px 10px;border-radius:999px;cursor:pointer}
+.mx .rg-out{display:grid;gap:10px;grid-template-columns:repeat(3,minmax(0,1fr))}
+.mx .rg-out .card{padding:12px 14px;box-shadow:none;background:var(--rb-bg)}
+.mx .rg-out .card.main{background:color-mix(in srgb,var(--rb-accent) 10%,var(--rb-card));border-color:color-mix(in srgb,var(--rb-accent) 35%,var(--rb-line2))}
+.mx .rg-out .card.main .big{color:var(--rb-accent)}
+.mx .rg-note{margin-top:10px;font-size:12px;color:var(--rb-muted)}
+.mx .rg-note b{color:var(--rb-ink)}
+@media (max-width:600px){.mx .rg-out{gap:6px}.mx .rg-out .card{padding:10px 8px}.mx .rg-out .big{font-size:18px}.mx .rg-out .lbl{font-size:10.5px}.mx .rg-out .sub2{font-size:10.5px}.mx .goalin select{width:100%;min-width:0}.mx .goalin label:last-child{grid-column:1/-1}}
+.mx .pseg{display:inline-flex;align-self:flex-start;background:var(--rb-card);border:1px solid var(--rb-line);border-radius:12px;padding:3px;gap:2px}
+.mx .pseg button{font:inherit;border:0;background:transparent;padding:7px 16px;border-radius:9px;cursor:pointer;font-size:14px;font-weight:650;color:var(--rb-ink2)}
+.mx .pseg button.on{background:var(--rb-accent);color:#fff}
 </style>
 </head>
 <body>
@@ -172,7 +196,11 @@
   <header>
     <div class="top"><span class="mark" aria-hidden="true"></span><div><h1>풀마라톤 기록 대시보드</h1><p class="sub">풀코스 · 지역 · 구간 기록을 한눈에 (Garmin 기준)</p></div></div>
   </header>
-  <p class="take">첫 풀 <b data-draw="firstTime" data-source="summary" data-field="firstTime">—</b>에서 PB <b data-draw="pbTime" data-source="summary" data-field="pbTime">—</b>까지 <b data-draw="improve" data-source="summary" data-field="improve">—</b> 단축했어요. 기록이 좋았던 날은 후반이 거의 느려지지 않았고, 서브 3:10의 열쇠는 31km 이후 페이스 유지예요.</p>
+  <div class="pseg" role="group" aria-label="러너 선택">
+    <button type="button" data-person="son" class="on">손영욱</button>
+    <button type="button" data-person="kim">김지훈</button>
+  </div>
+  <p class="take">첫 풀 <b data-draw="firstTime" data-source="summary" data-field="firstTime">—</b>에서 PB <b data-draw="pbTime" data-source="summary" data-field="pbTime">—</b>까지 <b data-draw="improve" data-source="summary" data-field="improve">—</b> 단축했어요. <span data-only="son">기록이 좋았던 날은 후반이 거의 느려지지 않았고, 서브 3:10의 열쇠는 31km 이후 페이스 유지예요.</span><span data-only="kim" hidden>네 번 모두 후반이 거의 느려지지 않은 이븐 페이스 러너이고, 케이던스와 보폭이 함께 늘면서 기록이 빨라졌어요.</span></p>
 
   <nav class="qnav" aria-label="바로가기">
     <button type="button" data-go="kpis" class="on">요약·지역</button>
@@ -181,7 +209,7 @@
     <button type="button" data-go="races">대회별 상세기록</button>
         <button type="button" data-go="trend">추이</button>
     <button type="button" data-go="pacing">후반 유지력</button>
-    <button type="button" data-go="course">같은 코스</button>
+    <button type="button" data-go="course" data-only="son">같은 코스</button>
     <button type="button" data-go="dynamics">다이내믹스</button>
     <button type="button" data-go="goal">목표 페이스</button>
   </nav>
@@ -195,7 +223,7 @@
     </div>
     <div class="tiles side">
       <div class="card tile pb"><div class="lbl">풀 PB (공식)</div><div class="big" data-draw="pbOfficial" data-source="summary" data-field="pbOfficial">—</div><div class="sub2"><span data-draw="pbRace" data-source="summary" data-field="pbRace">—</span> · 워치 <span data-draw="pbTime2" data-source="summary" data-field="pbWatch">—</span></div></div>
-      <div class="card tile"><div class="lbl">완주</div><div class="big"><span data-draw="count" data-source="summary" data-field="count">—</span>회</div><div class="sub2">2024년 10월부터</div></div>
+      <div class="card tile"><div class="lbl">완주</div><div class="big"><span data-draw="count" data-source="summary" data-field="count">—</span>회</div><div class="sub2" data-draw="since" data-source="summary" data-field="since">—</div></div>
       <div class="card tile"><div class="lbl">첫 풀 대비 단축</div><div class="big" data-draw="improve2" data-source="summary" data-field="improve">—</div><div class="sub2">첫 풀 <span data-draw="firstTime2" data-source="summary" data-field="firstTime">—</span></div></div>
       <div class="card tile"><div class="lbl">최근 대회</div><div class="big" data-draw="latestTime" data-source="summary" data-field="latestTime">—</div><div class="sub2"><span data-draw="latestRace" data-source="summary" data-field="latestRace">—</span> · 같은 코스 직전 대비 <span data-draw="latestVs" data-source="summary" data-field="latestVsCourse">—</span></div></div>
     </div>
@@ -224,9 +252,9 @@
 
   <section class="card" id="all">
     <h2>전체 출전 기록</h2>
-    <p class="note">지금까지 출전한 풀마라톤 전부. 공식 기록은 기록증 기준, 페이스와 나머지 지표는 워치 기준이에요.</p>
+    <p class="note">지금까지 출전한 풀마라톤 전부. <span data-only="son">공식 기록은 대회 기록증 기준, 페이스와 나머지 지표는 워치 기준이에요.</span><span data-only="kim" hidden>공식 기록은 대회 기록증 기준, 페이스와 나머지 지표는 워치 기준이에요. 공원사랑은 기록증 기록이 워치 기록보다 꽤 길어요. 출발 신호부터 잰 기록이거나 중간 정지 시간이 포함된 것으로 보여요.</span></p>
     <div class="tbox">
-      <table data-source="allRaces" data-row-key="date">
+      <table data-source="allRaces" data-row-key="person,date">
         <thead><tr>
           <th data-field="date">날짜</th><th data-field="no">회차</th><th data-field="name">대회명</th><th data-field="city">도시</th>
           <th data-field="official">공식 기록</th><th data-field="pace">페이스</th>
@@ -243,7 +271,7 @@
     <h2>대회별 상세기록</h2>
     <p class="note">공식 기록과 워치 기준 전·후반(21.1km 지점) 분할, 30km 전후 페이스.</p>
     <div class="tbox">
-      <table data-source="raceStats" data-row-key="race">
+      <table data-source="raceStats" data-row-key="person,race">
         <thead><tr>
           <th data-field="race">대회</th><th data-field="pb"></th><th data-field="official">공식 기록</th><th data-field="time" class="opt">워치</th><th data-field="pace">페이스</th>
           <th data-field="firstHalf" class="opt">전반</th><th data-field="secondHalf" class="opt">후반</th><th data-field="fade">후반 둔화/km</th>
@@ -266,12 +294,12 @@
   <section id="pacing">
     <div class="card">
       <h2>후반 유지력</h2>
-      <p class="note">전반 대비 후반 페이스가 km당 몇 초 느려졌는지. 둔화가 가장 작았던 <b data-draw="evenRaces" data-source="insights" data-field="evenRaces">—</b>는 모두 <b data-draw="evenMax" data-source="insights" data-field="evenMax">—</b> 이내였고, 가장 컸던 <b data-draw="worstRace" data-source="insights" data-field="worstRace">—</b>는 <b data-draw="worstFade" data-source="insights" data-field="worstFade">—</b>였어요. 점선은 +<span data-draw="even">—</span>초 기준선이에요.</p>
+      <p class="note">전반 대비 후반 페이스가 km당 몇 초 느려졌는지. 둔화가 가장 작았던 세 대회(<b data-draw="evenRaces" data-source="insights" data-field="evenRaces">—</b>)는 모두 <b data-draw="evenMax" data-source="insights" data-field="evenMax">—</b> 이내였고, 가장 컸던 <b data-draw="worstRace" data-source="insights" data-field="worstRace">—</b>는 <b data-draw="worstFade" data-source="insights" data-field="worstFade">—</b>였어요. 점선은 +<span data-draw="even">—</span>초 기준선이에요.</p>
       <div class="chart dash-skeleton" data-draw="fadeChart" data-source="raceStats"></div>
     </div>
   </section>
 
-  <section class="card" id="course">
+  <section class="card" id="course" data-only="son">
     <h2>같은 코스 비교</h2>
     <p class="note">같은 코스를 뛴 대회끼리 1km 랩 페이스(위가 빠름)와 5km 구간, 누적, 직전 대비 차이, 누적 단축을 비교해요.</p>
     <div class="seg" role="group" aria-label="코스 선택">
@@ -297,7 +325,8 @@
 
   <section id="dynamics">
     <h2>러닝 다이내믹스</h2>
-    <p class="note">대회별 평균값 추이. 케이던스는 <b data-draw="cadRange" data-source="insights" data-field="cadRange">—</b>로 거의 그대로인데, 보폭은 <b data-draw="strideFirst" data-source="insights" data-field="strideFirst">—</b>에서 PB 때 <b data-draw="stridePb" data-source="insights" data-field="stridePb">—</b>까지 늘었어요. 빨라진 건 보폭 덕분이에요.</p>
+    <p class="note" data-only="kim" hidden>대회별 평균값 추이. 케이던스는 <b data-draw="cadFirst" data-source="insights" data-field="cadFirst">—</b>에서 PB 때 <b data-draw="cadPb" data-source="insights" data-field="cadPb">—</b>로, 보폭은 <b data-draw="strideFirst2" data-source="insights" data-field="strideFirst">—</b>에서 <b data-draw="stridePb2" data-source="insights" data-field="stridePb">—</b>로 둘 다 늘었어요. 피치와 보폭이 함께 좋아지며 빨라진 경우예요.</p>
+    <p class="note" data-only="son">대회별 평균값 추이. 케이던스는 <b data-draw="cadRange" data-source="insights" data-field="cadRange">—</b>로 거의 그대로인데, 보폭은 <b data-draw="strideFirst" data-source="insights" data-field="strideFirst">—</b>에서 PB 때 <b data-draw="stridePb" data-source="insights" data-field="stridePb">—</b>까지 늘었어요. 빨라진 건 보폭 덕분이에요.</p>
     <p class="def" style="margin:-4px 0 12px">색 구간은 가민이 여러 수준의 러너를 조사해 만든 백분위 기준이에요. 빨강·주황은 경험이 적거나 느린 러너에게, 초록·파랑·보라는 숙련되거나 빠른 러너에게 흔한 값이에요. 수직 진폭·수직 비율 기준은 가슴 심박계(HRM-Pro·HRM-Run 등) 값이고, 허리에 차는 러닝 다이내믹스 포드는 조금 높게 잡혀요. 키가 큰 러너는 케이던스가 약간 낮고 보폭·수직 진폭이 약간 큰 편이에요.</p>
     <div class="grid dyn">
       <div class="card"><h3>케이던스 (spm)</h3><div class="chart small dash-skeleton" data-draw="dyn" data-metric="cadenceSpm" data-source="races"></div>
@@ -392,9 +421,10 @@ window.mxEven = 7;
 
 dash.calc('raceStats', {
   title: '대회별 기록 요약',
-  description: '대회마다 공식 기록과 워치 기록, 21.1km 지점 전·후반 분할과 둔화, 30km 전후 페이스, 같은 코스 직전 대비 차이를 계산',
+  description: '러너별로, 대회마다 공식 기록과 워치 기록, 21.1km 지점 전·후반 분할과 둔화, 30km 전후 페이스, 같은 코스 직전 대비 차이를 계산',
   inputs: ['races', 'laps'],
-  fn: (races, laps) => {
+  fn: (racesAll, lapsAll) => [...new Set(racesAll.map((r) => r.person))].flatMap((person) => {
+    const races = racesAll.filter((r) => r.person === person), laps = lapsAll.filter((l) => l.person === person);
     const hms = (s) => { s = Math.round(s); const h = Math.floor(s / 3600), m = Math.floor((s % 3600) / 60), x = s % 60; return (h ? h + ':' + String(m).padStart(2, '0') : m) + ':' + String(x).padStart(2, '0'); };
     const ms = (s) => { s = Math.round(s); return Math.floor(s / 60) + ':' + String(s % 60).padStart(2, '0'); };
     const sgn = (s) => { const a = Math.round(Math.abs(s)); if (a === 0) return '±0'; const v = a >= 60 ? Math.floor(a / 60) + ':' + String(a % 60).padStart(2, '0') : a + '초'; return (s < 0 ? '−' : '+') + v; };
@@ -418,27 +448,29 @@ dash.calc('raceStats', {
         daysSincePrev: r.daysSincePrev, pb: isPb ? 'PB' : '',
       });
     });
-    return out;
-  },
+    return out.map((o) => ({ person, ...o }));
+  }),
 });
 
 dash.calc('summary', {
   title: '요약 수치',
-  description: '공식 기록 기준 PB, 첫 풀, 첫 풀 대비 단축, 완주 횟수, 최근 대회',
+  description: '러너별 공식 기록 기준 PB, 첫 풀, 첫 출전 시기, 첫 풀 대비 단축, 완주 횟수, 최근 대회',
   inputs: ['raceStats', 'races'],
-  fn: (raceStats, races) => {
+  fn: (statsAll, racesAll) => [...new Set(statsAll.map((r) => r.person))].flatMap((person) => {
+    const raceStats = statsAll.filter((r) => r.person === person);
     const hms = (s) => { s = Math.round(s); const h = Math.floor(s / 3600), m = Math.floor((s % 3600) / 60), x = s % 60; return (h ? h + ':' + String(m).padStart(2, '0') : m) + ':' + String(x).padStart(2, '0'); };
     const best = raceStats.reduce((a, b) => (b.officialSec < a.officialSec ? b : a));
     const first = raceStats[0], last = raceStats[raceStats.length - 1];
-    return [{ pbRace: best.race, pbTime: best.official, pbOfficial: best.official, pbWatch: best.time, firstTime: first.official, improve: hms(first.officialSec - best.officialSec), count: raceStats.length, latestRace: last.race, latestTime: last.official, latestVsCourse: last.vsCourse }];
-  },
+    return [{ person, since: first.date.slice(0, 4) + '년 ' + Number(first.date.slice(5, 7)) + '월부터', pbRace: best.race, pbTime: best.official, pbOfficial: best.official, pbWatch: best.time, firstTime: first.official, improve: hms(first.officialSec - best.officialSec), count: raceStats.length, latestRace: last.race, latestTime: last.official, latestVsCourse: last.vsCourse }];
+  }),
 });
 
 dash.calc('insights', {
   title: '인사이트 수치',
   description: '달린 시·도와 도시 수, 가장 많이 나간 도시, 후반 둔화가 가장 작은 세 대회와 가장 큰 대회, 대회 간격별 직전 대비 평균, 보폭·케이던스 변화, PB 대회 30km 전후 페이스',
   inputs: ['raceStats', 'races'],
-  fn: (raceStats, races) => {
+  fn: (statsAll, racesAll) => [...new Set(statsAll.map((r) => r.person))].flatMap((person) => {
+    const raceStats = statsAll.filter((r) => r.person === person), races = racesAll.filter((r) => r.person === person);
     const sgn = (s) => { const a = Math.round(Math.abs(s)); if (a === 0) return '±0'; const v = a >= 60 ? Math.floor(a / 60) + ':' + String(a % 60).padStart(2, '0') : a + '초'; return (s < 0 ? '−' : '+') + v; };
     const byFade = raceStats.slice().sort((a, b) => a.fadeSec - b.fadeSec);
     const top3 = byFade.slice(0, 3), worst = byFade[byFade.length - 1];
@@ -448,6 +480,7 @@ dash.calc('insights', {
     const bestRace = races.find((r) => r.race === best.race);
     const cad = races.map((r) => r.cadenceSpm);
     return [{
+      person, cadFirst: sorted[0].cadenceSpm + 'spm', cadPb: bestRace.cadenceSpm + 'spm',
       evenRaces: top3.map((r) => r.race).join(' · '), evenMax: '+' + Math.max(...top3.map((r) => r.fadeSec)).toFixed(1) + '초',
       worstRace: worst.race, worstFade: worst.fade, gap21: gap(21), gap28: gap(28),
       strideFirst: sorted[0].strideM.toFixed(2) + 'm', stridePb: bestRace.strideM.toFixed(2) + 'm',
@@ -455,14 +488,15 @@ dash.calc('insights', {
       sidoCount: new Set(races.map((r) => r.sido)).size, cityCount: new Set(races.map((r) => r.city)).size,
       topCity: (() => { const m = {}; races.forEach((r) => { m[r.city] = (m[r.city] || 0) + 1; }); const k = Object.keys(m).sort((a, b) => m[b] - m[a])[0]; return k + ' ' + m[k] + '회'; })(),
     }];
-  },
+  }),
 });
 
 dash.calc('regions', {
   title: '지역별 출전 기록',
   description: '도시별 출전 횟수, 대회 목록, 그 도시의 최고 기록과 위치',
   inputs: ['races', 'raceStats'],
-  fn: (races, raceStats) => {
+  fn: (racesAll, statsAll) => [...new Set(racesAll.map((r) => r.person))].flatMap((person) => {
+    const races = racesAll.filter((r) => r.person === person), raceStats = statsAll.filter((r) => r.person === person);
     const out = {};
     races.slice().sort((a, b) => a.n - b.n).forEach((r) => {
       const s = raceStats.find((x) => x.race === r.race);
@@ -471,23 +505,26 @@ dash.calc('regions', {
       o.detail.push(r.race + '  ' + s.official);
       if (s.officialSec < o.bestSec) { o.bestSec = s.officialSec; o.best = s.official; }
     });
-    return Object.values(out).sort((a, b) => b.count - a.count).map((o) => ({ ...o, races: o.races.join(' · '), detail: o.detail.join('|') }));
-  },
+    return Object.values(out).sort((a, b) => b.count - a.count).map((o) => ({ person, ...o, races: o.races.join(' · '), detail: o.detail.join('|') }));
+  }),
 });
 
 dash.calc('allRaces', {
   title: '전체 출전 기록',
   description: '대회마다 날짜, 대회명, 도시, 배번, 공식 기록, 워치 기록, 페이스, 심박, 파워, 상승, 기온, 걷기, 신발, 메모와 기록증',
   inputs: ['races', 'raceStats'],
-  fn: (races, raceStats) => races.slice().sort((a, b) => b.n - a.n).map((r) => {
+  fn: (racesAll, statsAll) => [...new Set(racesAll.map((r) => r.person))].flatMap((person) => {
+    const races = racesAll.filter((r) => r.person === person), raceStats = statsAll.filter((r) => r.person === person);
+    return races.slice().sort((a, b) => b.n - a.n).map((r) => {
     const s = raceStats.find((x) => x.race === r.race);
     return {
-      date: r.date.slice(2).replace(/-/g, '.'), race: r.race, no: r.n + '번째', name: r.name, city: r.city, bib: r.bib || '–',
+      person, date: r.date.slice(2).replace(/-/g, '.'), race: r.race, no: r.n + '번째', name: r.name, city: r.city, bib: r.bib || '–',
       official: s.official, time: s.time, pace: s.pace + '/km', dist: r.distKm.toFixed(2) + 'km',
       hr: r.avgHr + '/' + r.maxHr, power: r.powerW + 'W', ascent: r.ascentM + 'm',
       temp: r.tempStartC + '℃' + (r.tempAvgC != null ? ' / ' + r.tempAvgC + '℃' : ''), walk: r.walkSec + '초', shoe: r.shoe, memo: r.memo,
       certUrl: r.certUrl || '', pb: s.pb,
     };
+    });
   }),
 });
 
@@ -495,7 +532,8 @@ dash.calc('courseTable', {
   title: '같은 코스 5km 구간 비교',
   description: '같은 코스를 두 번 이상 뛴 대회의 5km 구간, 누적, 직전 대비 차이와 누적 단축',
   inputs: ['raceStats', 'laps'],
-  fn: (raceStats, laps) => {
+  fn: (statsAll, lapsAll) => [...new Set(statsAll.map((r) => r.person))].flatMap((person) => {
+    const raceStats = statsAll.filter((r) => r.person === person), laps = lapsAll.filter((l) => l.person === person);
     const hms = (s) => { s = Math.round(s); const h = Math.floor(s / 3600), m = Math.floor((s % 3600) / 60), x = s % 60; return (h ? h + ':' + String(m).padStart(2, '0') : m) + ':' + String(x).padStart(2, '0'); };
     const sgn = (s) => { const a = Math.round(Math.abs(s)); if (a === 0) return '±0'; const v = a >= 60 ? Math.floor(a / 60) + ':' + String(a % 60).padStart(2, '0') : a + '초'; return (s < 0 ? '−' : '+') + v; };
     const names = ['5km', '10km', '15km', '20km', '25km', '30km', '35km', '40km', '결승'];
@@ -510,7 +548,7 @@ dash.calc('courseTable', {
       });
       const cum = segs.map((s) => { let t = 0; return s.map((v) => (t += v)); });
       names.forEach((nm, k) => {
-        const row = { course: c, seg: nm };
+        const row = { person, course: c, seg: nm };
         eds.forEach((e, i) => {
           const j = i + 1; row['split' + j] = hms(segs[i][k]); row['cum' + j] = hms(cum[i][k]);
           if (i) { row['diff' + j] = sgn(segs[i][k] - segs[i - 1][k]); row['cumDiff' + j] = sgn(cum[i][k] - cum[i - 1][k]); }
@@ -519,12 +557,18 @@ dash.calc('courseTable', {
       });
     });
     return rows;
-  },
+  }),
 });
 
-const ok = (...ids) => ids.every((id) => dash.data(id).status === 'ok');
+window.mxPerson = 'son';
+window.mxD = (id) => {
+  const r = dash.data(id);
+  if (r.status !== 'ok' || !Array.isArray(r.data) || !r.data.length || !('person' in r.data[0])) return r;
+  return Object.assign({}, r, { data: r.data.filter((x) => x.person === window.mxPerson) });
+};
+const ok = (...ids) => ids.every((id) => window.mxD(id).status === 'ok');
 window.mxOk = ok;
-const failed = (...ids) => ids.some((id) => ['error', 'connect', 'declined', 'missing'].includes(dash.data(id).status));
+const failed = (...ids) => ids.some((id) => ['error', 'connect', 'declined', 'missing'].includes(window.mxD(id).status));
 window.mxState = (el, ...ids) => {
   if (ok(...ids)) { el.classList.remove('dash-skeleton'); return true; }
   if (failed(...ids)) { el.classList.remove('dash-skeleton'); el.replaceChildren(Object.assign(document.createElement('div'), { className: 'fail', textContent: 'Failed to load' })); return false; }
@@ -534,7 +578,7 @@ window.mxState = (el, ...ids) => {
 // 3회차 열은 그 코스에 3번째 대회가 있을 때만 보이기
 dash.onData(() => {
   const c = window.mxCourse;
-  const s = dash.data('raceStats');
+  const s = window.mxD('raceStats');
   const n = s.status === 'ok' ? s.data.filter((r) => r.course === c).length : 3;
   document.querySelectorAll('#course .e3').forEach((th) => { th.hidden = n < 3; });
 });
@@ -543,10 +587,33 @@ document.querySelectorAll('#course .seg button').forEach((b) => {
   b.addEventListener('click', () => {
     window.mxCourse = b.dataset.course;
     document.querySelectorAll('#course .seg button').forEach((x) => x.classList.toggle('on', x === b));
-    const s = dash.data('raceStats');
+    const s = window.mxD('raceStats');
     const n = s.status === 'ok' ? s.data.filter((r) => r.course === window.mxCourse).length : 3;
     document.querySelectorAll('#course .e3').forEach((th) => { th.hidden = n < 3; });
     dash.draw('courseChart'); dash.draw('courseLegend'); dash.draw('courseRows'); dash.draw('edLabel');
+  });
+});
+// 러너 전환
+window.mxDraws = ['firstTime', 'firstTime2', 'pbTime', 'pbTime2', 'improve', 'improve2', 'pbOfficial', 'pbRace', 'count', 'latestTime', 'latestRace', 'latestVs', 'since',
+  'evenRaces', 'evenMax', 'worstRace', 'worstFade', 'cadRange', 'strideFirst', 'stridePb', 'cadFirst', 'cadPb', 'strideFirst2', 'stridePb2', 'sidoCount', 'cityCount', 'topCity', 'pb30', 'pb31',
+  'map', 'trendChart', 'fadeChart', 'courseChart', 'courseLegend', 'courseRows', 'edLabel', 'dyn', 'zones', 'raceRows', 'allRows', 'goal', 'rgPresets', 'riegel'];
+window.mxGoalDefault = { son: ['3:09:59', '42.45'], kim: ['2:59:59', '42.41'] };
+document.querySelectorAll('.mx .pseg button').forEach((b) => {
+  b.addEventListener('click', () => {
+    const p = b.dataset.person; if (p === window.mxPerson) return;
+    window.mxPerson = p;
+    document.querySelectorAll('.mx .pseg button').forEach((x) => x.classList.toggle('on', x === b));
+    document.querySelectorAll('[data-only]').forEach((el) => { el.hidden = el.dataset.only !== p; });
+    const g = window.mxGoalDefault[p];
+    document.querySelectorAll('#mx-goal').forEach((i) => { i.value = g[0]; });
+    document.querySelectorAll('#mx-dist').forEach((i) => { i.value = g[1]; });
+    const o = window.mxD('otherPbs'), ten = o.status === 'ok' ? o.data.find((x) => x.event === '10km') : null;
+    if (ten) {
+      document.querySelectorAll('#rg-dist').forEach((i) => { i.value = '10'; });
+      document.querySelectorAll('#rg-time').forEach((i) => { i.value = ten.time; });
+      document.querySelectorAll('.rg-custom').forEach((c) => c.classList.remove('show'));
+    }
+    window.mxDraws.forEach((n) => { try { dash.draw(n); } catch (_) {} });
   });
 });
 document.querySelectorAll('.mx .qnav button').forEach((b) => {
@@ -571,7 +638,8 @@ document.querySelectorAll('#mx-goal, #mx-dist').forEach((inp) => inp.addEventLis
 <script>
 const F = window.mxFmt;
 const textField = (name, id, field) => dash.draw(name, (el) => {
-  const d = dash.data(id);
+  const d = window.mxD(id);
+  el.dataset.where = 'person=' + window.mxPerson;
   el.textContent = d.status === 'ok' && d.data[0] && d.data[0][field] != null ? String(d.data[0][field]) : '—';
 });
 [['firstTime', 'summary', 'firstTime'], ['firstTime2', 'summary', 'firstTime'], ['pbTime', 'summary', 'pbTime'], ['pbTime2', 'summary', 'pbWatch'],
@@ -579,7 +647,7 @@ const textField = (name, id, field) => dash.draw(name, (el) => {
  ['count', 'summary', 'count'], ['latestTime', 'summary', 'latestTime'], ['latestRace', 'summary', 'latestRace'], ['latestVs', 'summary', 'latestVsCourse'],
  ['evenRaces', 'insights', 'evenRaces'], ['evenMax', 'insights', 'evenMax'], ['worstRace', 'insights', 'worstRace'], ['worstFade', 'insights', 'worstFade'],
  ['cadRange', 'insights', 'cadRange'], ['strideFirst', 'insights', 'strideFirst'],
- ['stridePb', 'insights', 'stridePb'], ['sidoCount', 'insights', 'sidoCount'], ['cityCount', 'insights', 'cityCount'], ['topCity', 'insights', 'topCity'], ['pb30', 'insights', 'pbPace30'], ['pb31', 'insights', 'pbPaceAfter30']].forEach((a) => textField(...a));
+ ['stridePb', 'insights', 'stridePb'], ['since', 'summary', 'since'], ['cadFirst', 'insights', 'cadFirst'], ['cadPb', 'insights', 'cadPb'], ['strideFirst2', 'insights', 'strideFirst'], ['stridePb2', 'insights', 'stridePb'], ['sidoCount', 'insights', 'sidoCount'], ['cityCount', 'insights', 'cityCount'], ['topCity', 'insights', 'topCity'], ['pb30', 'insights', 'pbPace30'], ['pb31', 'insights', 'pbPaceAfter30']].forEach((a) => textField(...a));
 dash.draw('even', (el) => { el.textContent = String(window.mxEven); });
 
 window.mxC = (v) => getComputedStyle(document.querySelector('.mx') || document.documentElement).getPropertyValue(v).trim();
@@ -611,7 +679,7 @@ function yAxis(g, y, ticks, fmtFn, w, left) {
 // 기록 추이
 dash.draw('trendChart', (el) => {
   if (!window.mxState(el, 'raceStats')) return;
-  const rows = dash.data('raceStats').data;
+  const rows = window.mxD('raceStats').data;
   el.replaceChildren();
   const W = el.clientWidth || 600, H = W < 480 ? 210 : 240, L = 40, R = 12, T = 26, B = 40;
   const svg = d3.select(el).append('svg').attr('width', '100%').attr('viewBox', `0 0 ${W} ${H}`);
@@ -652,7 +720,7 @@ dash.draw('trendChart', (el) => {
 // 후반 둔화 막대
 dash.draw('fadeChart', (el) => {
   if (!window.mxState(el, 'raceStats')) return;
-  const rows = dash.data('raceStats').data; el.replaceChildren();
+  const rows = window.mxD('raceStats').data; el.replaceChildren();
   const W = el.clientWidth || 400, H = W < 480 ? 210 : 240, L = 30, R = 6, T = 18, B = 40;
   const svg = d3.select(el).append('svg').attr('width', '100%').attr('viewBox', `0 0 ${W} ${H}`);
   const hi = Math.ceil(d3.max(rows, (r) => r.fadeSec) / 10) * 10;
@@ -676,7 +744,7 @@ dash.draw('fadeChart', (el) => {
 window.mxShort = { 춘천: '춘마', 대구: '대마', 동아: '동마', 삼척: '삼마', 인천: '인마' };
 window.mxEdName = (e) => e.date.slice(2, 4) + (window.mxShort[e.course] || e.course);
 dash.draw('edLabel', (el) => {
-  const s = dash.data('raceStats');
+  const s = window.mxD('raceStats');
   if (s.status !== 'ok') { el.textContent = '—'; return; }
   const eds = s.data.filter((r) => r.course === window.mxCourse), e = eds[Number(el.dataset.ed) - 1];
   el.textContent = e ? window.mxEdName(e) : '';
@@ -685,8 +753,8 @@ dash.draw('edLabel', (el) => {
 // 같은 코스 1km 랩
 dash.draw('courseChart', (el) => {
   if (!window.mxState(el, 'raceStats', 'laps')) return;
-  const eds = dash.data('raceStats').data.filter((r) => r.course === window.mxCourse);
-  const laps = dash.data('laps').data; el.replaceChildren();
+  const eds = window.mxD('raceStats').data.filter((r) => r.course === window.mxCourse);
+  const laps = window.mxD('laps').data; el.replaceChildren();
   const W = el.clientWidth || 600, H = W < 480 ? 220 : 240, L = 36, R = 8, T = 12, B = 24;
   const svg = d3.select(el).append('svg').attr('width', '100%').attr('viewBox', `0 0 ${W} ${H}`);
   const series = eds.map((e) => laps.filter((l) => l.race === e.race && l.km <= 42).sort((a, b) => a.km - b.km));
@@ -709,7 +777,7 @@ dash.draw('courseChart', (el) => {
     }).on('pointerleave', () => { tip.hide(); rule.attr('opacity', 0); });
 });
 dash.draw('courseLegend', (el) => {
-  const s = dash.data('raceStats');
+  const s = window.mxD('raceStats');
   if (s.status !== 'ok') { el.textContent = '—'; return; }
   const eds = s.data.filter((r) => r.course === window.mxCourse);
   el.replaceChildren(...eds.map((e, i) => {
@@ -721,7 +789,7 @@ dash.draw('courseLegend', (el) => {
   }));
 });
 dash.draw('courseRows', (el) => {
-  const s = dash.data('courseTable');
+  const s = window.mxD('courseTable');
   if (s.status !== 'ok') { el.replaceChildren(); return; }
   const rows = s.data.filter((r) => r.course === window.mxCourse);
   const three = rows.some((r) => r.split3 != null);
@@ -757,7 +825,7 @@ window.mxZones = {
 };
 dash.draw('zones', (el) => {
   const metric = el.dataset.metric, Z = window.mxZones, z = Z[metric];
-  const a = dash.data('races'), b = dash.data('raceStats');
+  const a = window.mxD('races'), b = window.mxD('raceStats');
   if (!z || a.status !== 'ok' || b.status !== 'ok') { el.textContent = '—'; return; }
   const rows = a.data.slice().sort((p, q) => p.n - q.n);
   const best = b.data.reduce((p, q) => (q.officialSec < p.officialSec ? q : p));
@@ -781,8 +849,8 @@ dash.draw('zones', (el) => {
 dash.draw('dyn', (el) => {
   const metric = el.dataset.metric, src = metric === 'paceSec' ? 'raceStats' : 'races';
   if (!window.mxState(el, src, 'raceStats')) return;
-  const rows = dash.data(src).data.slice().sort((a, b) => a.n - b.n);
-  const best = dash.data('raceStats').data.reduce((a, b) => (b.officialSec < a.officialSec ? b : a));
+  const rows = window.mxD(src).data.slice().sort((a, b) => a.n - b.n);
+  const best = window.mxD('raceStats').data.reduce((a, b) => (b.officialSec < a.officialSec ? b : a));
   el.replaceChildren();
   const f = metric === 'paceSec' ? F.ms : metric === 'strideM' ? (v) => v.toFixed(2) : (v) => String(v);
   const W = el.clientWidth || 300, H = 140, L = 6, R = 6, T = 54, B = 32;
@@ -819,11 +887,11 @@ dash.draw('dyn', (el) => {
 
 // 대회별 표
 dash.draw('raceRows', (el) => {
-  const s = dash.data('raceStats');
+  const s = window.mxD('raceStats');
   if (s.status !== 'ok') { el.replaceChildren(); return; }
   const cols = ['race', 'pb', 'official', 'time', 'pace', 'firstHalf', 'secondHalf', 'fade', 'pace30', 'paceAfter30', 'vsCourse'];
   el.replaceChildren(...s.data.slice().reverse().map((r) => {
-    const tr = document.createElement('tr');
+    const tr = document.createElement('tr'); tr.dataset.key = encodeURIComponent(r.person) + ',' + encodeURIComponent(r.race);
     cols.forEach((c) => {
       const td = document.createElement('td'); td.textContent = String(r[c]);
       if (c === 'time' || c === 'firstHalf' || c === 'secondHalf') td.classList.add('opt');
@@ -843,8 +911,8 @@ dash.draw('goal', (el) => {
   const g = parts.length === 3 ? parts[0] * 3600 + parts[1] * 60 + parts[2] : parts.length === 2 ? parts[0] * 60 + parts[1] : NaN;
   const d = parseFloat(dIn ? dIn.value : '42.45');
   if (!(g > 0) || !(d > 40)) { el.textContent = '—'; return; }
-  const best = dash.data('raceStats').data.reduce((a, b) => (b.officialSec < a.officialSec ? b : a));
-  const L = dash.data('laps').data.filter((l) => l.race === best.race).sort((a, b) => a.km - b.km);
+  const best = window.mxD('raceStats').data.reduce((a, b) => (b.officialSec < a.officialSec ? b : a));
+  const L = window.mxD('laps').data.filter((l) => l.race === best.race).sort((a, b) => a.km - b.km);
   let c = 0; const cum = L.map((l) => (c += l.sec));
   const p = g / d;
   const wrap = document.createElement('div');
@@ -864,7 +932,7 @@ dash.draw('goal', (el) => {
 // 지역 지도
 dash.draw('map', (el) => {
   if (!window.mxState(el, 'geo', 'regions')) return;
-  const geo = dash.data('geo').data, reg = dash.data('regions').data; el.replaceChildren();
+  const geo = window.mxD('geo').data, reg = window.mxD('regions').data; el.replaceChildren();
   const css = (v) => getComputedStyle(el).getPropertyValue(v).trim();
   const bySido = {}; reg.forEach((r) => { bySido[r.sido] = (bySido[r.sido] || 0) + r.count; });
   const fillFor = (n) => (!n ? css('--rb-land') : n === 1 ? css('--s2') : n === 2 ? css('--s3') : css('--s5'));
@@ -896,11 +964,11 @@ dash.draw('map', (el) => {
   });
 });
 dash.draw('allRows', (el) => {
-  const s = dash.data('allRaces');
+  const s = window.mxD('allRaces');
   if (s.status !== 'ok') { el.replaceChildren(); return; }
   const cols = ['date', 'no', 'name', 'city', 'official', 'pace', 'hr', 'power', 'ascent', 'temp', 'shoe'];
   el.replaceChildren(...s.data.map((r) => {
-    const tr = document.createElement('tr');
+    const tr = document.createElement('tr'); tr.dataset.key = encodeURIComponent(r.person) + ',' + encodeURIComponent(r.date);
     cols.forEach((c) => { const td = document.createElement('td'); td.textContent = String(r[c]); if (c === 'memo') td.className = 'wrap'; if (c === 'official') td.style.fontWeight = '700'; tr.appendChild(td); });
     return tr;
   }));
@@ -908,7 +976,7 @@ dash.draw('allRows', (el) => {
 
 // 기록증
 dash.draw('certs', (el) => {
-  const s = dash.data('allRaces');
+  const s = window.mxD('allRaces');
   if (s.status !== 'ok') { el.replaceChildren(); return; }
   el.replaceChildren(...s.data.filter((r) => r.certUrl).map((r) => {
     const card = document.createElement('figure'); card.className = 'cert'; card.style.margin = '0';
@@ -922,14 +990,11 @@ dash.draw('certs', (el) => {
     return card;
   }));
 });
-</script>
 
-<script>dash._boot();
-if ('serviceWorker' in navigator) addEventListener('load', () => navigator.serviceWorker.register('sw.js').catch(() => {}));
 // 리겔 레이스 예측
 window.mxRiegel = { exps: [1.06, 1.08, 1.10], full: 42.195 };
 dash.draw('rgPresets', (el) => {
-  const d = dash.data('otherPbs');
+  const d = window.mxD('otherPbs');
   if (d.status !== 'ok') { el.replaceChildren(); return; }
   el.replaceChildren(...d.data.map((r) => {
     const b = document.createElement('button'); b.type = 'button';
@@ -945,7 +1010,7 @@ dash.draw('rgPresets', (el) => {
 });
 dash.draw('riegel', (el) => {
   const sel = document.getElementById('rg-dist'), km = document.getElementById('rg-km'), tm = document.getElementById('rg-time');
-  const sm = dash.data('summary');
+  const sm = window.mxD('summary');
   const d1 = sel && sel.value === 'custom' ? parseFloat(km ? km.value : '') : parseFloat(sel ? sel.value : '10');
   const p = (tm ? tm.value : '').trim().split(':').map(Number);
   const t1 = p.length === 3 ? p[0] * 3600 + p[1] * 60 + p[2] : p.length === 2 ? p[0] * 60 + p[1] : NaN;
@@ -975,5 +1040,8 @@ document.querySelectorAll('#rg-dist').forEach((s) => s.addEventListener('change'
 }));
 document.querySelectorAll('#rg-km, #rg-time').forEach((i) => i.addEventListener('input', () => dash.draw('riegel')));
 </script>
+
+<script>dash._boot();
+if ('serviceWorker' in navigator) addEventListener('load', () => navigator.serviceWorker.register('sw.js').catch(() => {}));</script>
 </body>
 </html>
