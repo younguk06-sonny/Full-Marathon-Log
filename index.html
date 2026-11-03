@@ -197,10 +197,11 @@
     <div class="top"><span class="mark" aria-hidden="true"></span><div><h1>풀마라톤 기록 대시보드</h1><p class="sub">풀코스 · 지역 · 구간 기록을 한눈에 (Garmin 기준)</p></div></div>
   </header>
   <div class="pseg" role="group" aria-label="러너 선택">
-    <button type="button" data-person="son" class="on">손영욱</button>
+    <button type="button" data-person="pjh" class="on">박지현</button>
+    <button type="button" data-person="son">손영욱</button>
     <button type="button" data-person="kim">김지훈</button>
   </div>
-  <p class="take">첫 풀 <b data-draw="firstTime" data-source="summary" data-field="firstTime">—</b>에서 PB <b data-draw="pbTime" data-source="summary" data-field="pbTime">—</b>까지 <b data-draw="improve" data-source="summary" data-field="improve">—</b> 단축했어요. <span data-only="son">기록이 좋았던 날은 후반이 거의 느려지지 않았고, 서브 3:10의 열쇠는 31km 이후 페이스 유지예요.</span><span data-only="kim" hidden>네 번 모두 후반이 거의 느려지지 않은 이븐 페이스 러너이고, 케이던스와 보폭이 함께 늘면서 기록이 빨라졌어요.</span></p>
+  <p class="take">첫 풀 <b data-draw="firstTime" data-source="summary" data-field="firstTime">—</b>에서 PB <b data-draw="pbTime" data-source="summary" data-field="pbTime">—</b>까지 <b data-draw="improve" data-source="summary" data-field="improve">—</b> 단축했어요. <span data-only="pjh">30km까지의 스피드는 이미 충분하고, 31km 이후 둔화를 줄여 갈수록 기록이 크게 빨라지고 있어요.</span><span data-only="son" hidden>기록이 좋았던 날은 후반이 거의 느려지지 않았고, 서브 3:10의 열쇠는 31km 이후 페이스 유지예요.</span><span data-only="kim" hidden>네 번 모두 후반이 거의 느려지지 않은 이븐 페이스 러너이고, 케이던스와 보폭이 함께 늘면서 기록이 빨라졌어요.</span></p>
 
   <nav class="qnav" aria-label="바로가기">
     <button type="button" data-go="kpis" class="on">요약·지역</button>
@@ -210,7 +211,7 @@
     <button type="button" data-go="certs">기록증</button>
     <button type="button" data-go="trend">추이</button>
     <button type="button" data-go="pacing">후반 유지력</button>
-    <button type="button" data-go="course" data-only="son">같은 코스</button>
+    <button type="button" data-go="course" data-only="son" hidden>같은 코스</button>
     <button type="button" data-go="dynamics">다이내믹스</button>
     <button type="button" data-go="goal">목표 페이스</button>
   </nav>
@@ -253,7 +254,7 @@
 
   <section class="card" id="all">
     <h2>전체 출전 기록</h2>
-    <p class="note">지금까지 출전한 풀마라톤 전부. <span data-only="son">공식 기록은 기록증 기준, 페이스와 나머지 지표는 워치 기준이에요.</span><span data-only="kim" hidden>공식 기록은 기록증 기준, 페이스와 나머지 지표는 워치 기준이에요. 공원사랑은 기록증 기록이 워치 기록보다 꽤 길어요. 출발 신호부터 잰 기록이거나 중간 정지 시간이 포함된 것으로 보여요.</span></p>
+    <p class="note">지금까지 출전한 풀마라톤 전부. <span data-only="pjh">공식 기록은 기록증 기준, 페이스와 나머지 지표는 워치 기준이에요. 첫 대회(진주)는 갤럭시워치 기록이라 파워·보폭·접지 시간·기온이 비어 있어요.</span><span data-only="son" hidden>공식 기록은 기록증 기준, 페이스와 나머지 지표는 워치 기준이에요.</span><span data-only="kim" hidden>공식 기록은 기록증 기준, 페이스와 나머지 지표는 워치 기준이에요. 공원사랑은 기록증 기록이 워치 기록보다 꽤 길어요. 출발 신호부터 잰 기록이거나 중간 정지 시간이 포함된 것으로 보여요.</span></p>
     <div class="tbox">
       <table data-source="allRaces" data-row-key="person,date">
         <thead><tr>
@@ -306,7 +307,7 @@
     </div>
   </section>
 
-  <section class="card" id="course" data-only="son">
+  <section class="card" id="course" data-only="son" hidden>
     <h2>같은 코스 비교</h2>
     <p class="note">같은 코스를 뛴 대회끼리 1km 랩 페이스(위가 빠름)와 5km 구간, 누적, 직전 대비 차이, 누적 단축을 비교해요.</p>
     <div class="seg" role="group" aria-label="코스 선택">
@@ -332,8 +333,8 @@
 
   <section id="dynamics">
     <h2>러닝 다이내믹스</h2>
-    <p class="note" data-only="kim" hidden>대회별 평균값 추이. 케이던스는 <b data-draw="cadFirst" data-source="insights" data-field="cadFirst">—</b>에서 PB 때 <b data-draw="cadPb" data-source="insights" data-field="cadPb">—</b>로, 보폭은 <b data-draw="strideFirst2" data-source="insights" data-field="strideFirst">—</b>에서 <b data-draw="stridePb2" data-source="insights" data-field="stridePb">—</b>로 둘 다 늘었어요. 피치와 보폭이 함께 좋아지며 빨라진 경우예요.</p>
-    <p class="note" data-only="son">대회별 평균값 추이. 케이던스는 <b data-draw="cadRange" data-source="insights" data-field="cadRange">—</b>로 거의 그대로인데, 보폭은 <b data-draw="strideFirst" data-source="insights" data-field="strideFirst">—</b>에서 PB 때 <b data-draw="stridePb" data-source="insights" data-field="stridePb">—</b>까지 늘었어요. 빨라진 건 보폭 덕분이에요.</p>
+    <p class="note" data-only="kim pjh">대회별 평균값 추이. 케이던스는 <b data-draw="cadFirst" data-source="insights" data-field="cadFirst">—</b>에서 PB 때 <b data-draw="cadPb" data-source="insights" data-field="cadPb">—</b>로, 보폭은 <b data-draw="strideFirst2" data-source="insights" data-field="strideFirst">—</b>에서 <b data-draw="stridePb2" data-source="insights" data-field="stridePb">—</b>로 둘 다 늘었어요. 피치와 보폭이 함께 좋아지며 빨라진 경우예요.</p>
+    <p class="note" data-only="son" hidden>대회별 평균값 추이. 케이던스는 <b data-draw="cadRange" data-source="insights" data-field="cadRange">—</b>로 거의 그대로인데, 보폭은 <b data-draw="strideFirst" data-source="insights" data-field="strideFirst">—</b>에서 PB 때 <b data-draw="stridePb" data-source="insights" data-field="stridePb">—</b>까지 늘었어요. 빨라진 건 보폭 덕분이에요.</p>
     <p class="def" style="margin:-4px 0 12px">색 구간은 가민이 여러 수준의 러너를 조사해 만든 백분위 기준이에요. 빨강·주황은 경험이 적거나 느린 러너에게, 초록·파랑·보라는 숙련되거나 빠른 러너에게 흔한 값이에요. 수직 진폭·수직 비율 기준은 가슴 심박계(HRM-Pro·HRM-Run 등) 값이고, 허리에 차는 러닝 다이내믹스 포드는 조금 높게 잡혀요. 키가 큰 러너는 케이던스가 약간 낮고 보폭·수직 진폭이 약간 큰 편이에요.</p>
     <div class="grid dyn">
       <div class="card"><h3>케이던스 (spm)</h3><div class="chart small dash-skeleton" data-draw="dyn" data-metric="cadenceSpm" data-source="races"></div>
@@ -490,7 +491,7 @@ dash.calc('insights', {
       person, cadFirst: sorted[0].cadenceSpm + 'spm', cadPb: bestRace.cadenceSpm + 'spm',
       evenRaces: top3.map((r) => r.race).join(' · '), evenMax: '+' + Math.max(...top3.map((r) => r.fadeSec)).toFixed(1) + '초',
       worstRace: worst.race, worstFade: worst.fade, gap21: gap(21), gap28: gap(28),
-      strideFirst: sorted[0].strideM.toFixed(2) + 'm', stridePb: bestRace.strideM.toFixed(2) + 'm',
+      strideFirst: (sorted.find((r) => r.strideM != null) || sorted[0]).strideM.toFixed(2) + 'm', stridePb: bestRace.strideM.toFixed(2) + 'm',
       cadRange: Math.min(...cad) + '–' + Math.max(...cad) + 'spm', pbPace30: best.pace30, pbPaceAfter30: best.paceAfter30,
       sidoCount: new Set(races.map((r) => r.sido)).size, cityCount: new Set(races.map((r) => r.city)).size,
       topCity: (() => { const m = {}; races.forEach((r) => { m[r.city] = (m[r.city] || 0) + 1; }); const k = Object.keys(m).sort((a, b) => m[b] - m[a])[0]; return k + ' ' + m[k] + '회'; })(),
@@ -527,8 +528,8 @@ dash.calc('allRaces', {
     return {
       person, date: r.date.slice(2).replace(/-/g, '.'), race: r.race, no: r.n + '번째', name: r.name, city: r.city, bib: r.bib || '–',
       official: s.official, time: s.time, pace: s.pace + '/km', dist: r.distKm.toFixed(2) + 'km',
-      hr: r.avgHr + '/' + r.maxHr, power: r.powerW + 'W', ascent: r.ascentM + 'm',
-      temp: r.tempStartC + '℃' + (r.tempAvgC != null ? ' / ' + r.tempAvgC + '℃' : ''), walk: r.walkSec + '초', shoe: r.shoe, memo: r.memo,
+      hr: r.avgHr + '/' + r.maxHr, power: r.powerW != null ? r.powerW + 'W' : '–', ascent: r.ascentM + 'm',
+      temp: r.tempStartC != null ? r.tempStartC + '℃' + (r.tempAvgC != null ? ' / ' + r.tempAvgC + '℃' : '') : '–', walk: r.walkSec != null ? r.walkSec + '초' : '–', shoe: r.shoe, memo: r.memo,
       certUrl: r.certUrl || '', pb: s.pb,
     };
     });
@@ -567,7 +568,7 @@ dash.calc('courseTable', {
   }),
 });
 
-window.mxPerson = 'son';
+window.mxPerson = 'pjh';
 window.mxD = (id) => {
   const r = dash.data(id);
   if (r.status !== 'ok' || !Array.isArray(r.data) || !r.data.length || !('person' in r.data[0])) return r;
@@ -604,16 +605,33 @@ document.querySelectorAll('#course .seg button').forEach((b) => {
 window.mxDraws = ['firstTime', 'firstTime2', 'pbTime', 'pbTime2', 'improve', 'improve2', 'pbOfficial', 'pbRace', 'count', 'latestTime', 'latestRace', 'latestVs', 'since',
   'evenRaces', 'evenMax', 'worstRace', 'worstFade', 'cadRange', 'strideFirst', 'stridePb', 'cadFirst', 'cadPb', 'strideFirst2', 'stridePb2', 'sidoCount', 'cityCount', 'topCity', 'pb30', 'pb31',
   'map', 'trendChart', 'fadeChart', 'courseChart', 'courseLegend', 'courseRows', 'edLabel', 'dyn', 'zones', 'raceRows', 'allRows', 'certs', 'goal', 'rgPresets', 'riegel'];
-window.mxGoalDefault = { son: ['3:09:59', '42.45'], kim: ['2:59:59', '42.41'] };
+window.mxGoalDefault = { pjh: ['2:59:59', '42.30'], son: ['3:09:59', '42.45'], kim: ['2:59:59', '42.41'] };
+window.mxApplyPerson = (p) => {
+  document.querySelectorAll('[data-only]').forEach((el) => { el.hidden = !el.dataset.only.split(' ').includes(p); });
+  const g = window.mxGoalDefault[p];
+  document.querySelectorAll('#mx-goal').forEach((i) => { i.value = g[0]; });
+  document.querySelectorAll('#mx-dist').forEach((i) => { i.value = g[1]; });
+};
+window.mxApplyPerson(window.mxPerson);
+dash.onData(() => {
+  const a = window.mxD('allRaces');
+  const has = a.status === 'ok' && a.data.some((r) => r.certUrl);
+  document.querySelectorAll('#certs, .qnav [data-go="certs"]').forEach((el) => { el.hidden = a.status === 'ok' && !has; });
+  const o = window.mxD('otherPbs'), ten = o.status === 'ok' ? o.data.find((x) => x.event === '10km') : null;
+  if (ten && !window.mxRgInit) {
+    window.mxRgInit = true;
+    document.querySelectorAll('#rg-dist').forEach((i) => { i.value = '10'; });
+    document.querySelectorAll('#rg-time').forEach((i) => { i.value = ten.time; });
+  }
+});
 document.querySelectorAll('.mx .pseg button').forEach((b) => {
   b.addEventListener('click', () => {
     const p = b.dataset.person; if (p === window.mxPerson) return;
     window.mxPerson = p;
     document.querySelectorAll('.mx .pseg button').forEach((x) => x.classList.toggle('on', x === b));
-    document.querySelectorAll('[data-only]').forEach((el) => { el.hidden = el.dataset.only !== p; });
-    const g = window.mxGoalDefault[p];
-    document.querySelectorAll('#mx-goal').forEach((i) => { i.value = g[0]; });
-    document.querySelectorAll('#mx-dist').forEach((i) => { i.value = g[1]; });
+    window.mxApplyPerson(p);
+    const a = window.mxD('allRaces'), has = a.status === 'ok' && a.data.some((r) => r.certUrl);
+    document.querySelectorAll('#certs, .qnav [data-go="certs"]').forEach((el) => { el.hidden = !has; });
     const o = window.mxD('otherPbs'), ten = o.status === 'ok' ? o.data.find((x) => x.event === '10km') : null;
     if (ten) {
       document.querySelectorAll('#rg-dist').forEach((i) => { i.value = '10'; });
@@ -856,9 +874,10 @@ dash.draw('zones', (el) => {
 dash.draw('dyn', (el) => {
   const metric = el.dataset.metric, src = metric === 'paceSec' ? 'raceStats' : 'races';
   if (!window.mxState(el, src, 'raceStats')) return;
-  const rows = window.mxD(src).data.slice().sort((a, b) => a.n - b.n);
+  const rows = window.mxD(src).data.slice().sort((a, b) => a.n - b.n).filter((r) => r[metric] != null);
   const best = window.mxD('raceStats').data.reduce((a, b) => (b.officialSec < a.officialSec ? b : a));
   el.replaceChildren();
+  if (!rows.length) return;
   const f = metric === 'paceSec' ? F.ms : metric === 'strideM' ? (v) => v.toFixed(2) : (v) => String(v);
   const W = el.clientWidth || 300, H = 140, L = 6, R = 6, T = 54, B = 32;
   const svg = d3.select(el).append('svg').attr('width', '100%').attr('viewBox', `0 0 ${W} ${H}`);
