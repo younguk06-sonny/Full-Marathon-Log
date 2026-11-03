@@ -57,7 +57,7 @@
 .mx .tile.pb .big{color:var(--rb-accent)}
 .mx .tile .sub2{font-size:12px;color:var(--rb-muted)}
 .mx .chart{position:relative;min-height:240px}
-.mx .chart.small{min-height:110px}
+.mx .chart.small{min-height:140px}
 .mx .chart.map{min-height:300px}
 .mx .chart svg{display:block}
 .mx .tip{position:absolute;pointer-events:none;background:var(--rb-ink);color:var(--rb-card);font-size:12px;padding:7px 9px;border-radius:8px;line-height:1.4;white-space:nowrap;z-index:5}
@@ -113,7 +113,7 @@
   .mx .grid.dyn .card{padding:12px}
   .mx .grid.dyn h3{font-size:12.5px}
   .mx .chart{min-height:210px}
-  .mx .chart.small{min-height:96px}
+  .mx .chart.small{min-height:140px}
   .mx table{font-size:12px}
   .mx th,.mx td{padding:6px 6px}
   .mx th:first-child,.mx td:first-child{position:sticky;left:0;background:var(--rb-card);z-index:1}
@@ -594,9 +594,13 @@ dash.draw('trendChart', (el) => {
   rows.forEach((r, i) => {
     const pb = r.pb === 'PB';
     svg.append('circle').attr('cx', x(r.race)).attr('cy', y(r.officialSec)).attr('r', pb ? 5 : 4).style('fill', pb ? gold() : 'var(--rb-card)').style('stroke', pb ? gold() : window.mxC('--rb-accent')).attr('stroke-width', 2);
-    if (r === bestRow || i === 0 || i === n - 1) {
-      const below = i === n - 1 && r !== bestRow && Math.abs(y(r.officialSec) - y(bestRow.officialSec)) < 30;
-      svg.append('text').attr('x', x(r.race)).attr('y', y(r.officialSec) + (below ? 20 : -10)).attr('text-anchor', i === 0 ? 'start' : i === n - 1 ? 'end' : 'middle').style('font-size', '12px').style('fill', 'var(--rb-ink)').text(r.official);
+    {
+      const nb = [rows[i - 1], rows[i + 1]].filter(Boolean).map((q) => q.officialSec);
+      let below = r.officialSec > nb.reduce((p, q) => p + q, 0) / nb.length;
+      if (below && y(r.officialSec) + 17 > H - B - 2) below = false;
+      svg.append('text').attr('x', x(r.race)).attr('y', y(r.officialSec) + (below ? 17 : -9)).attr('text-anchor', 'middle')
+        .style('font-size', W < 480 ? '9.5px' : '11px').style('font-weight', r === bestRow ? '800' : '600').style('fill', 'var(--rb-ink)')
+        .style('paint-order', 'stroke').style('stroke', 'var(--rb-card)').style('stroke-width', '3px').style('stroke-linejoin', 'round').text(r.official);
     }
     const [yy, c] = r.race.split(' ');
     svg.append('text').attr('x', x(r.race)).attr('y', H - 22).attr('text-anchor', 'middle').style('font-size', '12px').style('fill', 'var(--rb-muted)').text(c);
@@ -735,7 +739,7 @@ dash.draw('dyn', (el) => {
   const best = dash.data('raceStats').data.reduce((a, b) => (b.officialSec < a.officialSec ? b : a));
   el.replaceChildren();
   const f = metric === 'paceSec' ? F.ms : metric === 'strideM' ? (v) => v.toFixed(2) : (v) => String(v);
-  const W = el.clientWidth || 300, H = W < 240 ? 104 : 110, L = 6, R = 6, T = 40, B = 16;
+  const W = el.clientWidth || 300, H = 140, L = 6, R = 6, T = 54, B = 32;
   const svg = d3.select(el).append('svg').attr('width', '100%').attr('viewBox', `0 0 ${W} ${H}`);
   const v = rows.map((r) => r[metric]), lo = d3.min(v), hi = d3.max(v), pad = (hi - lo) * 0.15 || 1;
   const x = d3.scaleLinear([0, rows.length - 1], [L + 4, W - R - 4]);
@@ -757,6 +761,12 @@ dash.draw('dyn', (el) => {
   const tip = tipFor(el);
   rows.forEach((r, i) => svg.append('circle').attr('cx', x(i)).attr('cy', y(v[i])).attr('r', r.race === best.race ? 4.5 : 3).style('fill', r.race === best.race ? gold() : window.mxC('--rb-accent'))
     .on('mouseenter', () => tip.show(x(i) / W * el.clientWidth, y(v[i]) / H * el.clientHeight, r.race, [f(v[i])])).on('mouseleave', () => tip.hide()));
+  rows.forEach((r, i) => {
+    const below = i % 2 === 1;
+    svg.append('text').attr('x', x(i)).attr('y', y(v[i]) + (below ? 14 : -7)).attr('text-anchor', i === 0 ? 'start' : i === rows.length - 1 ? 'end' : 'middle')
+      .style('font-size', '9.5px').style('font-weight', r.race === best.race ? '800' : '500').style('fill', r.race === best.race ? 'var(--rb-ink)' : 'var(--rb-ink2)')
+      .style('paint-order', 'stroke').style('stroke', 'var(--rb-card)').style('stroke-width', '2.5px').style('stroke-linejoin', 'round').style('pointer-events', 'none').text(f(v[i]));
+  });
   svg.append('text').attr('x', L).attr('y', H - 2).style('font-size', '12px').style('fill', 'var(--rb-muted)').text(rows[0].race.split(' ')[0]);
   svg.append('text').attr('x', W - R).attr('y', H - 2).attr('text-anchor', 'end').style('font-size', '12px').style('fill', 'var(--rb-muted)').text(rows[rows.length - 1].race.split(' ')[0]);
 });
