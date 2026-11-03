@@ -1,0 +1,370 @@
+<!doctype html>
+<html lang="ko">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<title>풀마라톤 로그</title>
+<meta name="description" content="손영욱의 풀마라톤 9회 기록·통계 분석">
+<meta name="theme-color" content="#0b1224">
+<link rel="manifest" href="manifest.webmanifest">
+<link rel="icon" type="image/png" sizes="64x64" href="icons/favicon-64.png">
+<link rel="apple-touch-icon" href="icons/apple-touch-icon.png">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-title" content="풀마라톤">
+<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.9/dist/web/variable/pretendardvariable-dynamic-subset.min.css">
+<style>
+:root{
+  --bg:#0b1224;--bg2:#111a33;--card:#141f3d;--line:#24325a;--ink:#eaf0ff;--ink2:#9fb0d6;--ink3:#6c7ca6;
+  --blue:#4c8dff;--blue2:#7fb0ff;--gold:#ffc24b;--good:#3ddc97;--bad:#ff6b6b;--warn:#ff9f43;
+}
+*{box-sizing:border-box}
+html,body{margin:0;background:var(--bg);color:var(--ink)}
+body{font-family:"Pretendard Variable",Pretendard,-apple-system,"Apple SD Gothic Neo","Noto Sans KR",sans-serif;font-size:15px;line-height:1.55;-webkit-font-smoothing:antialiased;padding-bottom:env(safe-area-inset-bottom)}
+.wrap{max-width:880px;margin:0 auto;padding:0 16px}
+.num{font-variant-numeric:tabular-nums}
+header{padding:calc(28px + env(safe-area-inset-top)) 0 8px;background:radial-gradient(120% 90% at 100% 0%,#1d3a8a55 0,transparent 60%)}
+.eyebrow{font-size:12px;letter-spacing:.14em;color:var(--blue2);font-weight:700;text-transform:uppercase}
+h1{font-size:28px;margin:6px 0 4px;letter-spacing:-.02em}
+.sub{color:var(--ink2);font-size:14px;margin:0}
+nav.tabs{position:sticky;top:0;z-index:10;background:color-mix(in srgb,var(--bg) 92%,transparent);backdrop-filter:blur(8px);border-bottom:1px solid var(--line);margin-top:14px}
+nav.tabs .wrap{display:flex;gap:4px;overflow-x:auto;scrollbar-width:none}
+nav.tabs a{flex:none;padding:12px 12px;color:var(--ink2);text-decoration:none;font-weight:600;font-size:14px;border-bottom:2px solid transparent}
+nav.tabs a.on{color:var(--ink);border-color:var(--blue)}
+section{padding:26px 0 6px;scroll-margin-top:52px}
+h2{font-size:19px;margin:0 0 4px;letter-spacing:-.01em}
+.h2sub{color:var(--ink3);font-size:13px;margin:0 0 14px}
+.card{background:var(--card);border:1px solid var(--line);border-radius:16px;padding:16px}
+.grid{display:grid;gap:10px}
+.kpis{grid-template-columns:repeat(2,1fr)}
+@media(min-width:640px){.kpis{grid-template-columns:repeat(4,1fr)}}
+.kpi .l{font-size:12px;color:var(--ink3);font-weight:600}
+.kpi .v{font-size:26px;font-weight:800;letter-spacing:-.02em;margin-top:2px}
+.kpi .s{font-size:12px;color:var(--ink2)}
+.kpi.pb{background:linear-gradient(135deg,#2a2208,#141f3d 70%);border-color:#5a4613}
+.kpi.pb .v{color:var(--gold)}
+.chart{width:100%;height:auto;display:block}
+.chart text{fill:var(--ink3);font-size:11px;font-family:inherit}
+.chart .lbl{fill:var(--ink);font-weight:700;font-size:11px}
+.legend{display:flex;flex-wrap:wrap;gap:12px;font-size:12px;color:var(--ink2);margin-top:8px}
+.legend i{display:inline-block;width:10px;height:10px;border-radius:3px;margin-right:5px;vertical-align:-1px}
+.insights{grid-template-columns:1fr}
+@media(min-width:640px){.insights{grid-template-columns:1fr 1fr}}
+.ins{position:relative;padding-left:16px}
+.ins:before{content:"";position:absolute;left:0;top:18px;bottom:18px;width:3px;border-radius:3px;background:var(--blue)}
+.ins.g:before{background:var(--good)}.ins.w:before{background:var(--warn)}.ins.y:before{background:var(--gold)}
+.ins h3{font-size:15px;margin:0 0 6px}
+.ins p{margin:0;color:var(--ink2);font-size:14px}
+.ins b{color:var(--ink)}
+.seg{display:inline-flex;background:var(--bg2);border:1px solid var(--line);border-radius:10px;padding:3px;gap:2px;flex-wrap:wrap}
+.seg button{all:unset;cursor:pointer;padding:7px 12px;border-radius:8px;font-size:13px;font-weight:600;color:var(--ink2)}
+.seg button.on{background:var(--blue);color:#fff}
+.row{display:flex;gap:8px;flex-wrap:wrap;align-items:center;margin-bottom:12px}
+.tbl{width:100%;border-collapse:collapse;font-size:13px}
+.tbl th,.tbl td{padding:8px 6px;text-align:right;border-bottom:1px solid var(--line);white-space:nowrap}
+.tbl th{color:var(--ink3);font-weight:600;font-size:12px;position:sticky;top:0;background:var(--card)}
+.tbl td:first-child,.tbl th:first-child{text-align:left}
+.tbl tr.tot td{font-weight:800;border-top:2px solid var(--line)}
+.scroll{overflow-x:auto;-webkit-overflow-scrolling:touch;margin:0 -4px;padding:0 4px}
+.up{color:var(--good)}.dn{color:var(--bad)}.mut{color:var(--ink3)}
+.races{grid-template-columns:1fr}
+.race{display:grid;grid-template-columns:34px 1fr auto;gap:10px;align-items:center;padding:12px 14px;cursor:pointer}
+.race .no{width:30px;height:30px;border-radius:9px;background:var(--bg2);display:grid;place-items:center;font-weight:800;font-size:13px;color:var(--ink2)}
+.race.pb .no{background:var(--gold);color:#241a00}
+.race .t{font-size:20px;font-weight:800;letter-spacing:-.02em}
+.race .nm{font-weight:700}.race .dt{font-size:12px;color:var(--ink3)}
+.race .d{font-size:12px;text-align:right}
+.pill{display:inline-block;font-size:11px;font-weight:700;padding:2px 7px;border-radius:99px;background:var(--bg2);color:var(--ink2);margin-left:6px;vertical-align:1px}
+.pill.pb{background:var(--gold);color:#241a00}
+.stats{grid-template-columns:repeat(3,1fr);gap:8px}
+@media(min-width:640px){.stats{grid-template-columns:repeat(6,1fr)}}
+.st{background:var(--bg2);border-radius:12px;padding:10px}
+.st .l{font-size:11px;color:var(--ink3)}.st .v{font-size:16px;font-weight:800}
+select,input{font:inherit;color:var(--ink);background:var(--bg2);border:1px solid var(--line);border-radius:10px;padding:9px 10px}
+.memo{font-size:13px;color:var(--ink2);background:var(--bg2);border-radius:10px;padding:8px 10px;margin:10px 0}
+.small{font-size:12px;color:var(--ink3)}
+footer{padding:30px 0 40px;color:var(--ink3);font-size:12px;text-align:center}
+.mini{grid-template-columns:repeat(2,1fr)}
+@media(min-width:640px){.mini{grid-template-columns:repeat(3,1fr)}}
+.mini .card{padding:12px}
+.mini h4{margin:0;font-size:13px}.mini .chg{font-size:12px;color:var(--ink2)}
+</style>
+</head>
+<body>
+<header>
+  <div class="wrap">
+    <div class="eyebrow">Full Marathon Log</div>
+    <h1>풀마라톤 9회 기록 분석</h1>
+    <p class="sub">2024.10 첫 춘천부터 2026.10 춘천까지 · Garmin Forerunner 265 기록 기준</p>
+  </div>
+  <nav class="tabs"><div class="wrap">
+    <a href="#overview" class="on">요약</a><a href="#trend">추이</a><a href="#insights">인사이트</a><a href="#course">같은 코스</a><a href="#pacing">페이스 분배</a><a href="#dynamics">러닝 다이내믹스</a><a href="#races">대회별</a><a href="#goal">목표 계산</a>
+  </div></nav>
+</header>
+
+<main class="wrap">
+<section id="overview">
+  <div class="grid kpis" id="kpis"></div>
+</section>
+
+<section id="trend">
+  <h2>기록 추이</h2>
+  <p class="h2sub">대회별 완주 시간(워치). 점선은 추세, 금색은 PB</p>
+  <div class="card"><svg id="trendChart" class="chart"></svg>
+  <div class="legend"><span><i style="background:var(--blue)"></i>완주 시간</span><span><i style="background:var(--gold)"></i>PB</span><span><i style="background:var(--ink3)"></i>추세선</span></div></div>
+</section>
+
+<section id="insights">
+  <h2>핵심 인사이트</h2>
+  <p class="h2sub">9개 대회 데이터에서 반복적으로 보이는 패턴</p>
+  <div class="grid insights" id="insightList"></div>
+</section>
+
+<section id="course">
+  <h2>같은 코스 비교</h2>
+  <p class="h2sub">구간 기록 · 누적 시간 · 직전 대회 대비 차이와 누적 단축</p>
+  <div class="row"><div class="seg" id="courseSeg"></div><div class="seg" id="unitSeg"><button data-u="5" class="on">5km</button><button data-u="1">1km</button></div></div>
+  <div class="card"><svg id="courseChart" class="chart"></svg><div class="legend" id="courseLegend"></div></div>
+  <div class="card scroll" style="margin-top:10px"><table class="tbl num" id="courseTbl"></table></div>
+</section>
+
+<section id="pacing">
+  <h2>페이스 분배</h2>
+  <p class="h2sub">전·후반 페이스 차이(초/km). 작을수록 이븐 페이스 — PB들은 모두 7초 이내</p>
+  <div class="card"><svg id="fadeChart" class="chart"></svg></div>
+  <div class="card scroll" style="margin-top:10px"><table class="tbl num" id="fadeTbl"></table></div>
+</section>
+
+<section id="dynamics">
+  <h2>러닝 다이내믹스 변화</h2>
+  <p class="h2sub">대회별 평균값 추이. 속도 향상은 케이던스가 아니라 보폭에서 나왔음</p>
+  <div class="grid mini" id="miniCharts"></div>
+</section>
+
+<section id="races">
+  <h2>대회별 상세</h2>
+  <p class="h2sub">대회를 누르면 1km 랩과 상세 지표가 열립니다</p>
+  <div class="grid races" id="raceList"></div>
+  <div class="card" id="raceDetail" style="margin-top:10px"></div>
+</section>
+
+<section id="goal">
+  <h2>목표 페이스 계산</h2>
+  <p class="h2sub">공식 기록 목표 → 워치 기준 페이스와 5km 통과 시간</p>
+  <div class="card">
+    <div class="row"><label class="small" for="goalIn">목표 기록</label><input id="goalIn" value="3:09:59" inputmode="numeric" style="width:120px"><label class="small" for="distIn">예상 워치 거리(km)</label><input id="distIn" value="42.45" inputmode="decimal" style="width:90px"></div>
+    <div id="goalOut"></div>
+  </div>
+</section>
+</main>
+<footer>데이터: Garmin Connect 캡처 수동 입력 · 공식 기록은 확인된 대회만 표기<br>새 대회는 data.js 끝에 추가하면 모든 차트가 자동 갱신됩니다</footer>
+
+<script src="data.js"></script>
+<script>
+(()=>{
+const R=window.RACES;
+const $=s=>document.querySelector(s);
+const NS="http://www.w3.org/2000/svg";
+const toS=t=>{const p=t.split(":").map(Number);return p.length===3?p[0]*3600+p[1]*60+p[2]:p[0]*60+p[1]};
+const hms=(s,d=0)=>{s=Math.round(s*10**d)/10**d;const h=Math.floor(s/3600),m=Math.floor(s%3600/60),x=s%60;const xs=d?x.toFixed(d).padStart(3+d,"0"):String(Math.round(x)).padStart(2,"0");return h?`${h}:${String(m).padStart(2,"0")}:${xs}`:`${m}:${xs}`};
+const ms=s=>{s=Math.round(s);return `${Math.floor(s/60)}:${String(s%60).padStart(2,"0")}`};
+const sgn=s=>{const a=Math.abs(Math.round(s));if(a===0)return "±0";return (s<0?"−":"+")+(a>=60?ms(a):a+"초")};
+const css=v=>getComputedStyle(document.documentElement).getPropertyValue(v).trim();
+const yy=d=>d.slice(2,4)+"."+d.slice(5,7);
+
+// derived
+R.forEach((r,i)=>{
+  r.sec=toS(r.time);r.pace=r.sec/r.dist;
+  r.cum=[];let c=0;r.laps.forEach(l=>{c+=l;r.cum.push(c)});
+  r.split5=[];for(let k=0;k<8;k++)r.split5.push(r.laps.slice(k*5,k*5+5).reduce((a,b)=>a+b,0));
+  r.finishSeg=r.laps[40]+r.laps[41]+r.last;
+  const half=21.0975;let t=0,d=0;for(let k=0;k<42;k++){if(d+1>=half){t+=r.laps[k]*(half-d);break}d++;t+=r.laps[k]}
+  r.h1=t;r.h2=r.sec-t;r.p1=t/half;r.p2=r.h2/(r.dist-half);r.fade=r.p2-r.p1;
+  r.gap=i?Math.round((new Date(r.date)-new Date(R[i-1].date))/864e5):null;
+});
+const best=R.reduce((a,b)=>b.sec<a.sec?b:a);
+const pbIds=new Set();let run=1e9;R.forEach(r=>{if(r.sec<run){run=r.sec;pbIds.add(r.id)}});
+
+// KPIs
+const first=R[0];
+$("#kpis").innerHTML=[
+ ["풀 PB",best.official||best.time,`${best.date.replace(/-/g,".")} ${best.name} · 워치 ${best.time}`,"pb"],
+ ["완주",R.length+"회",`${R[0].date.slice(0,4)}–${R[R.length-1].date.slice(0,4)} · 걷기 0초 3연속`],
+ ["총 단축",hms(first.sec-best.sec),`첫 풀 ${first.time} → ${best.time}`],
+ ["누적 레이스 거리",R.reduce((a,r)=>a+r.dist,0).toFixed(1)+"km",`평균 페이스 ${ms(R.reduce((a,r)=>a+r.sec,0)/R.reduce((a,r)=>a+r.dist,0))}/km`],
+].map(([l,v,s,c])=>`<div class="card kpi ${c||""}"><div class="l">${l}</div><div class="v num">${v}</div><div class="s">${s}</div></div>`).join("");
+
+// generic svg helpers
+function svg(el,w,h){el.setAttribute("viewBox",`0 0 ${w} ${h}`);el.innerHTML="";return el}
+const vw=el=>Math.max(300,Math.round(el.getBoundingClientRect().width)||640);
+function add(el,tag,at,txt){const n=document.createElementNS(NS,tag);for(const k in at)n.setAttribute(k,at[k]);if(txt!=null)n.textContent=txt;el.appendChild(n);return n}
+function axisY(el,x0,x1,y,lo,hi,ticks,fmt){ticks.forEach(v=>{const yy=y(v);add(el,"line",{x1:x0,x2:x1,y1:yy,y2:yy,stroke:css("--line"),"stroke-width":1});add(el,"text",{x:x0-6,y:yy+4,"text-anchor":"end"},fmt(v))})}
+
+// trend chart
+function drawTrend(){
+  const VW=vw($("#trendChart")),el=svg($("#trendChart"),VW,300),L=42,Rt=22,T=26,B=40,W=VW-L-Rt;
+  const lo=3*3600+5*60,hi=3*3600+40*60;
+  const H=300-T-B,x=i=>L+W*(i/(R.length-1)),y=v=>T+H*(1-(v-lo)/(hi-lo));
+  const ticks=[];for(let v=lo;v<=hi;v+=5*60)ticks.push(v);
+  axisY(el,L,VW-Rt,y,lo,hi,ticks,v=>hms(v).slice(0,4));
+  // regression
+  const n=R.length,xs=R.map((_,i)=>i),ys=R.map(r=>r.sec),mx=xs.reduce((a,b)=>a+b)/n,my=ys.reduce((a,b)=>a+b)/n;
+  const sl=xs.reduce((a,xx,i)=>a+(xx-mx)*(ys[i]-my),0)/xs.reduce((a,xx)=>a+(xx-mx)**2,0);
+  add(el,"line",{x1:x(0),y1:y(my-sl*mx),x2:x(n-1),y2:y(my+sl*(n-1-mx)),stroke:css("--ink3"),"stroke-dasharray":"4 4","stroke-width":1.5});
+  add(el,"polyline",{points:R.map((r,i)=>`${x(i)},${y(r.sec)}`).join(" "),fill:"none",stroke:css("--blue"),"stroke-width":2.5,"stroke-linejoin":"round"});
+  R.forEach((r,i)=>{
+    const pb=pbIds.has(r.id),isBest=r===best;
+    add(el,"circle",{cx:x(i),cy:y(r.sec),r:isBest?7:5,fill:pb?css("--gold"):css("--bg"),stroke:pb?css("--gold"):css("--blue"),"stroke-width":2.5});
+    const below=i>0&&i<R.length-1&&R[i].sec<R[i-1].sec&&R[i].sec<R[i+1].sec;
+    add(el,"text",{x:x(i),y:y(r.sec)+(below?20:-12),"text-anchor":"middle",class:"lbl"},r.time);
+    add(el,"text",{x:x(i),y:300-22,"text-anchor":"middle"},r.course);
+    add(el,"text",{x:x(i),y:300-8,"text-anchor":"middle"},yy(r.date));
+  });
+}
+drawTrend();
+
+// insights
+const by=id=>R.find(r=>r.id===id);
+const ins=[
+ ["y","24분 57초 단축, 추세는 대회당 약 −2분",`첫 풀 ${first.time}에서 PB ${best.time}까지 2년 5개월. 9개 대회 회귀선 기울기가 대회당 약 ${ms(-Math.round((()=>{const n=R.length,mx=(n-1)/2,my=R.reduce((a,r)=>a+r.sec,0)/n;return R.reduce((a,r,i)=>a+(i-mx)*(r.sec-my),0)/R.reduce((a,_,i)=>a+(i-mx)**2,0)})()))} 단축이에요. 같은 코스(춘천 3회·대구 2회·동아 2회)는 <b>나갈 때마다 빨라졌어요</b>.`],
+ ["g","잘 뛴 날은 전·후반 차이가 7초 이내",`동아25(+4.5초), 동아26 PB(+5.7초), 춘천25(+6.9초) — 기록이 좋았던 세 대회 모두 후반 페이스가 km당 7초 이내로만 떨어졌어요. 반대로 삼척(+46.9초)·대구26(+28.8초)·대구25(+20.9초)·춘천24(+20.1초)는 후반에 크게 무너졌어요. <b>기록을 가르는 건 초반 속도보다 후반 유지력</b>이에요.`],
+ ["w","대구 3주 뒤 동아 = PB, 4주 텀 = 부진",`2025·2026 모두 대구 21일 뒤 동아에서 기록을 크게 줄였어요(−8:19, −11:37). 반면 28일 간격으로 뛴 삼척(+7:59)과 인천(+12:42)은 직전 대회보다 둘 다 느렸어요. 두 번 다 <b>큰 노력을 쏟은 레이스 직후</b>였다는 공통점이 있어요.`],
+ ["","후반 12km가 남은 과제",`PB 동아26도 30km까지는 평균 4:28이었는데 31km 이후 4:40으로 12초 느려졌어요. 춘천26은 30km까지 4:32 → 이후 4:52(+20초). 서브 3:10에 필요한 워치 페이스는 약 4:28이라 <b>이미 30km까지는 해낸 속도</b>예요. 31~42km를 4:30대 초반으로 버티는 게 핵심이에요.`],
+ ["","보폭 1.10m → 1.22m, 케이던스는 그대로",`케이던스는 9개 대회 모두 177~182spm으로 거의 같아요. 반면 보폭은 1.10m(춘천24·인천)에서 1.22m(동아26)까지 늘었고, 기록과 가장 잘 맞물려 움직여요. 접지시간도 246→237ms로 짧아졌어요. 다만 춘천26처럼 <b>후반 수직진폭·접지시간 상승</b>이 시작되면 보폭이 먼저 무너지는 패턴이에요.`],
+ ["w","2026년은 더 높은 강도로 레이스",`평균 심박이 2025년 159~169에서 2026년 169~174로 올라갔고, 심박 5영역 비중도 10~29% → 51~64%가 됐어요. 강도를 감당하는 몸이 됐다는 뜻이지만, 덥거나(대구26 평균 27℃, 춘천26 25℃) 업힐·맞바람이 겹치면 여유가 없어요. 춘천25는 평균 22℃에서도 고르게 달렸으니 <b>더위 자체보다 더운 날의 초반 페이스 설정</b>이 관건이에요.`],
+ ["","40km 벽은 사라졌다",`춘천24(41km 8:08)·대구25(40·41km 6:42·6:48)는 막판에 걷기까지 나왔지만, 2026년 3개 대회는 걷기 0초예요. 동아26은 41·42km를 4:42·4:39로 오히려 다시 끌어올렸어요.`],
+ ["","신발 교체 시점과 기록 향상",`2026년 3개 대회는 메타스피드 엣지 도쿄, 이전 6개는 알파플라이3. 2026년 평균 기록(3:17:24)이 더 빠르지만 같은 시기 훈련량·강도가 함께 올라가서 신발 효과만 따로 떼어 보기는 어려워요.`],
+];
+$("#insightList").innerHTML=ins.map(([c,h,p])=>`<div class="card ins ${c}"><h3>${h}</h3><p>${p}</p></div>`).join("");
+
+// course comparison
+const courses=["춘천","대구","동아"];let curC="춘천",unit=5;
+$("#courseSeg").innerHTML=courses.map(c=>`<button data-c="${c}" class="${c===curC?"on":""}">${c} ${R.filter(r=>r.course===c).length}회</button>`).join("");
+$("#courseSeg").onclick=e=>{const b=e.target.closest("button");if(!b)return;curC=b.dataset.c;[...e.currentTarget.children].forEach(x=>x.classList.toggle("on",x===b));drawCourse()};
+$("#unitSeg").onclick=e=>{const b=e.target.closest("button");if(!b)return;unit=+b.dataset.u;[...e.currentTarget.children].forEach(x=>x.classList.toggle("on",x===b));drawCourse()};
+const palette=["#6c7ca6","#7fb0ff","#ffc24b"];
+function segs(r){ // returns [{label,split,cum}]
+  const out=[];
+  if(unit===5){let c=0;r.split5.forEach((s,k)=>{c+=s;out.push({l:(k+1)*5+"km",s,c})});c+=r.finishSeg;out.push({l:"결승",s:r.finishSeg,c,fin:true,km:r.dist-40});}
+  else{r.laps.forEach((s,k)=>out.push({l:(k+1)+"km",s,c:r.cum[k]}));out.push({l:"결승",s:r.last,c:r.sec,fin:true,km:r.dist-42});}
+  return out;
+}
+function drawCourse(){
+  const rs=R.filter(r=>r.course===curC);
+  // chart: pace per km (1km laps) for each edition
+  const VW=vw($("#courseChart")),el=svg($("#courseChart"),VW,250),L=40,Rt=10,T=16,B=26,W=VW-L-Rt,H=250-T-B;
+  const all=rs.flatMap(r=>r.laps),lo=Math.floor(Math.min(...all)/10)*10-5,hi=Math.min(Math.ceil(Math.max(...all)/10)*10,420);
+  const x=k=>L+W*(k/41),y=v=>T+H*((Math.min(v,hi)-lo)/(hi-lo));
+  const tk=[];for(let v=Math.ceil(lo/15)*15;v<=hi;v+=15)tk.push(v);
+  axisY(el,L,VW-Rt,y,lo,hi,tk,ms);
+  [0,10,20,30,40].forEach(k=>add(el,"text",{x:x(k),y:250-6,"text-anchor":"middle"},(k||1)+"km"));
+  rs.forEach((r,i)=>add(el,"polyline",{points:r.laps.map((v,k)=>`${x(k)},${y(v)}`).join(" "),fill:"none",stroke:palette[palette.length-rs.length+i],"stroke-width":i===rs.length-1?2.6:1.8,"stroke-linejoin":"round",opacity:i===rs.length-1?1:.85}));
+  add(el,"text",{x:L+4,y:T+10},"빠름 ↑");
+  $("#courseLegend").innerHTML=rs.map((r,i)=>`<span><i style="background:${palette[palette.length-rs.length+i]}"></i>${r.date.slice(0,4)} ${r.time}${r.official?` (공식 ${r.official})`:""}</span>`).join("")+`<span class="mut">1km 랩 페이스(위가 빠름)</span>`;
+  // table
+  const S=rs.map(segs);
+  let h=`<thead><tr><th>구간</th>`;
+  rs.forEach((r,i)=>{h+=`<th>${r.date.slice(0,4)} 구간</th><th>누적</th>`;if(i)h+=`<th>차이</th><th>누적 단축</th>`});
+  h+=`</tr></thead><tbody>`;
+  S[0].forEach((_,k)=>{
+    h+=`<tr${S[0][k].fin?' class="tot"':""}><td>${S[0][k].l}</td>`;
+    rs.forEach((r,i)=>{const s=S[i][k];h+=`<td>${unit===1&&!s.fin?ms(s.s):hms(s.s)}</td><td>${hms(s.c)}</td>`;
+      if(i){const p=S[i-1][k],d=s.s-p.s,dc=s.c-p.c;h+=`<td class="${d<0?"up":d>0?"dn":"mut"}">${sgn(d)}</td><td class="${dc<0?"up":"dn"}">${sgn(dc)}</td>`}});
+    h+=`</tr>`;
+  });
+  h+=`</tbody>`;
+  $("#courseTbl").innerHTML=h;
+}
+drawCourse();
+
+// pacing
+function drawFade(){
+  const VW=vw($("#fadeChart")),el=svg($("#fadeChart"),VW,250),L=40,Rt=8,T=18,B=40,W=VW-L-Rt,H=250-T-B;
+  const hi=50,x=i=>L+W*((i+.5)/R.length),y=v=>T+H*(1-v/hi),bw=W/R.length*.56;
+  axisY(el,L,VW-Rt,y,0,hi,[0,10,20,30,40,50],v=>"+"+v);
+  add(el,"line",{x1:L,x2:VW-Rt,y1:y(7),y2:y(7),stroke:css("--good"),"stroke-dasharray":"4 4"});
+  add(el,"text",{x:VW-Rt,y:y(50)+4,"text-anchor":"end",style:"fill:"+css("--good")},"--- 이븐 기준 +7초/km");
+  R.forEach((r,i)=>{const f=Math.max(r.fade,0),c=r.fade<=7?css("--good"):r.fade<=20?css("--warn"):css("--bad");
+    add(el,"rect",{x:x(i)-bw/2,y:y(f),width:bw,height:y(0)-y(f),rx:4,fill:c});
+    add(el,"text",{x:x(i),y:y(f)-5,"text-anchor":"middle",class:"lbl"},"+"+r.fade.toFixed(0));
+    add(el,"text",{x:x(i),y:250-24,"text-anchor":"middle"},r.course);
+    add(el,"text",{x:x(i),y:250-10,"text-anchor":"middle"},yy(r.date));});
+  let h=`<thead><tr><th>대회</th><th>전반(워치 21.1km)</th><th>후반</th><th>전반 페이스</th><th>후반 페이스</th><th>차이/km</th><th>30km까지</th><th>31km~</th></tr></thead><tbody>`;
+  R.forEach(r=>{const a=r.laps.slice(0,30).reduce((x,y)=>x+y)/30,b=(r.sec-r.cum[29])/(r.dist-30);
+    h+=`<tr><td>${yy(r.date)} ${r.course}</td><td>${hms(r.h1)}</td><td>${hms(r.h2)}</td><td>${ms(r.p1)}</td><td>${ms(r.p2)}</td><td class="${r.fade<=7?"up":"dn"}">+${r.fade.toFixed(1)}초</td><td>${ms(a)}</td><td>${ms(b)}</td></tr>`});
+  $("#fadeTbl").innerHTML=h+"</tbody>";
+}
+drawFade();
+
+// dynamics small multiples
+function drawMini(){
+  const M=[["평균 페이스","pace",ms,"/km",true],["보폭","stride",v=>v.toFixed(2),"m"],["케이던스","cad",v=>v,"spm"],["지면 접촉 시간","gct",v=>v,"ms",true],["평균 심박","hr",v=>v,"bpm"],["평균 파워","power",v=>v,"W"],["수직 진폭","vo",v=>v.toFixed(1),"cm",true],["수직 비율","vr",v=>v.toFixed(1),"%",true],["총 상승","ascent",v=>v,"m"]];
+  $("#miniCharts").innerHTML=M.map((m,i)=>`<div class="card"><h4>${m[0]}</h4><div class="chg" id="mc${i}"></div><svg class="chart" id="ms${i}"></svg></div>`).join("");
+  M.forEach(([n,k,f,u,lowGood],i)=>{
+    const v=R.map(r=>r[k]),lo=Math.min(...v),hi=Math.max(...v),pad=(hi-lo)*.2||1;
+    const MW=Math.round($("#ms"+i).getBoundingClientRect().width)||200,el=svg($("#ms"+i),MW,80),x=j=>8+(MW-16)*(j/(R.length-1)),y=t=>8+56*(1-(t-lo+pad)/(hi-lo+2*pad));
+    add(el,"polyline",{points:v.map((t,j)=>`${x(j)},${y(t)}`).join(" "),fill:"none",stroke:css("--blue2"),"stroke-width":2});
+    v.forEach((t,j)=>add(el,"circle",{cx:x(j),cy:y(t),r:pbIds.has(R[j].id)&&R[j]===best?4:2.5,fill:R[j]===best?css("--gold"):css("--blue2")}));
+    add(el,"text",{x:8,y:78},"24.10");add(el,"text",{x:MW-8,y:78,"text-anchor":"end"},"26.10");
+    $("#mc"+i).innerHTML=`${f(v[0])} → <b>${f(v[v.length-1])}</b>${u} <span class="mut">· PB ${f(best[k])}</span>`;
+  });
+}
+drawMini();
+
+// race list & detail
+let sel=best.id;
+function drawList(){
+  $("#raceList").innerHTML=R.slice().reverse().map(r=>`<div class="card race ${r===best?"pb":""}" data-id="${r.id}" style="${r.id===sel?"border-color:var(--blue)":""}">
+   <div class="no">${r.n}</div>
+   <div><div class="nm">${r.name}${r===best?'<span class="pill pb">PB</span>':""}${r.gap?`<span class="pill">${r.gap}일 간격</span>`:'<span class="pill">첫 풀</span>'}</div><div class="dt">${r.date.replace(/-/g,".")} · ${r.shoe} · ${r.dist}km</div></div>
+   <div class="d"><div class="t num">${r.time}</div><div class="mut">${ms(r.pace)}/km${r.official?` · 공식 ${r.official}`:""}</div></div></div>`).join("");
+}
+$("#raceList").onclick=e=>{const c=e.target.closest(".race");if(!c)return;sel=c.dataset.id;drawList();drawDetail();$("#raceDetail").scrollIntoView({behavior:"smooth",block:"start"})};
+function drawDetail(){
+  const r=by(sel),i=R.indexOf(r),prev=R.slice(0,i).reverse().find(p=>p.course===r.course);
+  const st=[["완주",r.time],["평균 페이스",ms(r.pace)+"/km"],["전·후반 차이","+"+r.fade.toFixed(1)+"초"],["평균/최대 심박",r.hr+"/"+r.hrMax],["심박 5영역",r.z5!=null?r.z5+"%":"–"],["평균 파워",r.power+"W"],["케이던스",r.cad+"spm"],["보폭",r.stride+"m"],["접지시간",r.gct+"ms"],["수직진폭",r.vo+"cm"],["총 상승",r.ascent+"m"],["기온(출발/평균)",r.tStart+"℃"+(r.tAvg!=null?" / "+r.tAvg+"℃":"")],["걷기",r.walk+"초"],["칼로리",r.cal.toLocaleString()],["신발",r.shoe.replace("Metaspeed Edge Tokyo","MSE 도쿄")],["같은 코스 직전",prev?sgn(r.sec-prev.sec):"–"]];
+  let h=`<div class="row" style="justify-content:space-between;margin:0"><h3 style="margin:0">${r.n}번째 · ${r.name} <span class="small">${r.date.replace(/-/g,".")}</span></h3></div>
+  <div class="memo">${r.memo}</div><div class="grid stats">${st.map(([l,v])=>`<div class="st"><div class="l">${l}</div><div class="v num">${v}</div></div>`).join("")}</div>
+  <p class="small" style="margin:14px 0 4px">1km 랩 페이스 (막대가 길수록 느림 · 점선은 평균)</p><svg id="lapChart" class="chart"></svg>
+  <div class="scroll" style="margin-top:8px"><table class="tbl num"><thead><tr><th>5km 구간</th><th>구간</th><th>페이스</th><th>누적</th>${prev?`<th>${prev.date.slice(0,4)} 대비</th><th>누적 차이</th>`:""}</tr></thead><tbody>`;
+  let c=0,pc=0;
+  r.split5.concat([r.finishSeg]).forEach((s,k)=>{c+=s;const fin=k===8,km=fin?r.dist-40:5;let extra="";
+    if(prev){const ps=fin?prev.finishSeg:prev.split5[k];pc+=ps;const d=s-ps,dc=c-pc;extra=`<td class="${d<0?"up":"dn"}">${sgn(d)}</td><td class="${dc<0?"up":"dn"}">${sgn(dc)}</td>`}
+    h+=`<tr${fin?' class="tot"':""}><td>${fin?"40km~결승":(k*5)+"–"+(k*5+5)+"km"}</td><td>${hms(s)}</td><td>${ms(s/km)}</td><td>${hms(c)}</td>${extra}</tr>`});
+  $("#raceDetail").innerHTML=h+"</tbody></table></div>";
+  const VW=vw($("#lapChart")),el=svg($("#lapChart"),VW,200),L=38,Rt=6,T=10,B=22,W=VW-L-Rt,H=200-T-B,n=43;
+  const v=r.laps.concat([r.last/r.lastKm]),lo=240,hi=Math.max(330,Math.min(500,Math.max(...v)+10));
+  const x=k=>L+W*(k/n),bw=W/n*.72,y=t=>T+H*(1-(Math.min(t,hi)-lo)/(hi-lo));
+  axisY(el,L,VW-Rt,y,lo,hi,[240,270,300,330,360,420,480].filter(t=>t<=hi),ms);
+  v.forEach((t,k)=>{const d=t-r.pace;add(el,"rect",{x:x(k)+1,y:y(t),width:bw,height:y(lo)-y(t),rx:2,fill:d<-5?css("--good"):d>15?css("--bad"):d>5?css("--warn"):css("--blue")})});
+  add(el,"line",{x1:L,x2:VW-Rt,y1:y(r.pace),y2:y(r.pace),stroke:css("--ink"),"stroke-dasharray":"3 3",opacity:.6});
+  [1,10,20,30,40].forEach(k=>add(el,"text",{x:x(k-1)+bw/2,y:200-6,"text-anchor":"middle"},k+"km"));
+}
+drawList();drawDetail();
+
+// goal calc
+function goal(){
+  const g=toS($("#goalIn").value||"3:09:59"),d=parseFloat($("#distIn").value)||42.45;
+  if(!g){$("#goalOut").innerHTML="";return}
+  const p=g/d,po=g/42.195;
+  let h=`<div class="grid kpis" style="margin-bottom:10px"><div class="card kpi"><div class="l">워치 기준 페이스</div><div class="v num">${ms(p)}</div><div class="s">${d}km 기준</div></div><div class="card kpi"><div class="l">공식 거리 페이스</div><div class="v num">${ms(po)}</div><div class="s">42.195km</div></div>
+  <div class="card kpi"><div class="l">PB 대비</div><div class="v num">${sgn(g-toS(best.official||best.time))}</div><div class="s">공식 ${best.official}</div></div><div class="card kpi"><div class="l">PB 30km 평균 대비</div><div class="v num">${sgn(p-best.laps.slice(0,30).reduce((a,b)=>a+b)/30)}</div><div class="s">/km · 동아26 1~30km</div></div></div>
+  <div class="scroll"><table class="tbl num"><thead><tr><th>지점(워치)</th><th>목표 통과</th><th>PB 실제</th><th>차이</th></tr></thead><tbody>`;
+  [5,10,15,20,25,30,35,40].forEach(k=>{const t=p*k,a=best.cum[k-1];h+=`<tr><td>${k}km</td><td>${hms(t)}</td><td>${hms(a)}</td><td class="${t<a?"up":"dn"}">${sgn(t-a)}</td></tr>`});
+  h+=`<tr class="tot"><td>결승</td><td>${hms(g)}</td><td>${best.time}</td><td>${sgn(g-best.sec)}</td></tr></tbody></table></div><p class="small">목표 통과 시간이 PB보다 느리면(빨간색) 그 구간은 PB 때보다 여유 있게 가도 된다는 뜻이에요.</p>`;
+  $("#goalOut").innerHTML=h;
+}
+let rz;let lastW=innerWidth;addEventListener("resize",()=>{if(innerWidth===lastW)return;lastW=innerWidth;clearTimeout(rz);rz=setTimeout(()=>{drawTrend();drawCourse();drawFade();drawMini();drawDetail()},200)});
+$("#goalIn").oninput=goal;$("#distIn").oninput=goal;goal();
+
+// tabs highlight
+const links=[...document.querySelectorAll("nav.tabs a")];
+const obs=new IntersectionObserver(es=>es.forEach(e=>{if(e.isIntersecting){links.forEach(a=>a.classList.toggle("on",a.getAttribute("href")==="#"+e.target.id));const on=links.find(a=>a.classList.contains("on"));if(on){const w=on.parentElement;w.scrollTo({left:on.offsetLeft-w.clientWidth/2+on.clientWidth/2,behavior:"smooth"})}}}),{rootMargin:"-40% 0px -55% 0px"});
+document.querySelectorAll("main section").forEach(s=>obs.observe(s));
+
+if("serviceWorker" in navigator)window.addEventListener("load",()=>navigator.serviceWorker.register("sw.js").catch(()=>{}));
+})();
+</script>
+</body>
+</html>
