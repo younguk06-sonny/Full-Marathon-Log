@@ -1129,9 +1129,9 @@ dash.draw('elevBars', (el) => {
     if (!nar || on) g.append('text').attr('x', cx + bw / 2).attr('y', y(e.ascent) - 4).attr('text-anchor', 'middle').style('font-size', nar ? '10px' : '10.5px').style('font-weight', on ? '800' : '600').style('fill', 'var(--rb-ink)').text(e.ascent);
     const [yy, mm] = [e.date.slice(2, 4), e.date.slice(5, 7)];
     if (nar) {
-      g.append('text').attr('transform', `translate(${cx + bw / 2 + 3},${H - B + 8}) rotate(-55)`).attr('text-anchor', 'end').style('font-size', '9.5px').style('fill', on ? 'var(--rb-ink)' : 'var(--rb-muted)').style('font-weight', on ? '700' : '400').text(yy + '.' + mm + ' ' + e.city);
+      g.append('text').attr('transform', `translate(${cx + bw / 2 + 3},${H - B + 8}) rotate(-55)`).attr('text-anchor', 'end').style('font-size', '9.5px').style('fill', on ? 'var(--rb-ink)' : 'var(--rb-muted)').style('font-weight', on ? '700' : '400').text(yy + '.' + mm + ' ' + (e.short || e.city));
     } else {
-      g.append('text').attr('x', cx + bw / 2).attr('y', H - 28).attr('text-anchor', 'middle').style('font-size', '11px').style('fill', on ? 'var(--rb-ink)' : 'var(--rb-muted)').style('font-weight', on ? '700' : '400').text(e.city);
+      g.append('text').attr('x', cx + bw / 2).attr('y', H - 28).attr('text-anchor', 'middle').style('font-size', '11px').style('fill', on ? 'var(--rb-ink)' : 'var(--rb-muted)').style('font-weight', on ? '700' : '400').text(e.short || e.city);
       g.append('text').attr('x', cx + bw / 2).attr('y', H - 14).attr('text-anchor', 'middle').style('font-size', '10.5px').style('fill', 'var(--rb-muted)').text(yy + '.' + mm);
     }
   });
