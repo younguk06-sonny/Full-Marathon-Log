@@ -24,9 +24,9 @@
 .mx *{box-sizing:border-box}
 .mx{--rb-bg:#eef2f7;--rb-card:#fcfdff;--rb-ink:#172030;--rb-ink2:#3f4b5e;--rb-muted:#7d889a;--rb-line:#d6dee9;--rb-line2:#e4e9f1;--rb-accent:#1d63c3;--rb-up:#c8372d;--rb-down:#1e8657;--rb-land:#e0e6ee;
   --rb-shadow:0 1px 0 rgba(0,0,0,.03),0 6px 24px -12px rgba(20,40,80,.18);
-  --s1:#cde1f8;--s2:#9cc3ee;--s3:#5c9de0;--s4:#2c77cd;--s5:#1656a8;--s6:#0a3876;--rb-gold:#d99a17}
+  --c1:#e8833a;--c2:#1e9a6a;--s1:#cde1f8;--s2:#9cc3ee;--s3:#5c9de0;--s4:#2c77cd;--s5:#1656a8;--s6:#0a3876;--rb-gold:#d99a17}
 @media (prefers-color-scheme:dark){.mx{--rb-bg:#10141b;--rb-card:#19202a;--rb-ink:#e9eef6;--rb-ink2:#bcc6d4;--rb-muted:#808b9c;--rb-line:#2c3442;--rb-line2:#222935;--rb-land:#242c38;--rb-accent:#5b9ff0;--rb-up:#f27d6a;--rb-down:#4fca93;
-  --rb-shadow:0 1px 0 rgba(255,255,255,.02),0 8px 24px -14px rgba(0,0,0,.6);--s1:#1a3560;--s2:#1f4a86;--s3:#2a63ad;--s4:#4383d1;--s5:#78a9e8;--s6:#b6d3f7;--rb-gold:#f2b84b}}
+  --rb-shadow:0 1px 0 rgba(255,255,255,.02),0 8px 24px -14px rgba(0,0,0,.6);--c1:#f2994a;--c2:#4fca93;--s1:#1a3560;--s2:#1f4a86;--s3:#2a63ad;--s4:#4383d1;--s5:#78a9e8;--s6:#b6d3f7;--rb-gold:#f2b84b}}
 .mx{font-family:"RB Pretendard","Pretendard Variable",Pretendard,-apple-system,"Apple SD Gothic Neo","Malgun Gothic",system-ui,sans-serif;font-feature-settings:"tnum" 1;-webkit-font-smoothing:antialiased;
   background:var(--rb-bg);color:var(--rb-ink);font-size:15px;line-height:1.5;padding:20px 16px 32px;display:flex;flex-direction:column;gap:16px}
 .mx h1,.mx h2,.mx h3{margin:0;letter-spacing:-.02em}
@@ -220,16 +220,11 @@
     <div class="chart dash-skeleton" data-draw="trendChart" data-source="raceStats"></div>
   </section>
 
-  <section class="grid" id="pacing">
+  <section id="pacing">
     <div class="card">
       <h2>후반 유지력</h2>
       <p class="note">전반 대비 후반 페이스가 km당 몇 초 느려졌는지. 둔화가 가장 작았던 <b data-draw="evenRaces" data-source="insights" data-field="evenRaces">—</b>는 모두 <b data-draw="evenMax" data-source="insights" data-field="evenMax">—</b> 이내였고, 가장 컸던 <b data-draw="worstRace" data-source="insights" data-field="worstRace">—</b>는 <b data-draw="worstFade" data-source="insights" data-field="worstFade">—</b>였어요. 점선은 +<span data-draw="even">—</span>초 기준선이에요.</p>
       <div class="chart dash-skeleton" data-draw="fadeChart" data-source="raceStats"></div>
-    </div>
-    <div class="card">
-      <h2>대회 간격과 결과</h2>
-      <p class="note">직전 대회와의 간격별로 직전 대회 대비 기록 차이 평균. 21일 간격(대구 → 동아)은 <b data-draw="gap21" data-source="insights" data-field="gap21">—</b>, 28일 간격(동아 → 삼척, 춘천 → 인천)은 <b data-draw="gap28" data-source="insights" data-field="gap28">—</b>였어요.</p>
-      <div class="chart dash-skeleton" data-draw="gapChart" data-source="raceStats"></div>
     </div>
   </section>
 
@@ -525,7 +520,7 @@ const textField = (name, id, field) => dash.draw(name, (el) => {
  ['improve', 'summary', 'improve'], ['improve2', 'summary', 'improve'], ['pbOfficial', 'summary', 'pbOfficial'], ['pbRace', 'summary', 'pbRace'],
  ['count', 'summary', 'count'], ['latestTime', 'summary', 'latestTime'], ['latestRace', 'summary', 'latestRace'], ['latestVs', 'summary', 'latestVsCourse'],
  ['evenRaces', 'insights', 'evenRaces'], ['evenMax', 'insights', 'evenMax'], ['worstRace', 'insights', 'worstRace'], ['worstFade', 'insights', 'worstFade'],
- ['gap21', 'insights', 'gap21'], ['gap28', 'insights', 'gap28'], ['cadRange', 'insights', 'cadRange'], ['strideFirst', 'insights', 'strideFirst'],
+ ['cadRange', 'insights', 'cadRange'], ['strideFirst', 'insights', 'strideFirst'],
  ['stridePb', 'insights', 'stridePb'], ['sidoCount', 'insights', 'sidoCount'], ['cityCount', 'insights', 'cityCount'], ['topCity', 'insights', 'topCity'], ['pb30', 'insights', 'pbPace30'], ['pb31', 'insights', 'pbPaceAfter30']].forEach((a) => textField(...a));
 dash.draw('even', (el) => { el.textContent = String(window.mxEven); });
 
@@ -613,26 +608,6 @@ dash.draw('fadeChart', (el) => {
   svg.append('line').attr('x1', L).attr('x2', W - R).attr('y1', y(window.mxEven)).attr('y2', y(window.mxEven)).style('stroke', 'var(--rb-down)').attr('stroke-dasharray', '4 4');
 });
 
-// 대회 간격 vs 직전 대비
-dash.draw('gapChart', (el) => {
-  if (!window.mxState(el, 'raceStats')) return;
-  const rows = dash.data('raceStats').data.filter((r) => r.daysSincePrev != null); el.replaceChildren();
-  const W = el.clientWidth || 400, H = W < 480 ? 210 : 240, L = 44, R = 10, T = 18, B = 34;
-  const svg = d3.select(el).append('svg').attr('width', '100%').attr('viewBox', `0 0 ${W} ${H}`);
-  const ext = d3.max(rows, (r) => Math.abs(r.vsPrevSec)) + 60;
-  const x = d3.scaleLinear([0, d3.max(rows, (r) => r.daysSincePrev) + 20], [L + 8, W - R - 8]);
-  const y = d3.scaleLinear([-ext, ext], [H - B, T]);
-  yAxis(svg.append('g'), y, d3.range(-Math.floor(ext / 300) * 300, ext, 300), (v) => (v > 0 ? '+' : v < 0 ? '−' : '') + F.ms(Math.abs(v)), W - R, L);
-  svg.append('line').attr('x1', L).attr('x2', W - R).attr('y1', y(0)).attr('y2', y(0)).style('stroke', 'var(--rb-line)');
-  [0, 100, 200].filter((v) => x(v) < W - R - 14).forEach((v) => svg.append('text').attr('x', x(v)).attr('y', H - 14).attr('text-anchor', 'middle').style('font-size', '12px').style('fill', 'var(--rb-muted)').text(v + '일'));
-  svg.append('text').attr('x', W - R).attr('y', T - 4).attr('text-anchor', 'end').style('font-size', '12px').style('fill', 'var(--rb-muted)').text('아래가 단축');
-  const tip = tipFor(el);
-  rows.forEach((r) => {
-    svg.append('circle').attr('cx', x(r.daysSincePrev)).attr('cy', y(r.vsPrevSec)).attr('r', 5).style('fill', r.vsPrevSec < 0 ? 'var(--rb-down)' : 'var(--rb-up)')
-      .on('mouseenter', () => tip.show(x(r.daysSincePrev) / W * el.clientWidth, y(r.vsPrevSec) / H * el.clientHeight, r.race, [r.daysSincePrev + '일 만', '직전 대회 대비 ' + F.sgn(r.vsPrevSec)]))
-      .on('mouseleave', () => tip.hide());
-  });
-});
 
 // 같은 코스 1km 랩
 dash.draw('courseChart', (el) => {
@@ -648,8 +623,9 @@ dash.draw('courseChart', (el) => {
   const y = d3.scaleLinear([lo, hi], [T, H - B]);
   yAxis(svg.append('g'), y, d3.range(lo, hi + 1, (hi - lo) / 15 > 8 ? 30 : 15), F.ms, W - R, L);
   [1, 10, 20, 30, 40].forEach((k) => svg.append('text').attr('x', x(k)).attr('y', H - 6).attr('text-anchor', 'middle').style('font-size', '12px').style('fill', 'var(--rb-muted)').text(k + 'km'));
-  const cols = eds.map((_, i) => (i === eds.length - 1 ? window.mxC('--rb-accent') : i === eds.length - 2 ? window.mxC('--s3') : muted()));
-  series.forEach((s, i) => svg.append('path').attr('d', d3.line((l) => x(l.km), (l) => y(Math.min(l.sec, hi)))(s)).style('fill', 'none').style('stroke', cols[i]).attr('stroke-width', 2).attr('stroke-linejoin', 'round').attr('stroke-linecap', 'round'));
+  const pal = [window.mxC('--c1'), window.mxC('--c2'), window.mxC('--rb-accent')];
+  const cols = eds.map((_, i) => pal[pal.length - eds.length + i]);
+  series.forEach((s, i) => svg.append('path').attr('d', d3.line((l) => x(l.km), (l) => y(Math.min(l.sec, hi)))(s)).style('fill', 'none').style('stroke', cols[i]).attr('stroke-width', i === series.length - 1 ? 2.6 : 2).attr('stroke-linejoin', 'round').attr('stroke-linecap', 'round'));
   const tip = tipFor(el);
   const rule = svg.append('line').attr('y1', T).attr('y2', H - B).style('stroke', 'var(--rb-line)').attr('opacity', 0);
   svg.append('rect').attr('x', L).attr('y', T).attr('width', W - L - R).attr('height', H - T - B).style('fill', 'transparent')
@@ -665,7 +641,8 @@ dash.draw('courseLegend', (el) => {
   const eds = s.data.filter((r) => r.course === window.mxCourse);
   el.replaceChildren(...eds.map((e, i) => {
     const sp = document.createElement('span'); const sw = document.createElement('i');
-    sw.style.background = i === eds.length - 1 ? window.mxC('--rb-accent') : i === eds.length - 2 ? window.mxC('--s3') : muted();
+    const pal = [window.mxC('--c1'), window.mxC('--c2'), window.mxC('--rb-accent')];
+    sw.style.background = pal[pal.length - eds.length + i];
     sp.append(sw, (i + 1) + '회 ' + e.date.slice(0, 4) + ' 공식 ' + e.official + ' (워치 ' + e.time + ')');
     return sp;
   }));
