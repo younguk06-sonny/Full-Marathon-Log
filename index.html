@@ -23,6 +23,19 @@
 .mx .zones .zc.me{border-color:var(--rb-ink);color:var(--rb-ink);font-weight:700}
 .mx .zones .zme{color:var(--rb-ink2)}
 .mx .zones .zme b{color:var(--rb-ink)}
+.mx .formula{display:inline-block;margin:6px 0;padding:4px 10px;border-radius:8px;background:var(--rb-bg);color:var(--rb-ink);font-size:14px;font-weight:700}
+.mx .goalin select{font:inherit;font-size:15px;font-weight:700;padding:6px 10px;border:1px solid var(--rb-line);border-radius:10px;background:var(--rb-bg);color:var(--rb-ink);min-width:8rem}
+.mx .goalin .rg-custom{display:none}
+.mx .goalin .rg-custom.show{display:flex}
+.mx .rg-presets{display:flex;flex-wrap:wrap;gap:6px;margin:-4px 0 12px}
+.mx .rg-presets button{font:inherit;font-size:12.5px;border:1px solid var(--rb-line);background:var(--rb-card);color:var(--rb-ink2);padding:5px 10px;border-radius:999px;cursor:pointer}
+.mx .rg-out{display:grid;gap:10px;grid-template-columns:repeat(3,minmax(0,1fr))}
+.mx .rg-out .card{padding:12px 14px;box-shadow:none;background:var(--rb-bg)}
+.mx .rg-out .card.main{background:color-mix(in srgb,var(--rb-accent) 10%,var(--rb-card));border-color:color-mix(in srgb,var(--rb-accent) 35%,var(--rb-line2))}
+.mx .rg-out .card.main .big{color:var(--rb-accent)}
+.mx .rg-note{margin-top:10px;font-size:12px;color:var(--rb-muted)}
+.mx .rg-note b{color:var(--rb-ink)}
+@media (max-width:600px){.mx .rg-out{gap:6px}.mx .rg-out .card{padding:10px 8px}.mx .rg-out .big{font-size:18px}.mx .rg-out .lbl{font-size:10.5px}.mx .rg-out .sub2{font-size:10.5px}.mx .goalin select{width:100%;min-width:0}.mx .goalin label:last-child{grid-column:1/-1}}
 </style>
 <style>
 @font-face{font-family:"RB Pretendard";font-weight:400;font-display:swap;src:url(fonts/Pretendard-Regular.subset.woff2) format("woff2")}
@@ -163,6 +176,7 @@
 
   <nav class="qnav" aria-label="바로가기">
     <button type="button" data-go="kpis" class="on">요약·지역</button>
+    <button type="button" data-go="predict">레이스 예측</button>
     <button type="button" data-go="all">전체 기록</button>
     <button type="button" data-go="races">대회별 상세기록</button>
         <button type="button" data-go="trend">추이</button>
@@ -185,6 +199,27 @@
       <div class="card tile"><div class="lbl">첫 풀 대비 단축</div><div class="big" data-draw="improve2" data-source="summary" data-field="improve">—</div><div class="sub2">첫 풀 <span data-draw="firstTime2" data-source="summary" data-field="firstTime">—</span></div></div>
       <div class="card tile"><div class="lbl">최근 대회</div><div class="big" data-draw="latestTime" data-source="summary" data-field="latestTime">—</div><div class="sub2"><span data-draw="latestRace" data-source="summary" data-field="latestRace">—</span> · 같은 코스 직전 대비 <span data-draw="latestVs" data-source="summary" data-field="latestVsCourse">—</span></div></div>
     </div>
+  </section>
+
+  <section class="card" id="predict">
+    <h2>레이스 예측 · 피터 리겔 공식</h2>
+    <p class="def" style="margin:4px 0 12px">미국 엔지니어 피터 리겔(Pete Riegel)이 1977년 러너스월드에 처음 발표하고, 1981년 American Scientist 논문 「Athletic Records and Human Endurance」로 정리한 공식이에요. 한 거리의 기록으로 다른 거리 기록을 예측해요.
+      <br><b class="formula">T₂ = T₁ × (D₂ ÷ D₁)<sup>1.06</sup></b>
+      <br>T₁·D₁은 이미 뛴 기록과 거리, D₂는 예측할 거리(풀 42.195km)예요. 지수 1.06은 거리가 늘수록 같은 페이스를 유지하기 어려워지는 정도를 뜻해요. 1이면 페이스가 그대로라는 뜻이고, 클수록 장거리에서 더 느려진다고 보는 거예요.
+      <br>주의: 그 거리에 맞는 훈련(특히 장거리 주행량)이 되어 있다는 전제라서, 풀은 실제보다 빠르게 나오는 경향이 있어요. 그래서 보수적인 지수 1.08·1.10 결과도 같이 보여 드려요.</p>
+    <div class="goalin">
+      <label>뛴 거리<select id="rg-dist" aria-label="뛴 거리">
+        <option value="5">5km</option>
+        <option value="10" selected>10km</option>
+        <option value="21.0975">하프 (21.0975km)</option>
+        <option value="30">30km</option>
+        <option value="custom">직접 입력</option>
+      </select></label>
+      <label class="rg-custom">거리(km)<input id="rg-km" value="15" inputmode="decimal" aria-label="거리 직접 입력"></label>
+      <label>기록 (시:분:초 또는 분:초)<input id="rg-time" value="39:53.8" inputmode="numeric" aria-label="기록"></label>
+    </div>
+    <div class="rg-presets" data-draw="rgPresets" data-source="otherPbs"></div>
+    <div data-draw="riegel" data-source="otherPbs summary">—</div>
   </section>
 
   <section class="card" id="all">
@@ -305,7 +340,7 @@
 <script>
 // Claude 대시보드용 dash API를 브라우저에서 직접 돌리는 작은 실행기
 window.dash = (() => {
-  const files = { races: 'data/races.json', laps: 'data/laps.json', geo: 'data/korea_sido.json' };
+  const files = { races: 'data/races.json', laps: 'data/laps.json', geo: 'data/korea_sido.json', otherPbs: 'data/other_pbs.json' };
   const data = {}, calcs = {}, draws = {}, listeners = [];
   let ready = false;
   const run = (name) => document.querySelectorAll('[data-draw="' + name + '"]').forEach((el) => { try { draws[name](el); } catch (e) { console.error(name, e); } });
@@ -879,6 +914,55 @@ dash.draw('certs', (el) => {
 </script>
 
 <script>dash._boot();
-if ('serviceWorker' in navigator) addEventListener('load', () => navigator.serviceWorker.register('sw.js').catch(() => {}));</script>
+if ('serviceWorker' in navigator) addEventListener('load', () => navigator.serviceWorker.register('sw.js').catch(() => {}));
+// 리겔 레이스 예측
+window.mxRiegel = { exps: [1.06, 1.08, 1.10], full: 42.195 };
+dash.draw('rgPresets', (el) => {
+  const d = dash.data('otherPbs');
+  if (d.status !== 'ok') { el.replaceChildren(); return; }
+  el.replaceChildren(...d.data.map((r) => {
+    const b = document.createElement('button'); b.type = 'button';
+    b.textContent = r.label + ' ' + r.time + ' 넣기';
+    b.onclick = () => {
+      document.querySelectorAll('#rg-dist').forEach((s) => { s.value = String(r.distKm); });
+      document.querySelectorAll('#rg-time').forEach((s) => { s.value = r.time; });
+      document.querySelectorAll('.rg-custom').forEach((c) => c.classList.remove('show'));
+      dash.draw('riegel');
+    };
+    return b;
+  }));
+});
+dash.draw('riegel', (el) => {
+  const sel = document.getElementById('rg-dist'), km = document.getElementById('rg-km'), tm = document.getElementById('rg-time');
+  const sm = dash.data('summary');
+  const d1 = sel && sel.value === 'custom' ? parseFloat(km ? km.value : '') : parseFloat(sel ? sel.value : '10');
+  const p = (tm ? tm.value : '').trim().split(':').map(Number);
+  const t1 = p.length === 3 ? p[0] * 3600 + p[1] * 60 + p[2] : p.length === 2 ? p[0] * 60 + p[1] : NaN;
+  if (!(d1 > 0) || !(t1 > 0) || p.some((x) => Number.isNaN(x))) { el.textContent = '거리와 기록을 넣으면 예상 풀 기록이 나와요.'; return; }
+  const R = window.mxRiegel, F2 = window.mxFmt;
+  const preds = R.exps.map((e) => t1 * Math.pow(R.full / d1, e));
+  const out = document.createElement('div'); out.className = 'rg-out';
+  preds.forEach((t, k) => {
+    const c = document.createElement('div'); c.className = 'card tile' + (k === 0 ? ' main' : '');
+    const l = document.createElement('div'); l.className = 'lbl'; l.textContent = k === 0 ? '예상 풀 기록 (지수 ' + R.exps[k].toFixed(2) + ')' : '보수적 (지수 ' + R.exps[k].toFixed(2) + ')';
+    const b = document.createElement('div'); b.className = 'big'; b.textContent = F2.hms(t);
+    const s2 = document.createElement('div'); s2.className = 'sub2'; s2.textContent = '페이스 ' + F2.ms(t / R.full) + '/km';
+    c.append(l, b, s2); out.appendChild(c);
+  });
+  const note = document.createElement('div'); note.className = 'rg-note';
+  note.append('입력: ' + (Math.round(d1 * 1000) / 1000) + 'km ' + F2.hms(t1) + ' (페이스 ' + F2.ms(t1 / d1) + '/km)');
+  if (sm.status === 'ok' && sm.data[0]) {
+    const pb = sm.data[0].pbOfficial, ps = pb.split(':').map(Number), pbs = ps[0] * 3600 + ps[1] * 60 + ps[2];
+    const bb = document.createElement('b'); bb.textContent = pb;
+    note.append(' · 실제 풀 PB ', bb, ' 대비 지수 ' + R.exps[0].toFixed(2) + ' 예측은 ' + F2.sgn(preds[0] - pbs));
+  }
+  el.replaceChildren(out, note);
+});
+document.querySelectorAll('#rg-dist').forEach((s) => s.addEventListener('change', () => {
+  document.querySelectorAll('.rg-custom').forEach((c) => c.classList.toggle('show', s.value === 'custom'));
+  dash.draw('riegel');
+}));
+document.querySelectorAll('#rg-km, #rg-time').forEach((i) => i.addEventListener('input', () => dash.draw('riegel')));
+</script>
 </body>
 </html>

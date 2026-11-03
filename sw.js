@@ -1,6 +1,6 @@
-const CACHE = "fm-log-v2";
+const CACHE = "fm-log-v3";
 const ASSETS = ["./", "index.html", "manifest.webmanifest", "vendor/d3.min.js",
-  "data/races.json", "data/laps.json", "data/korea_sido.json",
+  "data/races.json", "data/laps.json", "data/korea_sido.json", "data/other_pbs.json",
   "fonts/Pretendard-Regular.subset.woff2", "fonts/Pretendard-SemiBold.subset.woff2", "fonts/Pretendard-Bold.subset.woff2",
   "icons/icon-192.png", "icons/icon-512.png", "icons/apple-touch-icon.png", "icons/favicon-64.png"];
 self.addEventListener("install", (e) => { e.waitUntil(caches.open(CACHE).then((c) => c.addAll(ASSETS))); self.skipWaiting(); });
