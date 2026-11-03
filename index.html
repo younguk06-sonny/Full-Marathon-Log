@@ -261,7 +261,7 @@
         <option value="custom">직접 입력</option>
       </select></label>
       <label class="rg-custom">거리(km)<input id="rg-km" value="15" inputmode="decimal" aria-label="거리 직접 입력"></label>
-      <label>기록 (시:분:초 또는 분:초)<input id="rg-time" value="39:53.8" inputmode="numeric" aria-label="기록"></label>
+      <label>기록(시분초 ex)012959)<input id="rg-time" value="39:53.8" inputmode="numeric" aria-label="기록"></label>
     </div>
     <div class="rg-presets" data-draw="rgPresets" data-source="otherPbs"></div>
     <div data-draw="riegel" data-source="otherPbs summary">—</div>
@@ -1065,7 +1065,10 @@ dash.draw('riegel', (el) => {
   const sel = document.getElementById('rg-dist'), km = document.getElementById('rg-km'), tm = document.getElementById('rg-time');
   const sm = window.mxD('summary');
   const d1 = sel && sel.value === 'custom' ? parseFloat(km ? km.value : '') : parseFloat(sel ? sel.value : '10');
-  const p = (tm ? tm.value : '').trim().split(':').map(Number);
+  let raw = (tm ? tm.value : '').trim();
+  const dm = raw.match(/^(\d{3,6})(\.\d+)?$/);
+  if (dm) { const d = dm[1].padStart(6, '0'); raw = d.slice(0, 2) + ':' + d.slice(2, 4) + ':' + d.slice(4) + (dm[2] || ''); }
+  const p = raw.split(':').map(Number);
   const t1 = p.length === 3 ? p[0] * 3600 + p[1] * 60 + p[2] : p.length === 2 ? p[0] * 60 + p[1] : NaN;
   if (!(d1 > 0) || !(t1 > 0) || p.some((x) => Number.isNaN(x))) { el.textContent = '거리와 기록을 넣으면 예상 풀 기록이 나와요.'; return; }
   const R = window.mxRiegel, F2 = window.mxFmt;
