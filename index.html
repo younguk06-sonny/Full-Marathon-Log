@@ -285,9 +285,9 @@
       <table data-source="courseTable" data-row-key="course,seg">
         <thead><tr>
           <th data-field="seg">구간</th>
-          <th data-field="split1">1회 구간</th><th data-field="cum1">1회 누적</th>
-          <th data-field="split2">2회 구간</th><th data-field="cum2">2회 누적</th><th data-field="diff2">1회 대비</th><th data-field="cumDiff2">누적 단축</th>
-          <th data-field="split3" class="e3">3회 구간</th><th data-field="cum3" class="e3">3회 누적</th><th data-field="diff3" class="e3">2회 대비</th><th data-field="cumDiff3" class="e3">누적 단축</th>
+          <th data-field="split1"><span data-draw="edLabel" data-ed="1" data-source="raceStats">—</span> 구간</th><th data-field="cum1"><span data-draw="edLabel" data-ed="1" data-source="raceStats">—</span> 누적</th>
+          <th data-field="split2"><span data-draw="edLabel" data-ed="2" data-source="raceStats">—</span> 구간</th><th data-field="cum2"><span data-draw="edLabel" data-ed="2" data-source="raceStats">—</span> 누적</th><th data-field="diff2"><span data-draw="edLabel" data-ed="1" data-source="raceStats">—</span> 대비</th><th data-field="cumDiff2">누적 단축</th>
+          <th data-field="split3" class="e3"><span data-draw="edLabel" data-ed="3" data-source="raceStats">—</span> 구간</th><th data-field="cum3" class="e3"><span data-draw="edLabel" data-ed="3" data-source="raceStats">—</span> 누적</th><th data-field="diff3" class="e3"><span data-draw="edLabel" data-ed="2" data-source="raceStats">—</span> 대비</th><th data-field="cumDiff3" class="e3">누적 단축</th>
         </tr></thead>
         <tbody data-draw="courseRows"></tbody>
       </table>
@@ -546,7 +546,7 @@ document.querySelectorAll('#course .seg button').forEach((b) => {
     const s = dash.data('raceStats');
     const n = s.status === 'ok' ? s.data.filter((r) => r.course === window.mxCourse).length : 3;
     document.querySelectorAll('#course .e3').forEach((th) => { th.hidden = n < 3; });
-    dash.draw('courseChart'); dash.draw('courseLegend'); dash.draw('courseRows');
+    dash.draw('courseChart'); dash.draw('courseLegend'); dash.draw('courseRows'); dash.draw('edLabel');
   });
 });
 document.querySelectorAll('.mx .qnav button').forEach((b) => {
@@ -671,6 +671,17 @@ dash.draw('fadeChart', (el) => {
 });
 
 
+
+// 같은 코스 대회 이름 (24춘마, 25대마, 26동마 …)
+window.mxShort = { 춘천: '춘마', 대구: '대마', 동아: '동마', 삼척: '삼마', 인천: '인마' };
+window.mxEdName = (e) => e.date.slice(2, 4) + (window.mxShort[e.course] || e.course);
+dash.draw('edLabel', (el) => {
+  const s = dash.data('raceStats');
+  if (s.status !== 'ok') { el.textContent = '—'; return; }
+  const eds = s.data.filter((r) => r.course === window.mxCourse), e = eds[Number(el.dataset.ed) - 1];
+  el.textContent = e ? window.mxEdName(e) : '';
+});
+
 // 같은 코스 1km 랩
 dash.draw('courseChart', (el) => {
   if (!window.mxState(el, 'raceStats', 'laps')) return;
@@ -694,7 +705,7 @@ dash.draw('courseChart', (el) => {
     .on('pointermove pointerdown', (ev) => {
       const k = Math.max(1, Math.min(42, Math.round(x.invert(d3.pointer(ev)[0]))));
       rule.attr('x1', x(k)).attr('x2', x(k)).attr('opacity', 1);
-      tip.show(x(k) / W * el.clientWidth, T + 20, k + 'km 랩', eds.map((e, i) => e.date.slice(0, 4) + '  ' + F.ms(series[i][k - 1].sec)));
+      tip.show(x(k) / W * el.clientWidth, T + 20, k + 'km 랩', eds.map((e, i) => window.mxEdName(e) + '  ' + F.ms(series[i][k - 1].sec)));
     }).on('pointerleave', () => { tip.hide(); rule.attr('opacity', 0); });
 });
 dash.draw('courseLegend', (el) => {
@@ -705,7 +716,7 @@ dash.draw('courseLegend', (el) => {
     const sp = document.createElement('span'); const sw = document.createElement('i');
     const pal = [window.mxC('--c1'), window.mxC('--c2'), window.mxC('--rb-accent')];
     sw.style.background = pal[pal.length - eds.length + i];
-    sp.append(sw, (i + 1) + '회 ' + e.date.slice(0, 4) + ' 공식 ' + e.official + ' (워치 ' + e.time + ')');
+    sp.append(sw, window.mxEdName(e) + ' 공식 ' + e.official + ' (워치 ' + e.time + ')');
     return sp;
   }));
 });
