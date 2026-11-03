@@ -186,6 +186,21 @@
 .mx .pseg{display:inline-flex;align-self:flex-start;background:var(--rb-card);border:1px solid var(--rb-line);border-radius:12px;padding:3px;gap:2px}
 .mx .pseg button{font:inherit;border:0;background:transparent;padding:7px 16px;border-radius:9px;cursor:pointer;font-size:14px;font-weight:650;color:var(--rb-ink2)}
 .mx .pseg button.on{background:var(--rb-accent);color:#fff}
+.mx .chart.elevbar{min-height:220px}
+@media (max-width:600px){.mx .chart.elevbar{min-height:240px}}
+.mx .elev-head{display:flex;gap:8px;align-items:center;margin:12px 0 8px}
+.mx .elev-sel{font:inherit;font-size:14px;font-weight:700;padding:7px 10px;border:1px solid var(--rb-line);border-radius:10px;background:var(--rb-bg);color:var(--rb-ink);max-width:100%}
+.mx .elev-stats{display:grid;gap:8px;grid-template-columns:repeat(auto-fit,minmax(min(100%,8rem),1fr));margin-bottom:8px}
+.mx .elev-stats .st{background:var(--rb-bg);border-radius:10px;padding:8px 10px}
+.mx .elev-stats .l{font-size:11.5px;color:var(--rb-muted)}
+.mx .elev-stats .v{font-size:16px;font-weight:750}
+.mx .elev-imgs{display:grid;gap:12px;grid-template-columns:repeat(auto-fit,minmax(min(100%,16rem),1fr));margin-top:10px}
+.mx .elev-imgs figure{margin:0;border:1px solid var(--rb-line2);border-radius:12px;overflow:hidden;background:#000}
+.mx .elev-imgs img{width:100%;display:block}
+.mx .elev-imgs figcaption{background:var(--rb-card);padding:8px 10px;font-size:12.5px;color:var(--rb-ink2)}
+.mx .elev-imgs figcaption b{color:var(--rb-ink)}
+.mx .elev-imgs .best{display:inline-block;margin-left:6px;padding:0 6px;border-radius:999px;background:var(--rb-accent);color:#fff;font-size:10.5px;font-weight:700}
+.mx .elev-none{font-size:13px;color:var(--rb-muted);padding:20px 0;text-align:center}
 </style>
 </head>
 <body>
@@ -212,6 +227,7 @@
     <button type="button" data-go="trend">추이</button>
     <button type="button" data-go="pacing">후반 유지력</button>
     <button type="button" data-go="course" data-only="son" hidden>같은 코스</button>
+    <button type="button" data-go="elev">해발고도</button>
     <button type="button" data-go="dynamics">다이내믹스</button>
     <button type="button" data-go="goal">목표 페이스</button>
   </nav>
@@ -331,6 +347,22 @@
     <p class="swipe">표는 옆으로 밀어서 더 볼 수 있어요</p>
   </section>
 
+  <section class="card" id="elev">
+    <h2>대회별 해발고도</h2>
+    <p class="note">세 사람이 뛴 <b data-draw="evCount" data-source="elevation">—</b>개 대회의 코스 고저. 막대를 누르면 그 대회 고도 그래프가 아래에 나와요.</p>
+    <p class="def" style="margin:-6px 0 10px">여러 명이 함께 뛴 대회는 고도 변화가 가장 크게 잡힌(총 상승이 가장 큰) 기록을 대표로 썼어요. 해발고도는 워치 기압계 값이라 같은 대회도 기기·날씨에 따라 절대값이 달라요(25 동아는 −40~−6m로 기록됐어요). 그래프는 가민 캡처의 고도 차트를 읽어 시간 축을 거리로 바꾼 근사치예요.</p>
+    <div class="chart elevbar dash-skeleton" data-draw="elevBars" data-source="elevation"></div>
+    <div class="elev-head">
+      <select class="elev-sel" data-draw="elevSelect" data-source="elevation" aria-label="대회 선택"></select>
+    </div>
+    <div class="elev-stats" data-draw="elevStats" data-source="elevation"></div>
+    <div class="chart dash-skeleton" data-draw="elevChart" data-source="elevation"></div>
+    <details class="fold elev-fold" style="margin-top:10px">
+      <summary><span class="ft"><h3>실제 고도 그래프 보기</h3><span class="fh">워치 앱에서 캡처한 원본 고도 차트</span></span><span class="fb"><span class="o">펼치기</span><span class="c">접기</span></span></summary>
+      <div class="elev-imgs" data-draw="elevImgs" data-source="elevation"></div>
+    </details>
+  </section>
+
   <section id="dynamics">
     <h2>러닝 다이내믹스</h2>
     <p class="note" data-only="kim pjh">대회별 평균값 추이. 케이던스는 <b data-draw="cadFirst" data-source="insights" data-field="cadFirst">—</b>에서 PB 때 <b data-draw="cadPb" data-source="insights" data-field="cadPb">—</b>로, 보폭은 <b data-draw="strideFirst2" data-source="insights" data-field="strideFirst">—</b>에서 <b data-draw="stridePb2" data-source="insights" data-field="stridePb">—</b>로 둘 다 늘었어요. 피치와 보폭이 함께 좋아지며 빨라진 경우예요.</p>
@@ -377,7 +409,7 @@
 <script>
 // Claude 대시보드용 dash API를 브라우저에서 직접 돌리는 작은 실행기
 window.dash = (() => {
-  const files = { races: 'data/races.json', laps: 'data/laps.json', geo: 'data/korea_sido.json', otherPbs: 'data/other_pbs.json' };
+  const files = { races: 'data/races.json', laps: 'data/laps.json', geo: 'data/korea_sido.json', otherPbs: 'data/other_pbs.json', elevation: 'data/elevation.json' };
   const data = {}, calcs = {}, draws = {}, listeners = [];
   let ready = false;
   const run = (name) => document.querySelectorAll('[data-draw="' + name + '"]').forEach((el) => { try { draws[name](el); } catch (e) { console.error(name, e); } });
@@ -1065,6 +1097,101 @@ document.querySelectorAll('#rg-dist').forEach((s) => s.addEventListener('change'
   dash.draw('riegel');
 }));
 document.querySelectorAll('#rg-km, #rg-time').forEach((i) => i.addEventListener('input', () => dash.draw('riegel')));
+
+// 대회별 해발고도
+window.mxElevId = null;
+window.mxEv = () => {
+  const d = dash.data('elevation');
+  if (d.status !== 'ok') return null;
+  return d.data.map((e) => Object.assign({}, e, {
+    profile: typeof e.profile === 'string' ? JSON.parse(e.profile) : (e.profile || []),
+    sources: typeof e.sources === 'string' ? JSON.parse(e.sources) : (e.sources || []),
+  }));
+};
+window.mxEvCur = () => { const ev = window.mxEv(); if (!ev) return null; return ev.find((e) => e.id === window.mxElevId) || ev[ev.length - 1]; };
+window.mxElevPick = (id) => { window.mxElevId = id; ['elevBars', 'elevSelect', 'elevStats', 'elevChart', 'elevImgs'].forEach((n) => dash.draw(n)); };
+dash.draw('evCount', (el) => { const ev = window.mxEv(); el.textContent = ev ? String(ev.length) : '—'; });
+dash.draw('elevBars', (el) => {
+  if (!window.mxState(el, 'elevation')) return;
+  const ev = window.mxEv(), cur = window.mxEvCur(); el.replaceChildren();
+  const W = el.clientWidth || 600, nar = W < 560, H = nar ? 240 : 220, L = 42, R = 6, T = 18, B = nar ? 64 : 44;
+  const svg = d3.select(el).append('svg').attr('width', '100%').attr('viewBox', `0 0 ${W} ${H}`);
+  const x = d3.scaleBand(ev.map((e) => e.id), [L, W - R]).padding(0.25);
+  const hi = Math.ceil(d3.max(ev, (e) => e.ascent) / 100) * 100;
+  const y = d3.scaleLinear([0, hi], [H - B, T]);
+  yAxis(svg.append('g'), y, d3.range(0, hi + 1, 100), (v) => v + 'm', W - R, L);
+  const bw = Math.min(28, x.bandwidth());
+  ev.forEach((e) => {
+    const on = e.id === cur.id, cx = x(e.id) + (x.bandwidth() - bw) / 2;
+    const g = svg.append('g').style('cursor', 'pointer').on('click', () => window.mxElevPick(e.id));
+    g.append('rect').attr('x', x(e.id) - 2).attr('width', x.bandwidth() + 4).attr('y', T).attr('height', H - B - T).style('fill', 'transparent');
+    g.append('rect').attr('x', cx).attr('width', bw).attr('y', y(e.ascent)).attr('height', y(0) - y(e.ascent)).attr('rx', 3).style('fill', on ? window.mxC('--rb-accent') : window.mxC('--s2'));
+    if (!nar || on) g.append('text').attr('x', cx + bw / 2).attr('y', y(e.ascent) - 4).attr('text-anchor', 'middle').style('font-size', nar ? '10px' : '10.5px').style('font-weight', on ? '800' : '600').style('fill', 'var(--rb-ink)').text(e.ascent);
+    const [yy, mm] = [e.date.slice(2, 4), e.date.slice(5, 7)];
+    if (nar) {
+      g.append('text').attr('transform', `translate(${cx + bw / 2 + 3},${H - B + 8}) rotate(-55)`).attr('text-anchor', 'end').style('font-size', '9.5px').style('fill', on ? 'var(--rb-ink)' : 'var(--rb-muted)').style('font-weight', on ? '700' : '400').text(yy + '.' + mm + ' ' + e.city);
+    } else {
+      g.append('text').attr('x', cx + bw / 2).attr('y', H - 28).attr('text-anchor', 'middle').style('font-size', '11px').style('fill', on ? 'var(--rb-ink)' : 'var(--rb-muted)').style('font-weight', on ? '700' : '400').text(e.city);
+      g.append('text').attr('x', cx + bw / 2).attr('y', H - 14).attr('text-anchor', 'middle').style('font-size', '10.5px').style('fill', 'var(--rb-muted)').text(yy + '.' + mm);
+    }
+  });
+  svg.append('text').attr('x', L).attr('y', 11).style('font-size', '11px').style('fill', 'var(--rb-muted)').text('총 상승(m)');
+});
+dash.draw('elevSelect', (sel) => {
+  const ev = window.mxEv(); if (!ev) { sel.replaceChildren(); return; }
+  const cur = window.mxEvCur();
+  sel.replaceChildren(...ev.slice().reverse().map((e) => new Option(e.label + ' (' + e.runners + ')', e.id)));
+  sel.value = cur.id; sel.onchange = () => window.mxElevPick(sel.value);
+});
+dash.draw('elevStats', (el) => {
+  const e = window.mxEvCur(); if (!e) { el.replaceChildren(); return; }
+  el.dataset.where = 'id=' + e.id;
+  const items = [['총 상승', e.ascent + 'm'], ['최저 · 최고', e.min + ' · ' + e.max + 'm'], ['고저차', e.range + 'm'], ['뛴 사람', e.runners], ['그래프 기준', e.chosen + (e.count > 1 ? ' 기록' : '')]];
+  el.replaceChildren(...items.map(([l, v]) => { const d = document.createElement('div'); d.className = 'st'; const a = document.createElement('div'); a.className = 'l'; a.textContent = l; const b = document.createElement('div'); b.className = 'v'; b.textContent = v; d.append(a, b); return d; }));
+});
+dash.draw('elevChart', (el) => {
+  if (!window.mxState(el, 'elevation')) return;
+  const e = window.mxEvCur(); el.replaceChildren();
+  if (!e.profile.length) { const n = document.createElement('div'); n.className = 'elev-none'; n.textContent = '이 대회는 갤럭시워치 기록이라 고도 그래프가 없어요. 총 상승과 최저·최고만 있어요.'; el.appendChild(n); return; }
+  const W = el.clientWidth || 600, H = 230, L = 44, R = 10, T = 14, B = 26;
+  const svg = d3.select(el).append('svg').attr('width', '100%').attr('viewBox', `0 0 ${W} ${H}`);
+  const pts = e.profile, xmax = pts[pts.length - 1][0];
+  const lo = Math.floor(Math.min(e.min, d3.min(pts, (p) => p[1])) / 10) * 10 - 5, hi = Math.ceil(Math.max(e.max, d3.max(pts, (p) => p[1])) / 10) * 10 + 5;
+  const x = d3.scaleLinear([0, xmax], [L, W - R]), y = d3.scaleLinear([lo, hi], [H - B, T]);
+  const step = (hi - lo) > 80 ? 20 : 10;
+  yAxis(svg.append('g'), y, d3.range(Math.ceil(lo / step) * step, hi + 1, step), (v) => v + 'm', W - R, L);
+  [0, 10, 20, 30, 40].forEach((k) => svg.append('text').attr('x', x(k)).attr('y', H - 8).attr('text-anchor', 'middle').style('font-size', '11px').style('fill', 'var(--rb-muted)').text(k + 'km'));
+  const gid = 'eg' + Math.random().toString(36).slice(2, 7);
+  const grad = svg.append('defs').append('linearGradient').attr('id', gid).attr('x1', 0).attr('x2', 0).attr('y1', 0).attr('y2', 1);
+  [[0, .45], [.5, .2], [1, .03]].forEach(([o, a]) => grad.append('stop').attr('offset', o).style('stop-color', window.mxC('--rb-down')).style('stop-opacity', a));
+  svg.append('path').attr('d', d3.area((p) => x(p[0]), y(lo), (p) => y(p[1]))(pts)).style('fill', `url(#${gid})`);
+  svg.append('path').attr('d', d3.line((p) => x(p[0]), (p) => y(p[1]))(pts)).style('fill', 'none').style('stroke', window.mxC('--rb-down')).attr('stroke-width', 2).attr('stroke-linejoin', 'round');
+  const pmax = pts.reduce((a, b) => (b[1] > a[1] ? b : a)), pmin = pts.reduce((a, b) => (b[1] < a[1] ? b : a));
+  [[pmax, '최고 ' + e.max + 'm', -8], [pmin, '최저 ' + e.min + 'm', 16]].forEach(([p, t, dy]) => {
+    svg.append('circle').attr('cx', x(p[0])).attr('cy', y(p[1])).attr('r', 3.5).style('fill', window.mxC('--rb-ink'));
+    const anchor = x(p[0]) > W - 70 ? 'end' : x(p[0]) < L + 40 ? 'start' : 'middle';
+    svg.append('text').attr('x', x(p[0])).attr('y', y(p[1]) + dy).attr('text-anchor', anchor).style('font-size', '11px').style('font-weight', '700').style('fill', 'var(--rb-ink)').style('paint-order', 'stroke').style('stroke', 'var(--rb-card)').style('stroke-width', '3px').text(t + ' · ' + p[0].toFixed(1) + 'km');
+  });
+  const tip = tipFor(el), dot = svg.append('circle').attr('r', 4).style('fill', window.mxC('--rb-down')).attr('opacity', 0);
+  svg.append('rect').attr('x', L).attr('y', T).attr('width', W - L - R).attr('height', H - T - B).style('fill', 'transparent')
+    .on('pointermove pointerdown', (ev2) => {
+      const km = x.invert(d3.pointer(ev2)[0]); const p = pts.reduce((a, b) => (Math.abs(b[0] - km) < Math.abs(a[0] - km) ? b : a));
+      dot.attr('cx', x(p[0])).attr('cy', y(p[1])).attr('opacity', 1);
+      tip.show(x(p[0]) / W * el.clientWidth, y(p[1]) / H * el.clientHeight, p[0].toFixed(1) + 'km', ['해발 ' + Math.round(p[1]) + 'm']);
+    }).on('pointerleave', () => { tip.hide(); dot.attr('opacity', 0); });
+});
+dash.draw('elevImgs', (el) => {
+  const e = window.mxEvCur(); if (!e) { el.replaceChildren(); return; }
+  const list = e.sources.filter((s) => s.img);
+  if (!list.length) { const n = document.createElement('div'); n.className = 'elev-none'; n.textContent = '원본 고도 그래프가 없는 대회예요.'; el.replaceChildren(n); return; }
+  el.replaceChildren(...list.map((s) => {
+    const f = document.createElement('figure'); const im = document.createElement('img'); im.src = s.img; im.loading = 'lazy'; im.alt = s.name + ' ' + s.race + ' 고도 그래프';
+    const c = document.createElement('figcaption'); const b = document.createElement('b'); b.textContent = s.name;
+    c.append(b, ' · 총 상승 ' + s.ascent + 'm · 최저 ' + s.min + 'm · 최고 ' + s.max + 'm');
+    if (s.name === e.chosen && e.count > 1) { const t = document.createElement('span'); t.className = 'best'; t.textContent = '대표'; c.appendChild(t); }
+    f.append(im, c); return f;
+  }));
+});
 </script>
 
 <script>dash._boot();
