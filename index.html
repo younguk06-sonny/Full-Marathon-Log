@@ -205,18 +205,17 @@
 </head>
 <body>
 <div id="dash-root">
-
-
 <div class="mx">
   <header>
     <div class="top"><span class="mark" aria-hidden="true"></span><div><h1>풀마라톤 기록 대시보드</h1><p class="sub">풀코스 · 지역 · 구간 기록을 한눈에 (Garmin 기준)</p></div></div>
   </header>
   <div class="pseg" role="group" aria-label="러너 선택">
-    <button type="button" data-person="pjh" class="on">박지현</button>
+    <button type="button" data-person="ksj" class="on">김선진</button>
+    <button type="button" data-person="pjh">박지현</button>
     <button type="button" data-person="son">손영욱</button>
     <button type="button" data-person="kim">김지훈</button>
   </div>
-  <p class="take">첫 풀 <b data-draw="firstTime" data-source="summary" data-field="firstTime">—</b>에서 PB <b data-draw="pbTime" data-source="summary" data-field="pbTime">—</b>까지 <b data-draw="improve" data-source="summary" data-field="improve">—</b> 단축했어요. <span data-only="pjh">30km까지의 스피드는 이미 충분하고, 31km 이후 둔화를 줄여 갈수록 기록이 크게 빨라지고 있어요.</span><span data-only="son" hidden>기록이 좋았던 날은 후반이 거의 느려지지 않았고, 서브 3:10의 열쇠는 31km 이후 페이스 유지예요.</span><span data-only="kim" hidden>네 번 모두 후반이 거의 느려지지 않은 이븐 페이스 러너이고, 케이던스와 보폭이 함께 늘면서 기록이 빨라졌어요.</span></p>
+  <p class="take">첫 풀 <b data-draw="firstTime" data-source="summary" data-field="firstTime">—</b>에서 PB <b data-draw="pbTime" data-source="summary" data-field="pbTime">—</b>까지 <b data-draw="improve" data-source="summary" data-field="improve">—</b> 단축했어요. <span data-only="ksj">25년 동아부터는 30km까지 4분 초반 페이스를 꾸준히 지키고, 챌린지레이스와 26 동아에서 서브3를 두 번 했어요. 최근 공주·경주는 31km 이후 페이스가 30% 가까이 느려지고 9~10분을 걸어서, 후반 유지가 다음 PB의 열쇠예요.</span><span data-only="pjh" hidden>30km까지의 스피드는 이미 충분하고, 31km 이후 둔화를 줄여 갈수록 기록이 크게 빨라지고 있어요.</span><span data-only="son" hidden>기록이 좋았던 날은 후반이 거의 느려지지 않았고, 서브 3:10의 열쇠는 31km 이후 페이스 유지예요.</span><span data-only="kim" hidden>네 번 모두 후반이 거의 느려지지 않은 이븐 페이스 러너이고, 케이던스와 보폭이 함께 늘면서 기록이 빨라졌어요.</span></p>
 
   <nav class="qnav" aria-label="바로가기">
     <button type="button" data-go="kpis" class="on">요약·지역</button>
@@ -270,7 +269,7 @@
 
   <section class="card" id="all">
     <h2>전체 출전 기록</h2>
-    <p class="note">지금까지 출전한 풀마라톤 전부. <span data-only="pjh">공식 기록은 기록증 기준, 페이스와 나머지 지표는 워치 기준이에요. 첫 대회(진주)는 갤럭시워치 기록이라 파워·보폭·접지 시간·기온이 비어 있어요.</span><span data-only="son" hidden>공식 기록은 기록증 기준, 페이스와 나머지 지표는 워치 기준이에요.</span><span data-only="kim" hidden>공식 기록은 기록증 기준, 페이스와 나머지 지표는 워치 기준이에요. 공원사랑은 기록증 기록이 워치 기록보다 꽤 길어요. 출발 신호부터 잰 기록이거나 중간 정지 시간이 포함된 것으로 보여요.</span></p>
+    <p class="note">지금까지 출전한 풀마라톤 전부. <span data-only="ksj">공식 기록은 기록증 기준, 페이스와 나머지 지표는 워치 기준이에요. 산불조심 마라톤은 기록증이 발급되지 않아 워치 기록을 공식 기록 자리에 넣었어요.</span><span data-only="pjh" hidden>공식 기록은 기록증 기준, 페이스와 나머지 지표는 워치 기준이에요. 첫 대회(진주)는 갤럭시워치 기록이라 파워·보폭·접지 시간·기온이 비어 있어요.</span><span data-only="son" hidden>공식 기록은 기록증 기준, 페이스와 나머지 지표는 워치 기준이에요.</span><span data-only="kim" hidden>공식 기록은 기록증 기준, 페이스와 나머지 지표는 워치 기준이에요. 공원사랑은 기록증 기록이 워치 기록보다 꽤 길어요. 출발 신호부터 잰 기록이거나 중간 정지 시간이 포함된 것으로 보여요.</span></p>
     <div class="tbox">
       <table data-source="allRaces" data-row-key="person,date">
         <thead><tr>
@@ -349,7 +348,7 @@
 
   <section class="card" id="elev">
     <h2>대회별 해발고도</h2>
-    <p class="note">세 사람이 뛴 <b data-draw="evCount" data-source="elevation">—</b>개 대회의 코스 고저. 막대를 누르면 그 대회 고도 그래프가 아래에 나와요.</p>
+    <p class="note">네 사람이 뛴 <b data-draw="evCount" data-source="elevation">—</b>개 대회의 코스 고저. 막대를 누르면 그 대회 고도 그래프가 아래에 나와요.</p>
     <p class="def" style="margin:-6px 0 10px">여러 명이 함께 뛴 대회는 고도 변화가 가장 크게 잡힌(총 상승이 가장 큰) 기록을 대표로 썼어요. 해발고도는 워치 기압계 값이라 같은 대회도 기기·날씨에 따라 절대값이 달라요(25 동아는 −40~−6m로 기록됐어요). 그래프는 가민 캡처의 고도 차트를 읽어 시간 축을 거리로 바꾼 근사치예요.</p>
     <div class="chart elevbar dash-skeleton" data-draw="elevBars" data-source="elevation"></div>
     <div class="elev-head">
@@ -365,7 +364,7 @@
 
   <section id="dynamics">
     <h2>러닝 다이내믹스</h2>
-    <p class="note" data-only="kim pjh">대회별 평균값 추이. 케이던스는 <b data-draw="cadFirst" data-source="insights" data-field="cadFirst">—</b>에서 PB 때 <b data-draw="cadPb" data-source="insights" data-field="cadPb">—</b>로, 보폭은 <b data-draw="strideFirst2" data-source="insights" data-field="strideFirst">—</b>에서 <b data-draw="stridePb2" data-source="insights" data-field="stridePb">—</b>로 둘 다 늘었어요. 피치와 보폭이 함께 좋아지며 빨라진 경우예요.</p>
+    <p class="note" data-only="ksj kim pjh">대회별 평균값 추이. 케이던스는 <b data-draw="cadFirst" data-source="insights" data-field="cadFirst">—</b>에서 PB 때 <b data-draw="cadPb" data-source="insights" data-field="cadPb">—</b>로, 보폭은 <b data-draw="strideFirst2" data-source="insights" data-field="strideFirst">—</b>에서 <b data-draw="stridePb2" data-source="insights" data-field="stridePb">—</b>로 둘 다 늘었어요. 피치와 보폭이 함께 좋아지며 빨라진 경우예요.</p>
     <p class="note" data-only="son" hidden>대회별 평균값 추이. 케이던스는 <b data-draw="cadRange" data-source="insights" data-field="cadRange">—</b>로 거의 그대로인데, 보폭은 <b data-draw="strideFirst" data-source="insights" data-field="strideFirst">—</b>에서 PB 때 <b data-draw="stridePb" data-source="insights" data-field="stridePb">—</b>까지 늘었어요. 빨라진 건 보폭 덕분이에요.</p>
     <p class="def" style="margin:-4px 0 12px">색 구간은 가민이 여러 수준의 러너를 조사해 만든 백분위 기준이에요. 빨강·주황은 경험이 적거나 느린 러너에게, 초록·파랑·보라는 숙련되거나 빠른 러너에게 흔한 값이에요. 수직 진폭·수직 비율 기준은 가슴 심박계(HRM-Pro·HRM-Run 등) 값이고, 허리에 차는 러닝 다이내믹스 포드는 조금 높게 잡혀요. 키가 큰 러너는 케이던스가 약간 낮고 보폭·수직 진폭이 약간 큰 편이에요.</p>
     <div class="grid dyn">
@@ -403,8 +402,6 @@
     <div data-draw="goal" data-source="raceStats laps">—</div>
   </section>
 </div>
-
-
 </div>
 <script>
 // Claude 대시보드용 dash API를 브라우저에서 직접 돌리는 작은 실행기
@@ -482,7 +479,7 @@ dash.calc('raceStats', {
       out.push({
         race: r.race, n: r.n, date: r.date, course: r.course, timeSec: r.timeSec, time: hms(r.timeSec), officialSec: off, official: r.officialTime || hms(off),
         paceSec: r.timeSec / r.distKm, pace: ms(r.timeSec / r.distKm), firstHalf: hms(t), secondHalf: hms(r.timeSec - t),
-        fadeSec: Math.round((p2 - p1) * 10) / 10, fade: '+' + (p2 - p1).toFixed(1) + '초',
+        fadeSec: Math.round((p2 - p1) * 10) / 10, fade: (p2 - p1 >= 0 ? '+' : '−') + Math.abs(p2 - p1).toFixed(1) + '초',
         pace30: ms(first30 / 30), paceAfter30: ms((r.timeSec - first30) / (r.distKm - 30)),
         vsCourse: prevCourse ? sgn(off - prevCourse.officialSec) : '–', vsPrevSec: prevAny ? off - prevAny.officialSec : null,
         daysSincePrev: r.daysSincePrev, pb: isPb ? 'PB' : '',
@@ -521,7 +518,7 @@ dash.calc('insights', {
     const cad = races.map((r) => r.cadenceSpm);
     return [{
       person, cadFirst: sorted[0].cadenceSpm + 'spm', cadPb: bestRace.cadenceSpm + 'spm',
-      evenRaces: top3.map((r) => r.race).join(' · '), evenMax: '+' + Math.max(...top3.map((r) => r.fadeSec)).toFixed(1) + '초',
+      evenRaces: top3.map((r) => r.race).join(' · '), evenMax: (Math.max(...top3.map((r) => r.fadeSec)) >= 0 ? '+' : '−') + Math.abs(Math.max(...top3.map((r) => r.fadeSec))).toFixed(1) + '초',
       worstRace: worst.race, worstFade: worst.fade, gap21: gap(21), gap28: gap(28),
       strideFirst: (sorted.find((r) => r.strideM != null) || sorted[0]).strideM.toFixed(2) + 'm', stridePb: bestRace.strideM.toFixed(2) + 'm',
       cadRange: Math.min(...cad) + '–' + Math.max(...cad) + 'spm', pbPace30: best.pace30, pbPaceAfter30: best.paceAfter30,
@@ -600,7 +597,7 @@ dash.calc('courseTable', {
   }),
 });
 
-window.mxPerson = 'pjh';
+window.mxPerson = 'ksj';
 window.mxD = (id) => {
   const r = dash.data(id);
   if (r.status !== 'ok' || !Array.isArray(r.data) || !r.data.length || !('person' in r.data[0])) return r;
@@ -637,7 +634,7 @@ document.querySelectorAll('#course .seg button').forEach((b) => {
 window.mxDraws = ['firstTime', 'firstTime2', 'pbTime', 'pbTime2', 'improve', 'improve2', 'pbOfficial', 'pbRace', 'count', 'latestTime', 'latestRace', 'latestVs', 'since',
   'evenRaces', 'evenMax', 'worstRace', 'worstFade', 'cadRange', 'strideFirst', 'stridePb', 'cadFirst', 'cadPb', 'strideFirst2', 'stridePb2', 'sidoCount', 'cityCount', 'topCity', 'pb30', 'pb31',
   'map', 'trendChart', 'fadeChart', 'courseChart', 'courseLegend', 'courseRows', 'edLabel', 'dyn', 'zones', 'raceRows', 'allRows', 'certs', 'goal', 'rgPresets', 'riegel'];
-window.mxGoalDefault = { pjh: ['2:59:59', '42.30'], son: ['3:09:59', '42.45'], kim: ['2:59:59', '42.41'] };
+window.mxGoalDefault = { ksj: ['2:54:59', '42.38'], pjh: ['2:59:59', '42.30'], son: ['3:09:59', '42.45'], kim: ['2:59:59', '42.41'] };
 window.mxApplyPerson = (p) => {
   document.querySelectorAll('[data-only]').forEach((el) => { el.hidden = !el.dataset.only.split(' ').includes(p); });
   const g = window.mxGoalDefault[p];
@@ -690,9 +687,7 @@ if ('IntersectionObserver' in window) {
   document.querySelectorAll('.mx > section[id]').forEach((sec) => io.observe(sec));
 }
 document.querySelectorAll('#mx-goal, #mx-dist').forEach((inp) => inp.addEventListener('input', () => dash.draw('goal')));
-</script>
-
-<script>
+</script><script>
 const F = window.mxFmt;
 const textField = (name, id, field) => dash.draw(name, (el) => {
   const d = window.mxD(id);
@@ -1193,7 +1188,6 @@ dash.draw('elevImgs', (el) => {
   }));
 });
 </script>
-
 <script>dash._boot();
 if ('serviceWorker' in navigator) addEventListener('load', () => navigator.serviceWorker.register('sw.js').catch(() => {}));</script>
 </body>
