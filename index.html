@@ -207,7 +207,8 @@
     <button type="button" data-go="predict">레이스 예측</button>
     <button type="button" data-go="all">전체 기록</button>
     <button type="button" data-go="races">대회별 상세기록</button>
-        <button type="button" data-go="trend">추이</button>
+    <button type="button" data-go="certs">기록증</button>
+    <button type="button" data-go="trend">추이</button>
     <button type="button" data-go="pacing">후반 유지력</button>
     <button type="button" data-go="course" data-only="son">같은 코스</button>
     <button type="button" data-go="dynamics">다이내믹스</button>
@@ -252,7 +253,7 @@
 
   <section class="card" id="all">
     <h2>전체 출전 기록</h2>
-    <p class="note">지금까지 출전한 풀마라톤 전부. <span data-only="son">공식 기록은 대회 기록증 기준, 페이스와 나머지 지표는 워치 기준이에요.</span><span data-only="kim" hidden>공식 기록은 대회 기록증 기준, 페이스와 나머지 지표는 워치 기준이에요. 공원사랑은 기록증 기록이 워치 기록보다 꽤 길어요. 출발 신호부터 잰 기록이거나 중간 정지 시간이 포함된 것으로 보여요.</span></p>
+    <p class="note">지금까지 출전한 풀마라톤 전부. <span data-only="son">공식 기록은 기록증 기준, 페이스와 나머지 지표는 워치 기준이에요.</span><span data-only="kim" hidden>공식 기록은 기록증 기준, 페이스와 나머지 지표는 워치 기준이에요. 공원사랑은 기록증 기록이 워치 기록보다 꽤 길어요. 출발 신호부터 잰 기록이거나 중간 정지 시간이 포함된 것으로 보여요.</span></p>
     <div class="tbox">
       <table data-source="allRaces" data-row-key="person,date">
         <thead><tr>
@@ -283,7 +284,13 @@
     <p class="swipe">휴대폰에서는 워치·전반·후반 열을 숨겼어요. 옆으로 밀면 나머지가 보여요</p>
   </section>
 
-
+  <section class="card" id="certs">
+    <details class="fold">
+      <summary><span class="ft"><h2>기록증</h2><span class="fh">대회별 공식 기록증 모음</span></span><span class="fb"><span class="o">펼치기</span><span class="c">접기</span></span></summary>
+      <p class="note" style="margin-top:12px">기록증을 누르면 크게 보여요. 다시 누르면 작아져요.</p>
+      <div class="certs" data-draw="certs" data-source="allRaces"></div>
+    </details>
+  </section>
 
   <section class="card" id="trend">
     <h2>기록 추이</h2>
@@ -596,7 +603,7 @@ document.querySelectorAll('#course .seg button').forEach((b) => {
 // 러너 전환
 window.mxDraws = ['firstTime', 'firstTime2', 'pbTime', 'pbTime2', 'improve', 'improve2', 'pbOfficial', 'pbRace', 'count', 'latestTime', 'latestRace', 'latestVs', 'since',
   'evenRaces', 'evenMax', 'worstRace', 'worstFade', 'cadRange', 'strideFirst', 'stridePb', 'cadFirst', 'cadPb', 'strideFirst2', 'stridePb2', 'sidoCount', 'cityCount', 'topCity', 'pb30', 'pb31',
-  'map', 'trendChart', 'fadeChart', 'courseChart', 'courseLegend', 'courseRows', 'edLabel', 'dyn', 'zones', 'raceRows', 'allRows', 'goal', 'rgPresets', 'riegel'];
+  'map', 'trendChart', 'fadeChart', 'courseChart', 'courseLegend', 'courseRows', 'edLabel', 'dyn', 'zones', 'raceRows', 'allRows', 'certs', 'goal', 'rgPresets', 'riegel'];
 window.mxGoalDefault = { son: ['3:09:59', '42.45'], kim: ['2:59:59', '42.41'] };
 document.querySelectorAll('.mx .pseg button').forEach((b) => {
   b.addEventListener('click', () => {
