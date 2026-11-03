@@ -15,7 +15,15 @@
 <link rel="preload" href="fonts/Pretendard-Regular.subset.woff2" as="font" type="font/woff2" crossorigin>
 <style>html,body{margin:0;background:#eef2f7}@media (prefers-color-scheme:dark){html,body{background:#10141b}}
 .dash-skeleton{background:rgba(125,136,154,.12);border-radius:10px}
-.mx{max-width:1200px;margin:0 auto;padding-top:calc(20px + env(safe-area-inset-top))!important;padding-bottom:calc(32px + env(safe-area-inset-bottom))!important}</style>
+.mx{max-width:1200px;margin:0 auto;padding-top:calc(20px + env(safe-area-inset-top))!important;padding-bottom:calc(32px + env(safe-area-inset-bottom))!important}.mx .def{margin:8px 0 0;font-size:11.5px;line-height:1.5;color:var(--rb-muted)}
+.mx .zones{margin-top:8px;font-size:11px;color:var(--rb-muted)}
+.mx .zones .zr{display:grid;grid-template-columns:repeat(5,1fr);gap:3px;margin-bottom:6px}
+.mx .zones .zc{border-radius:6px;padding:3px 2px;min-width:0;overflow-wrap:anywhere;text-align:center;line-height:1.25;background:var(--rb-bg);border:1px solid transparent}
+.mx .zones .zc i{display:block;height:4px;border-radius:2px;margin:0 2px 3px}
+.mx .zones .zc.me{border-color:var(--rb-ink);color:var(--rb-ink);font-weight:700}
+.mx .zones .zme{color:var(--rb-ink2)}
+.mx .zones .zme b{color:var(--rb-ink)}
+</style>
 <style>
 @font-face{font-family:"RB Pretendard";font-weight:400;font-display:swap;src:url(fonts/Pretendard-Regular.subset.woff2) format("woff2")}
 @font-face{font-family:"RB Pretendard";font-weight:600;font-display:swap;src:url(fonts/Pretendard-SemiBold.subset.woff2) format("woff2")}
@@ -101,7 +109,7 @@
   .mx .tile .big{font-size:21px}
   .mx .tile .lbl{font-size:12px}
   .mx .tile .sub2{font-size:11.5px}
-  .mx .grid.dyn{grid-template-columns:1fr 1fr;gap:10px}
+  .mx .grid.dyn{grid-template-columns:1fr;gap:10px}
   .mx .grid.dyn .card{padding:12px}
   .mx .grid.dyn h3{font-size:12.5px}
   .mx .chart{min-height:210px}
@@ -255,13 +263,28 @@
   <section id="dynamics">
     <h2>러닝 다이내믹스</h2>
     <p class="note">대회별 평균값 추이. 케이던스는 <b data-draw="cadRange" data-source="insights" data-field="cadRange">—</b>로 거의 그대로인데, 보폭은 <b data-draw="strideFirst" data-source="insights" data-field="strideFirst">—</b>에서 PB 때 <b data-draw="stridePb" data-source="insights" data-field="stridePb">—</b>까지 늘었어요. 빨라진 건 보폭 덕분이에요.</p>
+    <p class="def" style="margin:-4px 0 12px">색 구간은 가민이 여러 수준의 러너를 조사해 만든 백분위 기준이에요. 빨강·주황은 경험이 적거나 느린 러너에게, 초록·파랑·보라는 숙련되거나 빠른 러너에게 흔한 값이에요. 수직 진폭·수직 비율 기준은 가슴 심박계(HRM-Pro·HRM-Run 등) 값이고, 허리에 차는 러닝 다이내믹스 포드는 조금 높게 잡혀요. 키가 큰 러너는 케이던스가 약간 낮고 보폭·수직 진폭이 약간 큰 편이에요.</p>
     <div class="grid dyn">
-      <div class="card"><h3>평균 페이스 (/km)</h3><div class="chart small dash-skeleton" data-draw="dyn" data-metric="paceSec" data-source="raceStats"></div></div>
-      <div class="card"><h3>보폭 (m)</h3><div class="chart small dash-skeleton" data-draw="dyn" data-metric="strideM" data-source="races"></div></div>
-      <div class="card"><h3>케이던스 (spm)</h3><div class="chart small dash-skeleton" data-draw="dyn" data-metric="cadenceSpm" data-source="races"></div></div>
-      <div class="card"><h3>평균 심박 (bpm)</h3><div class="chart small dash-skeleton" data-draw="dyn" data-metric="avgHr" data-source="races"></div></div>
-      <div class="card"><h3>지면 접촉 시간 (ms)</h3><div class="chart small dash-skeleton" data-draw="dyn" data-metric="gctMs" data-source="races"></div></div>
-      <div class="card"><h3>평균 파워 (W)</h3><div class="chart small dash-skeleton" data-draw="dyn" data-metric="powerW" data-source="races"></div></div>
+      <div class="card"><h3>케이던스 (spm)</h3><div class="chart small dash-skeleton" data-draw="dyn" data-metric="cadenceSpm" data-source="races"></div>
+        <p class="def">1분 동안 디딘 걸음 수(양발 합계). 높을수록 한 걸음이 짧고 가벼워져 착지 충격이 줄어드는 편이에요.</p>
+        <div class="zones" data-draw="zones" data-metric="cadenceSpm" data-source="races raceStats">—</div></div>
+      <div class="card"><h3>지면 접촉 시간 (ms)</h3><div class="chart small dash-skeleton" data-draw="dyn" data-metric="gctMs" data-source="races"></div>
+        <p class="def">한 걸음마다 발이 땅에 닿아 있는 시간. 짧을수록 탄성 있게 튀어 나가는 주법이에요. 걷는 동안은 측정되지 않아요.</p>
+        <div class="zones" data-draw="zones" data-metric="gctMs" data-source="races raceStats">—</div></div>
+      <div class="card"><h3>수직 진폭 (cm)</h3><div class="chart small dash-skeleton" data-draw="dyn" data-metric="vertOscCm" data-source="races"></div>
+        <p class="def">한 걸음마다 상체가 위아래로 튀는 높이. 낮을수록 위로 새는 힘이 적어요. 다만 보폭이 크면 함께 커지기 쉬워요.</p>
+        <div class="zones" data-draw="zones" data-metric="vertOscCm" data-source="races raceStats">—</div></div>
+      <div class="card"><h3>수직 비율 (%)</h3><div class="chart small dash-skeleton" data-draw="dyn" data-metric="vertRatioPct" data-source="races"></div>
+        <p class="def">수직 진폭 ÷ 보폭. 앞으로 간 거리 대비 얼마나 위로 튀었는지를 뜻하고, 낮을수록 효율적인 주법이에요. 키와는 상관이 없어요.</p>
+        <div class="zones" data-draw="zones" data-metric="vertRatioPct" data-source="races raceStats">—</div></div>
+      <div class="card"><h3>보폭 (m)</h3><div class="chart small dash-skeleton" data-draw="dyn" data-metric="strideM" data-source="races"></div>
+        <p class="def">한 발이 땅에 닿은 지점부터 다음 발이 닿은 지점까지의 거리. 속도 = 케이던스 × 보폭이라, 케이던스가 같다면 보폭이 길수록 빨라요. 가민 색 구간은 없어요.</p></div>
+      <div class="card"><h3>평균 페이스 (/km)</h3><div class="chart small dash-skeleton" data-draw="dyn" data-metric="paceSec" data-source="raceStats"></div>
+        <p class="def">워치 거리 기준 1km 평균 시간. 워치 거리가 공식 42.195km보다 길게 잡혀서 공식 기록으로 나눈 페이스보다 조금 빨라요.</p></div>
+      <div class="card"><h3>평균 심박 (bpm)</h3><div class="chart small dash-skeleton" data-draw="dyn" data-metric="avgHr" data-source="races"></div>
+        <p class="def">레이스 전체 평균 심박. 심박 구간은 사람마다 최대 심박·젖산역치가 달라 정해진 백분위가 없어요. 같은 페이스에서 낮을수록 유산소 능력이 좋아졌다는 신호예요.</p></div>
+      <div class="card"><h3>평균 파워 (W)</h3><div class="chart small dash-skeleton" data-draw="dyn" data-metric="powerW" data-source="races"></div>
+        <p class="def">가민 러닝 파워의 레이스 평균. 속도·경사·바람(지원 시)·체중으로 추정한 값이라 다른 브랜드와 직접 비교하긴 어려워요.</p></div>
     </div>
   </section>
 
@@ -666,6 +689,44 @@ dash.draw('courseRows', (el) => {
   }));
 });
 
+
+// 가민 러닝 다이내믹스 색 구간 (가민 매뉴얼 기준, 수직 값은 가슴 심박계 기준)
+window.mxZones = {
+  colors: ['#d9443a', '#f08c2e', '#2ea44f', '#1b9ad6', '#7b4fd6'],
+  names: ['빨강', '주황', '초록', '파랑', '보라'],
+  pct: ['하위 5%', '5–29', '30–69', '70–95', '상위 5%'],
+  cadenceSpm: { better: 'high', edges: [153, 164, 174, 184], label: ['<153', '153–163', '164–173', '174–183', '>183'] },
+  gctMs: { better: 'low', edges: [218, 249, 278, 309], label: ['>308', '278–308', '249–277', '218–248', '<218'] },
+  vertOscCm: { better: 'low', edges: [6.4, 8.2, 9.8, 11.6], label: ['>11.5', '9.8–11.5', '8.2–9.7', '6.4–8.1', '<6.4'] },
+  vertRatioPct: { better: 'low', edges: [6.1, 7.5, 8.7, 10.2], label: ['>10.1', '8.7–10.1', '7.5–8.6', '6.1–7.4', '<6.1'] },
+  zoneOf(metric, v) {
+    const z = this[metric]; if (!z) return -1;
+    const e = z.edges; let k = 0; while (k < e.length && v >= e[k]) k++;
+    return z.better === 'high' ? k : 4 - k;
+  },
+};
+dash.draw('zones', (el) => {
+  const metric = el.dataset.metric, Z = window.mxZones, z = Z[metric];
+  const a = dash.data('races'), b = dash.data('raceStats');
+  if (!z || a.status !== 'ok' || b.status !== 'ok') { el.textContent = '—'; return; }
+  const rows = a.data.slice().sort((p, q) => p.n - q.n);
+  const best = b.data.reduce((p, q) => (q.officialSec < p.officialSec ? q : p));
+  const last = rows[rows.length - 1], pbRow = rows.find((r) => r.race === best.race);
+  const zl = Z.zoneOf(metric, last[metric]), zp = Z.zoneOf(metric, pbRow[metric]);
+  const row = document.createElement('div'); row.className = 'zr';
+  [0, 1, 2, 3, 4].forEach((k) => {
+    const c = document.createElement('div'); c.className = 'zc' + (k === zl ? ' me' : '');
+    const bar = document.createElement('i'); bar.style.background = Z.colors[k];
+    c.append(bar, z.label[k], document.createElement('br'), Z.pct[k]);
+    row.appendChild(c);
+  });
+  const me = document.createElement('div'); me.className = 'zme';
+  const t1 = document.createElement('b'); t1.textContent = '최근 ' + last[metric];
+  const t2 = document.createElement('b'); t2.textContent = 'PB 대회 ' + pbRow[metric];
+  me.append(t1, ' ' + Z.names[zl] + '(' + Z.pct[zl] + ') · ', t2, ' ' + Z.names[zp] + '(' + Z.pct[zp] + ')');
+  el.replaceChildren(row, me);
+});
+
 // 러닝 다이내믹스
 dash.draw('dyn', (el) => {
   const metric = el.dataset.metric, src = metric === 'paceSec' ? 'raceStats' : 'races';
@@ -681,6 +742,17 @@ dash.draw('dyn', (el) => {
   const y = d3.scaleLinear([lo - pad, hi + pad], metric === 'paceSec' ? [T, H - B] : [H - B, T]);
   svg.append('text').attr('x', 0).attr('y', 14).style('font-size', '13px').style('font-weight', '700').style('fill', 'var(--rb-ink)').text(f(v[0]) + ' → ' + f(v[v.length - 1]));
   svg.append('text').attr('x', 0).attr('y', 30).style('font-size', '11.5px').style('fill', 'var(--rb-muted)').text('PB 대회 ' + f(rows.find((r) => r.race === best.race)[metric]));
+  const Zb = window.mxZones && window.mxZones[metric];
+  if (Zb) {
+    const [d0, d1] = y.domain(), lo2 = Math.min(d0, d1), hi2 = Math.max(d0, d1);
+    const edges = [-Infinity, ...Zb.edges, Infinity];
+    for (let k = 0; k < 5; k++) {
+      const a = Math.max(lo2, edges[k]), b2 = Math.min(hi2, edges[k + 1]);
+      if (b2 <= a) continue;
+      const zi = Zb.better === 'high' ? k : 4 - k;
+      svg.append('rect').attr('x', 0).attr('width', W).attr('y', Math.min(y(a), y(b2))).attr('height', Math.abs(y(a) - y(b2))).style('fill', window.mxZones.colors[zi]).style('opacity', '0.13');
+    }
+  }
   svg.append('path').attr('d', d3.line((_, i) => x(i), (t) => y(t))(v)).style('fill', 'none').style('stroke', window.mxC('--rb-accent')).attr('stroke-width', 2).attr('stroke-linejoin', 'round').attr('stroke-linecap', 'round');
   const tip = tipFor(el);
   rows.forEach((r, i) => svg.append('circle').attr('cx', x(i)).attr('cy', y(v[i])).attr('r', r.race === best.race ? 4.5 : 3).style('fill', r.race === best.race ? gold() : window.mxC('--rb-accent'))
