@@ -1146,7 +1146,7 @@ dash.draw('elevSelect', (sel) => {
 dash.draw('elevStats', (el) => {
   const e = window.mxEvCur(); if (!e) { el.replaceChildren(); return; }
   el.dataset.where = 'id=' + e.id;
-  const items = [['총 상승', e.ascent + 'm'], ['최저 · 최고', e.min + ' · ' + e.max + 'm'], ['고저차', e.range + 'm'], ['뛴 사람', e.runners], ['그래프 기준', e.chosen + (e.count > 1 ? ' 기록' : '')]];
+  const items = [['총 상승', e.ascent + 'm'], ['최저 · 최고', e.min + ' · ' + e.max + 'm'], ['고저차', e.range + 'm'], ['뛴 사람', e.runners]];
   el.replaceChildren(...items.map(([l, v]) => { const d = document.createElement('div'); d.className = 'st'; const a = document.createElement('div'); a.className = 'l'; a.textContent = l; const b = document.createElement('div'); b.className = 'v'; b.textContent = v; d.append(a, b); return d; }));
 });
 dash.draw('elevChart', (el) => {
