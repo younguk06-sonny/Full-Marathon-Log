@@ -257,7 +257,7 @@
     <button type="button" data-go="certs">기록증</button>
     <button type="button" data-go="trend">추이</button>
     <button type="button" data-go="pacing">후반 유지력</button>
-    <button type="button" data-go="course" data-only="son" hidden>같은 코스</button>
+    <button type="button" data-go="course" hidden>같은 코스</button>
     <button type="button" data-go="elev">해발고도</button>
     <button type="button" data-go="dynamics">다이내믹스</button>
     <button type="button" data-go="goal">목표 페이스</button>
@@ -354,13 +354,10 @@
     </div>
   </section>
 
-  <section class="card" id="course" data-only="son" hidden>
+  <section class="card" id="course" hidden>
     <h2>같은 코스 비교</h2>
     <p class="note">같은 코스를 뛴 대회끼리 1km 랩 페이스(위가 빠름)와 5km 구간, 누적, 직전 대비 차이, 누적 단축을 비교해요.</p>
     <div class="seg" role="group" aria-label="코스 선택">
-      <button type="button" data-course="춘천" class="on">춘천</button>
-      <button type="button" data-course="대구">대구</button>
-      <button type="button" data-course="동아">동아</button>
     </div>
     <div class="chart dash-skeleton" data-draw="courseChart" data-source="laps raceStats"></div>
     <div class="legend" data-draw="courseLegend" data-source="raceStats"></div>
@@ -652,16 +649,32 @@ dash.onData(() => {
   document.querySelectorAll('#course .e3').forEach((th) => { th.hidden = n < 3; });
 });
 
-document.querySelectorAll('#course .seg button').forEach((b) => {
-  b.addEventListener('click', () => {
-    window.mxCourse = b.dataset.course;
-    document.querySelectorAll('#course .seg button').forEach((x) => x.classList.toggle('on', x === b));
-    const s = window.mxD('raceStats');
-    const n = s.status === 'ok' ? s.data.filter((r) => r.course === window.mxCourse).length : 3;
-    document.querySelectorAll('#course .e3').forEach((th) => { th.hidden = n < 3; });
-    dash.draw('courseChart'); dash.draw('courseLegend'); dash.draw('courseRows'); dash.draw('edLabel');
-  });
-});
+// 같은 코스 비교: 선택한 러너가 두 번 이상 뛴 코스로 버튼을 만들고, 없으면 섹션 숨김
+window.mxCourseSeg = () => {
+  const s = window.mxD('raceStats');
+  if (s.status !== 'ok') return;
+  const cnt = {}; s.data.forEach((r) => { cnt[r.course] = (cnt[r.course] || 0) + 1; });
+  const list = [...new Set(s.data.map((r) => r.course))].filter((c) => cnt[c] >= 2);
+  document.querySelectorAll('#course, .qnav [data-go="course"]').forEach((el) => { el.hidden = !list.length; });
+  if (!list.length) return;
+  const seg = document.querySelector('#course .seg');
+  if (seg && seg.dataset.for !== window.mxPerson + '|' + list.join(',')) {
+    seg.dataset.for = window.mxPerson + '|' + list.join(',');
+    window.mxCourse = list[0];
+    seg.replaceChildren(...list.map((c) => {
+      const b = document.createElement('button'); b.type = 'button'; b.dataset.course = c; b.textContent = c;
+      b.addEventListener('click', () => {
+        window.mxCourse = c; window.mxCourseSeg();
+        dash.draw('courseChart'); dash.draw('courseLegend'); dash.draw('courseRows'); dash.draw('edLabel');
+      });
+      return b;
+    }));
+  }
+  if (!list.includes(window.mxCourse)) window.mxCourse = list[0];
+  seg.querySelectorAll('button').forEach((x) => x.classList.toggle('on', x.dataset.course === window.mxCourse));
+  document.querySelectorAll('#course .e3').forEach((th) => { th.hidden = cnt[window.mxCourse] < 3; });
+};
+dash.onData(() => window.mxCourseSeg());
 // 러너 전환
 window.mxDraws = ['firstTime', 'firstTime2', 'pbTime', 'pbTime2', 'improve', 'improve2', 'pbOfficial', 'pbRace', 'count', 'latestTime', 'latestRace', 'latestVs', 'since',
   'evenRaces', 'evenMax', 'worstRace', 'worstFade', 'cadRange', 'strideFirst', 'stridePb', 'cadFirst', 'cadPb', 'strideFirst2', 'stridePb2', 'sidoCount', 'cityCount', 'topCity', 'pb30', 'pb31',
@@ -672,6 +685,7 @@ window.mxApplyPerson = (p) => {
   const g = window.mxGoalDefault[p];
   document.querySelectorAll('#mx-goal').forEach((i) => { i.value = g[0]; });
   document.querySelectorAll('#mx-dist').forEach((i) => { i.value = g[1]; });
+  if (window.mxCourseSeg) window.mxCourseSeg();
 };
 window.mxApplyPerson(window.mxPerson);
 dash.onData(() => {
