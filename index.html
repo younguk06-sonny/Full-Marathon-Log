@@ -186,6 +186,15 @@
 .mx .pseg{display:inline-flex;align-self:flex-start;background:var(--rb-card);border:1px solid var(--rb-line);border-radius:12px;padding:3px;gap:2px}
 .mx .pseg button{font:inherit;border:0;background:transparent;padding:7px 16px;border-radius:9px;cursor:pointer;font-size:14px;font-weight:650;color:var(--rb-ink2)}
 .mx .pseg button.on{background:var(--rb-accent);color:#fff}
+.mx .eseg{display:inline-flex;align-self:flex-start;background:var(--rb-card);border:1px solid var(--rb-line);border-radius:10px;padding:3px;gap:2px}
+.mx .eseg.off{display:none}
+.mx .eseg button{font:inherit;border:0;background:transparent;padding:5px 14px;border-radius:8px;cursor:pointer;font-size:13px;font-weight:650;color:var(--rb-ink2)}
+.mx .eseg button.on{background:var(--rb-ink);color:var(--rb-card)}
+.mx .eseg button[hidden]{display:none}
+.mx.ev-short > .fullonly{display:none!important}
+.mx:not(.ev-short) > .shortonly{display:none!important}
+.mx .s-laptable td.best{font-weight:800;color:var(--rb-accent)}
+.mx .s-laptable tr.fin td{font-weight:750;border-top:1px solid var(--rb-line)}
 .mx.locked > :not(header):not(.pseg):not(.lockbox){display:none!important}
 .mx.nosel > :not(header):not(.pseg):not(.pickbox){display:none!important}
 .mx .pickbox{display:none}
@@ -247,9 +256,10 @@
     <form class="lk-form" autocomplete="off"><input class="lk-pin" type="password" inputmode="numeric" pattern="[0-9]*" maxlength="4" aria-label="비밀번호 4자리"><button type="submit">확인</button></form>
     <div class="lk-err" aria-live="polite"></div>
   </div>
-  <p class="take">첫 풀 <b data-draw="firstTime" data-source="summary" data-field="firstTime">—</b>에서 PB <b data-draw="pbTime" data-source="summary" data-field="pbTime">—</b>까지 <b data-draw="improve" data-source="summary" data-field="improve">—</b> 단축했어요. <span data-only="ksj">25년 동아부터는 30km까지 4분 초반 페이스를 꾸준히 지키고, 챌린지레이스와 26 동아에서 서브3를 두 번 했어요. 최근 공주·경주는 31km 이후 페이스가 30% 가까이 느려지고 9~10분을 걸어서, 후반 유지가 다음 PB의 열쇠예요.</span><span data-only="pjh" hidden>30km까지의 스피드는 이미 충분하고, 31km 이후 둔화를 줄여 갈수록 기록이 크게 빨라지고 있어요.</span><span data-only="son" hidden>기록이 좋았던 날은 후반이 거의 느려지지 않았고, 서브 3:10의 열쇠는 31km 이후 페이스 유지예요.</span><span data-only="kim" hidden>네 번 모두 후반이 거의 느려지지 않은 이븐 페이스 러너이고, 케이던스와 보폭이 함께 늘면서 기록이 빨라졌어요.</span></p>
+  <div class="eseg off" role="group" aria-label="거리 선택"><button type="button" data-ev="full" class="on">풀</button><button type="button" data-ev="half" hidden>하프</button><button type="button" data-ev="10km" hidden>10K</button></div>
+  <p class="take fullonly">첫 풀 <b data-draw="firstTime" data-source="summary" data-field="firstTime">—</b>에서 PB <b data-draw="pbTime" data-source="summary" data-field="pbTime">—</b>까지 <b data-draw="improve" data-source="summary" data-field="improve">—</b> 단축했어요. <span data-only="ksj">25년 동아부터는 30km까지 4분 초반 페이스를 꾸준히 지키고, 챌린지레이스와 26 동아에서 서브3를 두 번 했어요. 최근 공주·경주는 31km 이후 페이스가 30% 가까이 느려지고 9~10분을 걸어서, 후반 유지가 다음 PB의 열쇠예요.</span><span data-only="pjh" hidden>30km까지의 스피드는 이미 충분하고, 31km 이후 둔화를 줄여 갈수록 기록이 크게 빨라지고 있어요.</span><span data-only="son" hidden>기록이 좋았던 날은 후반이 거의 느려지지 않았고, 서브 3:10의 열쇠는 31km 이후 페이스 유지예요.</span><span data-only="kim" hidden>네 번 모두 후반이 거의 느려지지 않은 이븐 페이스 러너이고, 케이던스와 보폭이 함께 늘면서 기록이 빨라졌어요.</span></p>
 
-  <nav class="qnav" aria-label="바로가기">
+  <nav class="qnav fullonly" aria-label="바로가기">
     <button type="button" data-go="kpis" class="on">요약·지역</button>
     <button type="button" data-go="predict">레이스 예측</button>
     <button type="button" data-go="all">전체 기록</button>
@@ -263,7 +273,7 @@
     <button type="button" data-go="goal">목표 페이스</button>
   </nav>
 
-  <section class="overview" id="kpis">
+  <section class="overview fullonly" id="kpis">
     <div class="card mapcard" id="map">
       <h2>달린 지역</h2>
       <p class="note"><b data-draw="sidoCount" data-source="insights" data-field="sidoCount">—</b>개 시·도, <b data-draw="cityCount" data-source="insights" data-field="cityCount">—</b>개 도시에서 풀코스를 달렸어요. 가장 많이 나간 곳은 <b data-draw="topCity" data-source="insights" data-field="topCity">—</b>예요. 점을 누르면 대회 기록이 보여요.</p>
@@ -276,6 +286,53 @@
       <div class="card tile"><div class="lbl">첫 풀 대비 단축</div><div class="big" data-draw="improve2" data-source="summary" data-field="improve">—</div><div class="sub2">첫 풀 <span data-draw="firstTime2" data-source="summary" data-field="firstTime">—</span></div></div>
       <div class="card tile"><div class="lbl">최근 대회</div><div class="big" data-draw="latestTime" data-source="summary" data-field="latestTime">—</div><div class="sub2"><span data-draw="latestRace" data-source="summary" data-field="latestRace">—</span> · 같은 코스 직전 대비 <span data-draw="latestVs" data-source="summary" data-field="latestVsCourse">—</span></div></div>
     </div>
+  </section>
+
+  <p class="take shortonly" data-draw="sTake" data-source="shortRaces">—</p>
+  <section class="tiles shortonly" id="s-kpis" data-draw="sTiles" data-source="shortRaces"></section>
+
+  <section class="card shortonly" id="s-all">
+    <h2>전체 출전 기록 · <span data-draw="sEvName">—</span></h2>
+    <p class="note">공식 기록은 기록증 기준, 페이스는 공식 기록 ÷ 공식 거리예요. 나머지 지표는 워치 기준이고, 가민 없이 뛴 대회는 비어 있어요.</p>
+    <div class="tbox" data-draw="sAll" data-source="shortRaces"></div>
+    <p class="swipe">표는 옆으로 밀어서 더 볼 수 있어요</p>
+  </section>
+
+  <section class="card shortonly" id="s-trend">
+    <h2>기록 추이</h2>
+    <p class="note">대회별 공식 기록. 위로 갈수록 빠른 기록이고, 금색 점은 그때까지의 PB, 점선은 추세선이에요.</p>
+    <div class="chart" data-draw="sTrend" data-source="shortRaces"></div>
+  </section>
+
+  <section class="card shortonly" id="s-laps">
+    <h2>1km 랩 비교</h2>
+    <p class="note">대회마다 1km 랩 페이스(위가 빠름). 표에서 파란 굵은 글씨는 그 구간에서 가장 빨랐던 대회예요.</p>
+    <div class="chart" data-draw="sLapChart" data-source="shortLaps shortRaces"></div>
+    <div class="legend" data-draw="sLapLegend" data-source="shortRaces"></div>
+    <div class="tbox" style="margin-top:12px" data-draw="sLapRows" data-source="shortLaps shortRaces"></div>
+    <p class="swipe">표는 옆으로 밀어서 더 볼 수 있어요</p>
+  </section>
+
+  <section class="shortonly" id="s-dyn">
+    <h2>러닝 다이내믹스</h2>
+    <p class="note">대회별 평균값 추이. 색 구간과 지표 설명은 풀 화면의 러닝 다이내믹스와 같아요. 가민 없이 뛴 대회의 케이던스·보폭은 걸음 수로 계산한 값이에요.</p>
+    <div class="grid dyn">
+      <div class="card"><h3>케이던스 (spm)</h3><div class="chart small" data-draw="sDyn" data-metric="cadenceSpm" data-source="shortRaces"></div></div>
+      <div class="card"><h3>보폭 (m)</h3><div class="chart small" data-draw="sDyn" data-metric="strideM" data-source="shortRaces"></div></div>
+      <div class="card"><h3>지면 접촉 시간 (ms)</h3><div class="chart small" data-draw="sDyn" data-metric="gctMs" data-source="shortRaces"></div></div>
+      <div class="card"><h3>수직 진폭 (cm)</h3><div class="chart small" data-draw="sDyn" data-metric="vertOscCm" data-source="shortRaces"></div></div>
+      <div class="card"><h3>수직 비율 (%)</h3><div class="chart small" data-draw="sDyn" data-metric="vertRatioPct" data-source="shortRaces"></div></div>
+      <div class="card"><h3>평균 심박 (bpm)</h3><div class="chart small" data-draw="sDyn" data-metric="avgHr" data-source="shortRaces"></div></div>
+      <div class="card"><h3>평균 파워 (W)</h3><div class="chart small" data-draw="sDyn" data-metric="powerW" data-source="shortRaces"></div></div>
+    </div>
+  </section>
+
+  <section class="card shortonly" id="s-certs">
+    <details class="fold">
+      <summary><span class="ft"><h2>기록증</h2><span class="fh"><span data-draw="sEvName">—</span> 공식 기록증 모음</span></span><span class="fb"><span class="o">펼치기</span><span class="c">접기</span></span></summary>
+      <p class="note" style="margin-top:12px">기록증을 누르면 크게 보여요. 다시 누르면 작아져요.</p>
+      <div class="certs" data-draw="sCerts" data-source="shortRaces"></div>
+    </details>
   </section>
 
   <section class="card" id="predict">
@@ -299,7 +356,7 @@
     <div data-draw="riegel" data-source="otherPbs summary">—</div>
   </section>
 
-  <section class="card" id="all">
+  <section class="card fullonly" id="all">
     <h2>전체 출전 기록</h2>
     <p class="note">지금까지 출전한 풀마라톤 전부. <span data-only="ksj">공식 기록은 기록증 기준, 페이스와 나머지 지표는 워치 기준이에요. 산불조심 마라톤은 기록증이 발급되지 않아 워치 기록을 공식 기록 자리에 넣었어요.</span><span data-only="pjh" hidden>공식 기록은 기록증 기준, 페이스와 나머지 지표는 워치 기준이에요. 첫 대회(진주)는 갤럭시워치 기록이라 파워·보폭·접지 시간·기온이 비어 있어요.</span><span data-only="son" hidden>공식 기록은 기록증 기준, 페이스와 나머지 지표는 워치 기준이에요.</span><span data-only="kim" hidden>공식 기록은 기록증 기준, 페이스와 나머지 지표는 워치 기준이에요. 공원사랑은 기록증 기록이 워치 기록보다 꽤 길어요. 출발 신호부터 잰 기록이거나 중간 정지 시간이 포함된 것으로 보여요.</span></p>
     <div class="tbox">
@@ -316,7 +373,7 @@
     <p class="swipe">표는 옆으로 밀어서 더 볼 수 있어요</p>
   </section>
 
-  <section class="card" id="races">
+  <section class="card fullonly" id="races">
     <h2>대회별 상세기록</h2>
     <p class="note">공식 기록과 워치 기준 전·후반(21.1km 지점) 분할, 30km 전후 페이스.</p>
     <div class="tbox">
@@ -332,7 +389,7 @@
     <p class="swipe">휴대폰에서는 워치·전반·후반 열을 숨겼어요. 옆으로 밀면 나머지가 보여요</p>
   </section>
 
-  <section class="card" id="certs">
+  <section class="card fullonly" id="certs">
     <details class="fold">
       <summary><span class="ft"><h2>기록증</h2><span class="fh">대회별 공식 기록증 모음</span></span><span class="fb"><span class="o">펼치기</span><span class="c">접기</span></span></summary>
       <p class="note" style="margin-top:12px">기록증을 누르면 크게 보여요. 다시 누르면 작아져요.</p>
@@ -340,13 +397,13 @@
     </details>
   </section>
 
-  <section class="card" id="trend">
+  <section class="card fullonly" id="trend">
     <h2>기록 추이</h2>
     <p class="note">대회별 공식 기록. 위로 갈수록 빠른 기록이고, 금색 점은 그때까지의 PB, 점선은 추세선이에요.</p>
     <div class="chart dash-skeleton" data-draw="trendChart" data-source="raceStats"></div>
   </section>
 
-  <section id="pacing">
+  <section class="fullonly" id="pacing">
     <div class="card">
       <h2>후반 유지력</h2>
       <p class="note">전반 대비 후반 페이스가 km당 몇 초 느려졌는지. 둔화가 가장 작았던 세 대회(<b data-draw="evenRaces" data-source="insights" data-field="evenRaces">—</b>)는 모두 <b data-draw="evenMax" data-source="insights" data-field="evenMax">—</b> 이내였고, 가장 컸던 <b data-draw="worstRace" data-source="insights" data-field="worstRace">—</b>는 <b data-draw="worstFade" data-source="insights" data-field="worstFade">—</b>였어요. 점선은 +<span data-draw="even">—</span>초 기준선이에요.</p>
@@ -354,7 +411,7 @@
     </div>
   </section>
 
-  <section class="card" id="course" hidden>
+  <section class="card fullonly" id="course" hidden>
     <h2>같은 코스 비교</h2>
     <p class="note">같은 코스를 뛴 대회끼리 1km 랩 페이스(위가 빠름)와 5km 구간, 누적, 직전 대비 차이, 누적 단축을 비교해요.</p>
     <div class="seg" role="group" aria-label="코스 선택">
@@ -375,7 +432,7 @@
     <p class="swipe">표는 옆으로 밀어서 더 볼 수 있어요</p>
   </section>
 
-  <section class="card" id="elev">
+  <section class="card fullonly" id="elev">
     <h2>대회별 해발고도</h2>
     <p class="note">네 사람이 뛴 <b data-draw="evCount" data-source="elevation">—</b>개 대회의 코스 고저. 막대를 누르면 그 대회 고도 그래프가 아래에 나와요.</p>
     <p class="def" style="margin:-6px 0 10px">여러 명이 함께 뛴 대회는 고도 변화가 가장 크게 잡힌(총 상승이 가장 큰) 기록을 대표로 썼어요. 해발고도는 워치 기압계 값이라 같은 대회도 기기·날씨에 따라 절대값이 달라요(25 동아는 −40~−6m로 기록됐어요). 그래프는 가민 캡처의 고도 차트를 읽어 시간 축을 거리로 바꾼 근사치예요.</p>
@@ -391,7 +448,7 @@
     </details>
   </section>
 
-  <section id="dynamics">
+  <section class="fullonly" id="dynamics">
     <h2>러닝 다이내믹스</h2>
     <p class="note" data-only="ksj kim pjh">대회별 평균값 추이. 케이던스는 <b data-draw="cadFirst" data-source="insights" data-field="cadFirst">—</b>에서 PB 때 <b data-draw="cadPb" data-source="insights" data-field="cadPb">—</b>로, 보폭은 <b data-draw="strideFirst2" data-source="insights" data-field="strideFirst">—</b>에서 <b data-draw="stridePb2" data-source="insights" data-field="stridePb">—</b>로 둘 다 늘었어요. 피치와 보폭이 함께 좋아지며 빨라진 경우예요.</p>
     <p class="note" data-only="son" hidden>대회별 평균값 추이. 케이던스는 <b data-draw="cadRange" data-source="insights" data-field="cadRange">—</b>로 거의 그대로인데, 보폭은 <b data-draw="strideFirst" data-source="insights" data-field="strideFirst">—</b>에서 PB 때 <b data-draw="stridePb" data-source="insights" data-field="stridePb">—</b>까지 늘었어요. 빨라진 건 보폭 덕분이에요.</p>
@@ -421,7 +478,7 @@
   </section>
 
 
-  <section class="card" id="goal">
+  <section class="card fullonly" id="goal">
     <h2>목표 페이스 계산</h2>
     <p class="note">목표 기록을 넣으면 워치 거리 기준 페이스와 5km 통과 시간을 PB 대회의 실제 통과 시간과 비교해요. PB 때 30km까지 평균은 <b data-draw="pb30" data-source="insights" data-field="pbPace30">—</b>, 31km 이후는 <b data-draw="pb31" data-source="insights" data-field="pbPaceAfter30">—</b>였어요.</p>
     <div class="goalin">
@@ -435,7 +492,7 @@
 <script>
 // Claude 대시보드용 dash API를 브라우저에서 직접 돌리는 작은 실행기
 window.dash = (() => {
-  const files = { races: 'data/races.json', laps: 'data/laps.json', geo: 'data/korea_sido.json', otherPbs: 'data/other_pbs.json', elevation: 'data/elevation.json' };
+  const files = { races: 'data/races.json', laps: 'data/laps.json', geo: 'data/korea_sido.json', otherPbs: 'data/other_pbs.json', elevation: 'data/elevation.json', shortRaces: 'data/short_races.json', shortLaps: 'data/short_laps.json' };
   const data = {}, calcs = {}, draws = {}, listeners = [];
   let ready = false;
   const run = (name) => document.querySelectorAll('[data-draw="' + name + '"]').forEach((el) => { try { draws[name](el); } catch (e) { console.error(name, e); } });
@@ -680,12 +737,43 @@ window.mxDraws = ['firstTime', 'firstTime2', 'pbTime', 'pbTime2', 'improve', 'im
   'evenRaces', 'evenMax', 'worstRace', 'worstFade', 'cadRange', 'strideFirst', 'stridePb', 'cadFirst', 'cadPb', 'strideFirst2', 'stridePb2', 'sidoCount', 'cityCount', 'topCity', 'pb30', 'pb31',
   'map', 'trendChart', 'fadeChart', 'courseChart', 'courseLegend', 'courseRows', 'edLabel', 'dyn', 'zones', 'raceRows', 'allRows', 'certs', 'goal', 'rgPresets', 'riegel'];
 window.mxGoalDefault = { ksj: ['2:54:59', '42.38'], pjh: ['2:59:59', '42.30'], son: ['3:09:59', '42.45'], kim: ['2:59:59', '42.41'] };
+// 거리별 분류 (풀 / 하프 / 10K)
+window.mxEvent = 'full';
+window.mxEvNames = { full: '풀', half: '하프', '10km': '10K' };
+window.mxEvDist = { half: 21.0975, '10km': 10 };
+window.mxShortNote = {
+  'son|10km': '평택항부터는 1km 랩이 10초 안쪽으로 고르게 유지되고, 케이던스는 180대 그대로인데 보폭이 1.28m에서 1.38m로 늘면서 빨라졌어요.',
+};
+window.mxS = (id) => {
+  const r = dash.data(id);
+  if (r.status !== 'ok' || !Array.isArray(r.data)) return r;
+  return Object.assign({}, r, { data: r.data.filter((x) => x.person === window.mxPerson && x.event === window.mxEvent).sort((a, b) => (a.date < b.date ? -1 : a.date > b.date ? 1 : (a.km || 0) - (b.km || 0))) });
+};
+window.mxSDraws = ['sTake', 'sTiles', 'sEvName', 'sAll', 'sTrend', 'sLapChart', 'sLapLegend', 'sLapRows', 'sDyn', 'sCerts'];
+window.mxEvApply = () => {
+  const s = dash.data('shortRaces'), have = new Set(['full']);
+  if (s.status === 'ok') s.data.filter((x) => x.person === window.mxPerson).forEach((x) => have.add(x.event));
+  if (!have.has(window.mxEvent)) window.mxEvent = 'full';
+  document.querySelectorAll('.mx .eseg').forEach((g) => {
+    g.classList.toggle('off', have.size < 2);
+    g.querySelectorAll('button').forEach((b) => { b.hidden = !have.has(b.dataset.ev); b.classList.toggle('on', b.dataset.ev === window.mxEvent); });
+  });
+  const root = document.querySelector('.mx'); if (root) root.classList.toggle('ev-short', window.mxEvent !== 'full');
+};
+window.mxDraws.push(...window.mxSDraws);
+document.querySelectorAll('.mx .eseg button').forEach((b) => b.addEventListener('click', () => {
+  if (b.dataset.ev === window.mxEvent) return;
+  window.mxEvent = b.dataset.ev; window.mxEvApply();
+  window.mxDraws.forEach((n) => { try { dash.draw(n); } catch (_) {} });
+}));
+dash.onData(() => window.mxEvApply());
 window.mxApplyPerson = (p) => {
   document.querySelectorAll('[data-only]').forEach((el) => { el.hidden = !el.dataset.only.split(' ').includes(p); });
   const g = window.mxGoalDefault[p];
   document.querySelectorAll('#mx-goal').forEach((i) => { i.value = g[0]; });
   document.querySelectorAll('#mx-dist').forEach((i) => { i.value = g[1]; });
   if (window.mxCourseSeg) window.mxCourseSeg();
+  if (window.mxEvApply) window.mxEvApply();
 };
 window.mxApplyPerson(window.mxPerson);
 dash.onData(() => {
@@ -1155,6 +1243,185 @@ dash.draw('certs', (el) => {
     const b = document.createElement('b'); b.textContent = r.official;
     if (r.pb) { const t = document.createElement('i'); t.className = 'pbtag'; t.style.fontStyle = 'normal'; t.textContent = 'PB'; b.appendChild(t); }
     const sp = document.createElement('span'); sp.textContent = r.date + ' ' + r.city;
+    cap.append(b, sp); card.append(img, cap);
+    card.addEventListener('click', () => { const was = card.classList.contains('open'); el.querySelectorAll('.cert.open').forEach((c) => c.classList.remove('open')); if (!was) { card.classList.add('open'); card.scrollIntoView({ behavior: 'smooth', block: 'start' }); } });
+    return card;
+  }));
+});
+
+// ===== 하프·10K 화면 =====
+window.mxSPal = (n) => {
+  const base = ['#9aa5b4', window.mxC('--c1'), window.mxC('--c2'), '#8b5cf6', '#e0a526'];
+  const last = window.mxC('--rb-accent');
+  if (n <= 1) return [last];
+  const pre = base.slice(Math.max(0, base.length - (n - 1)));
+  while (pre.length < n - 1) pre.unshift('#c3cad4');
+  return [...pre.slice(-(n - 1)), last];
+};
+window.mxSPb = (rows) => { let best = Infinity; return rows.map((r) => { const pb = r.officialSec < best; if (pb) best = r.officialSec; return pb; }); };
+window.mxSDiff = (s) => { const a = Math.abs(s), m = Math.floor(a / 60), x = Math.round(a % 60); const t = (m ? m + ':' + String(x).padStart(2, '0') : x + '초'); return (s < 0 ? '−' : '+') + t; };
+dash.draw('sEvName', (el) => { el.textContent = window.mxEvNames[window.mxEvent] || ''; });
+dash.draw('sTake', (el) => {
+  const s = window.mxS('shortRaces'); if (s.status !== 'ok' || !s.data.length) { el.textContent = ''; return; }
+  const rows = s.data, first = rows[0], best = rows.reduce((a, b) => (b.officialSec < a.officialSec ? b : a)), nm = window.mxEvNames[window.mxEvent];
+  el.replaceChildren();
+  const b = (t) => Object.assign(document.createElement('b'), { textContent: t });
+  if (rows.length > 1 && best !== first) el.append('첫 ' + nm + ' ', b(first.officialTime), '에서 PB ', b(best.officialTime), '까지 ', b(window.mxSDiff(best.officialSec - first.officialSec).replace('−', '')), ' 단축했어요. ');
+  else el.append(nm + ' PB는 ', b(best.officialTime), '예요. ');
+  const note = window.mxShortNote[window.mxPerson + '|' + window.mxEvent]; if (note) el.append(note);
+});
+dash.draw('sTiles', (el) => {
+  const s = window.mxS('shortRaces'); if (s.status !== 'ok' || !s.data.length) { el.replaceChildren(); return; }
+  const rows = s.data, first = rows[0], last = rows[rows.length - 1], best = rows.reduce((a, b) => (b.officialSec < a.officialSec ? b : a)), nm = window.mxEvNames[window.mxEvent];
+  const tile = (lbl, big, sub, pb) => {
+    const c = document.createElement('div'); c.className = 'card tile' + (pb ? ' pb' : '');
+    c.append(Object.assign(document.createElement('div'), { className: 'lbl', textContent: lbl }), Object.assign(document.createElement('div'), { className: 'big', textContent: big }), Object.assign(document.createElement('div'), { className: 'sub2', textContent: sub }));
+    return c;
+  };
+  const prev = rows[rows.length - 2];
+  el.replaceChildren(
+    tile(nm + ' PB (공식)', best.officialTime, best.race + ' · 워치 ' + F.hms(best.timeSec), true),
+    tile('출전', rows.length + '회', first.date.slice(0, 4) + '년 ' + Number(first.date.slice(5, 7)) + '월부터'),
+    tile('첫 대회 대비 단축', rows.length > 1 ? window.mxSDiff(best.officialSec - first.officialSec).replace('−', '') : '—', '첫 ' + nm + ' ' + first.officialTime),
+    tile('최근 대회', last.officialTime, last.race + (prev ? ' · 직전 대비 ' + window.mxSDiff(last.officialSec - prev.officialSec) : '')),
+  );
+});
+dash.draw('sAll', (el) => {
+  const s = window.mxS('shortRaces'); if (s.status !== 'ok') { el.replaceChildren(); return; }
+  const dist = window.mxEvDist[window.mxEvent] || 10, pbs = window.mxSPb(s.data);
+  const head = ['날짜', '회차', '대회명', '도시', '공식 기록', '페이스', '심박(평균/최대)', '파워', '케이던스', '보폭', '총 상승', '기온', '신발'];
+  const t = document.createElement('table'), th = document.createElement('thead'), tr0 = document.createElement('tr');
+  head.forEach((h) => tr0.appendChild(Object.assign(document.createElement('th'), { textContent: h }))); th.appendChild(tr0);
+  const tb = document.createElement('tbody'), dash_ = (v, u) => (v == null ? '—' : v + (u || ''));
+  s.data.map((r, i) => [r, i]).reverse().forEach(([r, i]) => {
+    const tr = document.createElement('tr');
+    const cells = [r.date.slice(2).replace(/-/g, '.'), (i + 1) + '번째', r.name, r.city, r.officialTime + (pbs[i] && i === s.data.indexOf(s.data.reduce((a, b) => (b.officialSec < a.officialSec ? b : a))) ? ' PB' : ''), F.ms(r.officialSec / dist) + '/km',
+      r.avgHr == null ? '—' : r.avgHr + '/' + r.maxHr, dash_(r.powerW, 'W'), dash_(r.cadenceSpm), r.strideM == null ? '—' : r.strideM.toFixed(2) + 'm', dash_(r.ascentM, 'm'),
+      r.tempStartC == null ? '—' : r.tempStartC + '℃' + (r.tempAvgC != null ? '/' + r.tempAvgC + '℃' : ''), r.shoe];
+    cells.forEach((c, k) => { const td = document.createElement('td'); td.textContent = c; if (k === 4) td.style.fontWeight = '700'; tr.appendChild(td); });
+    tb.appendChild(tr);
+  });
+  t.append(th, tb); el.replaceChildren(t);
+});
+dash.draw('sTrend', (el) => {
+  const s = window.mxS('shortRaces'); if (s.status !== 'ok' || !s.data.length) { el.replaceChildren(); return; }
+  const rows = s.data, pbs = window.mxSPb(rows); el.replaceChildren();
+  const W = el.clientWidth || 600, H = W < 480 ? 210 : 240, L = 44, R = 12, T = 26, B = 40;
+  const svg = d3.select(el).append('svg').attr('width', '100%').attr('viewBox', `0 0 ${W} ${H}`);
+  const span = d3.max(rows, (r) => r.officialSec) - d3.min(rows, (r) => r.officialSec), pad = Math.max(30, span * 0.12);
+  const lo = d3.min(rows, (r) => r.officialSec) - pad, hi = d3.max(rows, (r) => r.officialSec) + pad;
+  const x = d3.scalePoint(rows.map((r) => r.race), [L + 18, W - R - 18]);
+  const y = d3.scaleLinear([lo, hi], [T, H - B]);
+  const step = [30, 60, 120, 180, 300, 600].find((st) => (H - T - B) / ((hi - lo) / st) >= 22) || 600;
+  yAxis(svg.append('g'), y, d3.range(Math.ceil(lo / step) * step, hi, step), (v) => F.hms(v), W - R, L);
+  const n = rows.length;
+  if (n > 1) {
+    const xs = rows.map((_, i) => i), mx = d3.mean(xs), my = d3.mean(rows, (r) => r.officialSec);
+    const slope = d3.sum(rows, (r, i) => (i - mx) * (r.officialSec - my)) / d3.sum(xs, (i) => (i - mx) ** 2);
+    svg.append('line').attr('x1', x(rows[0].race)).attr('x2', x(rows[n - 1].race)).attr('y1', y(my - slope * mx)).attr('y2', y(my + slope * (n - 1 - mx))).style('stroke', 'var(--rb-muted)').attr('stroke-dasharray', '4 4');
+  }
+  svg.append('path').attr('d', d3.line((r) => x(r.race), (r) => y(r.officialSec))(rows)).style('fill', 'none').style('stroke', window.mxC('--rb-accent')).attr('stroke-width', 2).attr('stroke-linejoin', 'round');
+  const best = rows.reduce((a, b) => (b.officialSec < a.officialSec ? b : a));
+  rows.forEach((r, i) => {
+    svg.append('circle').attr('cx', x(r.race)).attr('cy', y(r.officialSec)).attr('r', pbs[i] ? 5 : 4).style('fill', pbs[i] ? gold() : 'var(--rb-card)').style('stroke', pbs[i] ? gold() : window.mxC('--rb-accent')).attr('stroke-width', 2);
+    const nb = [rows[i - 1], rows[i + 1]].filter(Boolean).map((q) => q.officialSec);
+    let below = nb.length && r.officialSec > nb.reduce((p, q) => p + q, 0) / nb.length;
+    if (below && y(r.officialSec) + 17 > H - B - 2) below = false;
+    if (!below && y(r.officialSec) - 9 < 12) below = true;
+    svg.append('text').attr('x', x(r.race)).attr('y', y(r.officialSec) + (below ? 17 : -9)).attr('text-anchor', 'middle').style('font-size', W < 480 ? '10px' : '11px').style('font-weight', r === best ? '800' : '600').style('fill', 'var(--rb-ink)')
+      .style('paint-order', 'stroke').style('stroke', 'var(--rb-card)').style('stroke-width', '3px').style('stroke-linejoin', 'round').text(r.officialTime);
+    const [yy, c] = r.race.split(' ');
+    svg.append('text').attr('x', x(r.race)).attr('y', H - 22).attr('text-anchor', 'middle').style('font-size', '12px').style('fill', 'var(--rb-muted)').text(c);
+    svg.append('text').attr('x', x(r.race)).attr('y', H - 8).attr('text-anchor', 'middle').style('font-size', '12px').style('fill', 'var(--rb-muted)').text(yy);
+  });
+});
+dash.draw('sLapChart', (el) => {
+  const s = window.mxS('shortRaces'), lp = window.mxS('shortLaps');
+  if (s.status !== 'ok' || lp.status !== 'ok' || !s.data.length) { el.replaceChildren(); return; }
+  const races = s.data, pal = window.mxSPal(races.length); el.replaceChildren();
+  const series = races.map((r) => lp.data.filter((l) => l.race === r.race && l.distKm === 1));
+  const K = d3.max(series, (x) => x.length) || 1;
+  const W = el.clientWidth || 600, H = W < 480 ? 220 : 240, L = 38, R = 10, T = 12, B = 24;
+  const svg = d3.select(el).append('svg').attr('width', '100%').attr('viewBox', `0 0 ${W} ${H}`);
+  const all = series.flat().map((l) => l.sec), lo = Math.floor(d3.min(all) / 15) * 15, hi = Math.ceil(d3.max(all) / 15) * 15;
+  const x = d3.scaleLinear([1, K], [L + 6, W - R - 6]), y = d3.scaleLinear([lo, hi], [T, H - B]);
+  yAxis(svg.append('g'), y, d3.range(lo, hi + 1, (hi - lo) / 15 > 6 ? 30 : 15), F.ms, W - R, L);
+  d3.range(1, K + 1).forEach((k) => svg.append('text').attr('x', x(k)).attr('y', H - 6).attr('text-anchor', 'middle').style('font-size', '11.5px').style('fill', 'var(--rb-muted)').text(k + (k === K ? 'km' : '')));
+  series.forEach((sr, i) => {
+    svg.append('path').attr('d', d3.line((l) => x(l.km), (l) => y(l.sec))(sr)).style('fill', 'none').style('stroke', pal[i]).attr('stroke-width', i === series.length - 1 ? 2.6 : 2).attr('stroke-linejoin', 'round');
+    sr.forEach((l) => svg.append('circle').attr('cx', x(l.km)).attr('cy', y(l.sec)).attr('r', 2.4).style('fill', pal[i]));
+  });
+  const tip = tipFor(el), rule = svg.append('line').attr('y1', T).attr('y2', H - B).style('stroke', 'var(--rb-line)').attr('opacity', 0);
+  svg.append('rect').attr('x', L).attr('y', T).attr('width', W - L - R).attr('height', H - T - B).style('fill', 'transparent')
+    .on('pointermove pointerdown', (ev) => {
+      const k = Math.max(1, Math.min(K, Math.round(x.invert(d3.pointer(ev)[0])))); rule.attr('x1', x(k)).attr('x2', x(k)).attr('opacity', 1);
+      tip.show(x(k) / W * el.clientWidth, T + 20, k + 'km 랩', races.map((r, i) => r.race + '  ' + (series[i][k - 1] ? F.ms(series[i][k - 1].sec) : '—')));
+    }).on('pointerleave', () => { tip.hide(); rule.attr('opacity', 0); });
+});
+dash.draw('sLapLegend', (el) => {
+  const s = window.mxS('shortRaces'); if (s.status !== 'ok') { el.replaceChildren(); return; }
+  const pal = window.mxSPal(s.data.length);
+  el.replaceChildren(...s.data.map((r, i) => { const sp = document.createElement('span'), sw = document.createElement('i'); sw.style.background = pal[i]; sp.append(sw, r.race + ' 공식 ' + r.officialTime); return sp; }));
+});
+dash.draw('sLapRows', (el) => {
+  const s = window.mxS('shortRaces'), lp = window.mxS('shortLaps');
+  if (s.status !== 'ok' || lp.status !== 'ok' || !s.data.length) { el.replaceChildren(); return; }
+  const races = s.data, by = races.map((r) => lp.data.filter((l) => l.race === r.race));
+  const K = d3.max(by, (x) => x.filter((l) => l.distKm === 1).length) || 0;
+  const t = document.createElement('table'); t.className = 's-laptable';
+  const th = document.createElement('thead'), tr0 = document.createElement('tr');
+  ['구간', ...races.map((r) => r.race)].forEach((h) => tr0.appendChild(Object.assign(document.createElement('th'), { textContent: h }))); th.appendChild(tr0);
+  const tb = document.createElement('tbody');
+  for (let k = 1; k <= K; k++) {
+    const tr = document.createElement('tr'); tr.appendChild(Object.assign(document.createElement('td'), { textContent: k + 'km' }));
+    const v = by.map((b) => { const l = b.find((q) => q.km === k && q.distKm === 1); return l ? l.sec : null; }), mn = Math.min(...v.filter((q) => q != null));
+    v.forEach((q) => { const td = document.createElement('td'); td.textContent = q == null ? '—' : F.ms(q); if (q === mn && races.length > 1) td.className = 'best'; tr.appendChild(td); });
+    tb.appendChild(tr);
+  }
+  const fin = document.createElement('tr'); fin.className = 'fin'; fin.appendChild(Object.assign(document.createElement('td'), { textContent: '공식 기록' }));
+  const mnO = Math.min(...races.map((r) => r.officialSec));
+  races.forEach((r) => { const td = document.createElement('td'); td.textContent = r.officialTime; if (r.officialSec === mnO && races.length > 1) td.className = 'best'; fin.appendChild(td); });
+  tb.appendChild(fin); t.append(th, tb); el.replaceChildren(t);
+});
+dash.draw('sDyn', (el) => {
+  const metric = el.dataset.metric, s = window.mxS('shortRaces');
+  if (s.status !== 'ok') { el.replaceChildren(); return; }
+  const rows = s.data.filter((r) => r[metric] != null); el.replaceChildren();
+  if (!rows.length) { el.appendChild(Object.assign(document.createElement('div'), { className: 'elev-none', textContent: '기록 없음' })); return; }
+  const best = s.data.reduce((a, b) => (b.officialSec < a.officialSec ? b : a));
+  const f = metric === 'strideM' ? (v) => v.toFixed(2) : (v) => String(v);
+  const W = el.clientWidth || 300, H = 140, L = 6, R = 6, T = 54, B = 32;
+  const svg = d3.select(el).append('svg').attr('width', '100%').attr('viewBox', `0 0 ${W} ${H}`);
+  const v = rows.map((r) => r[metric]), lo = d3.min(v), hi = d3.max(v), pad = (hi - lo) * 0.15 || Math.abs(hi) * 0.05 || 1;
+  const x = d3.scaleLinear([0, Math.max(1, rows.length - 1)], [L + 14, W - R - 14]), y = d3.scaleLinear([lo - pad, hi + pad], [H - B, T]);
+  svg.append('text').attr('x', 0).attr('y', 14).style('font-size', '13px').style('font-weight', '700').style('fill', 'var(--rb-ink)').text(rows.length > 1 ? f(v[0]) + ' → ' + f(v[v.length - 1]) : f(v[0]));
+  const br = rows.find((r) => r.race === best.race);
+  svg.append('text').attr('x', 0).attr('y', 30).style('font-size', '11.5px').style('fill', 'var(--rb-muted)').text(br ? 'PB 대회 ' + f(br[metric]) : '');
+  const Zb = window.mxZones && window.mxZones[metric];
+  if (Zb) {
+    const [d0, d1] = y.domain(), edges = [-Infinity, ...Zb.edges, Infinity];
+    for (let k = 0; k < 5; k++) { const a = Math.max(d0, edges[k]), b2 = Math.min(d1, edges[k + 1]); if (b2 <= a) continue; const zi = Zb.better === 'high' ? k : 4 - k; svg.append('rect').attr('x', 0).attr('width', W).attr('y', y(b2)).attr('height', y(a) - y(b2)).style('fill', window.mxZones.colors[zi]).style('opacity', '0.13'); }
+  }
+  if (rows.length > 1) svg.append('path').attr('d', d3.line((_, i) => x(i), (t) => y(t))(v)).style('fill', 'none').style('stroke', window.mxC('--rb-accent')).attr('stroke-width', 2).attr('stroke-linejoin', 'round');
+  rows.forEach((r, i) => {
+    const isB = r.race === best.race;
+    svg.append('circle').attr('cx', x(i)).attr('cy', y(v[i])).attr('r', isB ? 4.5 : 3).style('fill', isB ? gold() : window.mxC('--rb-accent'));
+    svg.append('text').attr('x', x(i)).attr('y', y(v[i]) + (i % 2 ? 14 : -7)).attr('text-anchor', 'middle').style('font-size', '9.5px').style('font-weight', isB ? '800' : '500').style('fill', isB ? 'var(--rb-ink)' : 'var(--rb-ink2)')
+      .style('paint-order', 'stroke').style('stroke', 'var(--rb-card)').style('stroke-width', '2.5px').text(f(v[i]));
+  });
+  svg.append('text').attr('x', L).attr('y', H - 2).style('font-size', '12px').style('fill', 'var(--rb-muted)').text(rows[0].race.split(' ')[0]);
+  if (rows.length > 1) svg.append('text').attr('x', W - R).attr('y', H - 2).attr('text-anchor', 'end').style('font-size', '12px').style('fill', 'var(--rb-muted)').text(rows[rows.length - 1].race.split(' ')[0]);
+});
+dash.draw('sCerts', (el) => {
+  const s = window.mxS('shortRaces'); if (s.status !== 'ok') { el.replaceChildren(); return; }
+  const best = s.data.length ? s.data.reduce((a, b) => (b.officialSec < a.officialSec ? b : a)) : null;
+  el.replaceChildren(...s.data.filter((r) => r.certUrl).slice().reverse().map((r) => {
+    const card = document.createElement('figure'); card.className = 'cert'; card.style.margin = '0';
+    const img = document.createElement('img'); img.src = r.certUrl; img.loading = 'lazy'; img.alt = r.name + ' 기록증';
+    const cap = document.createElement('figcaption'); cap.className = 'cap';
+    const b = document.createElement('b'); b.textContent = r.officialTime;
+    if (r === best) { const t = document.createElement('i'); t.className = 'pbtag'; t.style.fontStyle = 'normal'; t.textContent = 'PB'; b.appendChild(t); }
+    const sp = document.createElement('span'); sp.textContent = r.date.slice(2).replace(/-/g, '.') + ' ' + r.name;
     cap.append(b, sp); card.append(img, cap);
     card.addEventListener('click', () => { const was = card.classList.contains('open'); el.querySelectorAll('.cert.open').forEach((c) => c.classList.remove('open')); if (!was) { card.classList.add('open'); card.scrollIntoView({ behavior: 'smooth', block: 'start' }); } });
     return card;
