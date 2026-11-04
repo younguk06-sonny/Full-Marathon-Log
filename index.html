@@ -186,6 +186,30 @@
 .mx .pseg{display:inline-flex;align-self:flex-start;background:var(--rb-card);border:1px solid var(--rb-line);border-radius:12px;padding:3px;gap:2px}
 .mx .pseg button{font:inherit;border:0;background:transparent;padding:7px 16px;border-radius:9px;cursor:pointer;font-size:14px;font-weight:650;color:var(--rb-ink2)}
 .mx .pseg button.on{background:var(--rb-accent);color:#fff}
+.mx.locked > :not(header):not(.pseg):not(.lockbox){display:none!important}
+.mx.nosel > :not(header):not(.pseg):not(.pickbox){display:none!important}
+.mx .pickbox{display:none}
+.mx.nosel .pickbox{display:flex;flex-direction:column;align-items:center;gap:8px;background:var(--rb-card);border:1px dashed var(--rb-line);border-radius:16px;padding:44px 20px;text-align:center}
+.mx .pickbox b{font-size:16px}
+.mx .pickbox span{font-size:13px;color:var(--rb-muted)}
+.mx .lockbox{display:none}
+.mx.locked .lockbox{display:flex;flex-direction:column;align-items:center;gap:12px;background:var(--rb-card);border:1px solid var(--rb-line);border-radius:16px;padding:36px 20px;text-align:center}
+.mx .lockbox .lk-ic{width:44px;height:44px;border-radius:50%;background:var(--rb-bg,#eef2f7);display:flex;align-items:center;justify-content:center}
+.mx .lockbox h2{margin:0;font-size:17px}
+.mx .lockbox p{margin:0;font-size:13px;color:var(--rb-muted)}
+.mx .lockbox form{display:flex;gap:8px}
+.mx .lockbox input{font:inherit;font-size:20px;letter-spacing:8px;text-align:center;width:130px;padding:9px 10px;border:1px solid var(--rb-line);border-radius:10px;background:var(--rb-card);color:var(--rb-ink)}
+.mx .lockbox button{font:inherit;font-weight:700;border:0;border-radius:10px;padding:0 16px;background:var(--rb-accent);color:#fff;cursor:pointer}
+.mx .lockbox .lk-err{color:#C0392B;font-size:12.5px;min-height:16px}
+.mx .lockbox .lk-err.shake{animation:lkshake .3s}
+@keyframes lkshake{0%,100%{transform:translateX(0)}25%{transform:translateX(-5px)}75%{transform:translateX(5px)}}
+.mx .pseg{gap:8px;margin-top:14px;overflow:visible}
+.mx .pseg button{position:relative}
+.mx .pbadge{position:absolute;top:-19px;right:-17px;pointer-events:none;line-height:1;z-index:2}
+.mx .pseg button:has(.pbadge.star){margin-right:14px}
+.mx .pbadge.star{right:-24px;top:-19px}
+.mx .pbadge.star svg{display:block;width:42px;height:42px;filter:drop-shadow(0 1px 1.5px rgba(0,0,0,.25))}
+.mx .pbadge.single{top:-14px;right:-14px;width:27px;height:27px;border-radius:50%;display:flex;align-items:center;justify-content:center;background:radial-gradient(circle at 35% 30%,#FFD54A,#F2B21B 70%);color:#5A3300;font-size:9px;font-weight:900;border:1.5px solid #fff;box-shadow:0 1px 2px rgba(0,0,0,.25);letter-spacing:-.4px}
 .mx .chart.elevbar{min-height:220px}
 @media (max-width:600px){.mx .chart.elevbar{min-height:240px}}
 .mx .elev-head{display:flex;gap:8px;align-items:center;margin:12px 0 8px}
@@ -205,15 +229,23 @@
 </head>
 <body>
 <div id="dash-root">
-<div class="mx">
+<div class="mx nosel">
   <header>
     <div class="top"><span class="mark" aria-hidden="true"></span><div><h1>풀마라톤 기록 대시보드</h1><p class="sub">풀코스 · 지역 · 구간 기록을 한눈에 (Garmin 기준)</p></div></div>
   </header>
   <div class="pseg" role="group" aria-label="러너 선택">
-    <button type="button" data-person="ksj" class="on">김선진</button>
-    <button type="button" data-person="pjh">박지현</button>
+    <button type="button" data-person="ksj">김선진<span class="pbadge star" aria-label="SUB-3"><svg viewBox="0 0 40 40" aria-hidden="true"><path d="M20 1.8l5.3 11.6 12.7 1.4-9.5 8.6 2.7 12.5L20 29.5 8.8 35.9l2.7-12.5L2 14.8l12.7-1.4z" fill="#F2B21B" stroke="#fff" stroke-width="1.6" stroke-linejoin="round"/><text x="20" y="24.6" text-anchor="middle" font-size="6.6" font-weight="900" fill="#5A3300" font-family="inherit" letter-spacing="-.2">SUB-3</text></svg></span></button>
+    <button type="button" data-person="pjh">박지현<span class="pbadge single" aria-label="싱글">싱글</span></button>
     <button type="button" data-person="son">손영욱</button>
-    <button type="button" data-person="kim">김지훈</button>
+    <button type="button" data-person="kim">김지훈<span class="pbadge single" aria-label="싱글">싱글</span></button>
+  </div>
+  <div class="pickbox"><b>이름을 선택하세요</b><span>위에서 이름을 누르면 선택한 러너의 기록이 나와요</span></div>
+  <div class="lockbox" role="dialog" aria-label="비밀번호 입력">
+    <div class="lk-ic" aria-hidden="true"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="4" y="10" width="16" height="11" rx="2.5"/><path d="M8 10V7a4 4 0 0 1 8 0v3"/></svg></div>
+    <h2><span class="lk-name">—</span>님의 기록</h2>
+    <p>본인 비밀번호 4자리를 입력하세요</p>
+    <form class="lk-form" autocomplete="off"><input class="lk-pin" type="password" inputmode="numeric" pattern="[0-9]*" maxlength="4" aria-label="비밀번호 4자리"><button type="submit">확인</button></form>
+    <div class="lk-err" aria-live="polite"></div>
   </div>
   <p class="take">첫 풀 <b data-draw="firstTime" data-source="summary" data-field="firstTime">—</b>에서 PB <b data-draw="pbTime" data-source="summary" data-field="pbTime">—</b>까지 <b data-draw="improve" data-source="summary" data-field="improve">—</b> 단축했어요. <span data-only="ksj">25년 동아부터는 30km까지 4분 초반 페이스를 꾸준히 지키고, 챌린지레이스와 26 동아에서 서브3를 두 번 했어요. 최근 공주·경주는 31km 이후 페이스가 30% 가까이 느려지고 9~10분을 걸어서, 후반 유지가 다음 PB의 열쇠예요.</span><span data-only="pjh" hidden>30km까지의 스피드는 이미 충분하고, 31km 이후 둔화를 줄여 갈수록 기록이 크게 빨라지고 있어요.</span><span data-only="son" hidden>기록이 좋았던 날은 후반이 거의 느려지지 않았고, 서브 3:10의 열쇠는 31km 이후 페이스 유지예요.</span><span data-only="kim" hidden>네 번 모두 후반이 거의 느려지지 않은 이븐 페이스 러너이고, 케이던스와 보폭이 함께 늘면서 기록이 빨라졌어요.</span></p>
 
@@ -670,6 +702,77 @@ document.querySelectorAll('.mx .pseg button').forEach((b) => {
     window.mxDraws.forEach((n) => { try { dash.draw(n); } catch (_) {} });
   });
 });
+// 러너별 비밀번호 잠금 (화면 잠금)
+window.mxLock = {
+  hash: { ksj: '02a4f93864b56f671f573c065e52d7ce14053dbf4e1c8f0eb3b6fecbc5e8ebcc', pjh: '11aff9d4b0ce24b46b3f3c05ab17d0bcb8e72a5aacac6c1cd72145d5a94e48a5', son: '5b4952e27d155bc74eada65b716b8f1b09502a2a097acfc5eb2138f14513762c', kim: '7eba25f7b47e666bfa44520980ff6f683404eb861fbb0031119e274de7f314a0' },
+  names: { ksj: '김선진', pjh: '박지현', son: '손영욱', kim: '김지훈' },
+  open: new Set(),
+};
+try { JSON.parse(sessionStorage.getItem('fm-unlock') || '[]').forEach((p) => window.mxLock.open.add(p)); } catch (_) {}
+window.mxSelected = false;
+window.mxLockApply = () => {
+  const p = window.mxPerson, root = document.querySelector('.mx');
+  root.classList.toggle('nosel', !window.mxSelected);
+  if (!window.mxSelected) { root.classList.remove('locked'); return true; }
+  const locked = !!window.mxLock.hash[p] && !window.mxLock.open.has(p);
+  root.classList.toggle('locked', locked);
+  document.querySelectorAll('.mx .lk-name').forEach((e) => { e.textContent = window.mxLock.names[p] || ''; });
+  document.querySelectorAll('.mx .lk-err').forEach((e) => { e.textContent = ''; });
+  if (locked) document.querySelectorAll('.mx .lk-pin').forEach((i) => { i.value = ''; setTimeout(() => { try { i.focus({ preventScroll: true }); } catch (_) {} }, 50); });
+  return locked;
+};
+window.mxShaJs = (str) => {
+  const K = [], H = [], isP = (n) => { for (let i = 2; i * i <= n; i++) if (n % i === 0) return false; return true; };
+  for (let n = 2, c = 0; c < 64; n++) if (isP(n)) { if (c < 8) H[c] = (Math.pow(n, 1 / 2) * 4294967296) | 0; K[c++] = (Math.pow(n, 1 / 3) * 4294967296) | 0; }
+  const bytes = [...new TextEncoder().encode(str)], bl = bytes.length * 8;
+  bytes.push(0x80); while (bytes.length % 64 !== 56) bytes.push(0);
+  for (let i = 7; i >= 0; i--) bytes.push(i > 3 ? 0 : (bl >>> (i * 8)) & 255);
+  const r = (x, n) => (x >>> n) | (x << (32 - n)), h = H.slice();
+  for (let o = 0; o < bytes.length; o += 64) {
+    const w = [];
+    for (let i = 0; i < 64; i++) {
+      if (i < 16) w[i] = (bytes[o + i * 4] << 24) | (bytes[o + i * 4 + 1] << 16) | (bytes[o + i * 4 + 2] << 8) | bytes[o + i * 4 + 3];
+      else { const s0 = r(w[i - 15], 7) ^ r(w[i - 15], 18) ^ (w[i - 15] >>> 3), s1 = r(w[i - 2], 17) ^ r(w[i - 2], 19) ^ (w[i - 2] >>> 10); w[i] = (w[i - 16] + s0 + w[i - 7] + s1) | 0; }
+    }
+    let [A, B, C, D, E, F, G, Hh] = h;
+    for (let i = 0; i < 64; i++) {
+      const t1 = (Hh + (r(E, 6) ^ r(E, 11) ^ r(E, 25)) + ((E & F) ^ (~E & G)) + K[i] + w[i]) | 0;
+      const t2 = ((r(A, 2) ^ r(A, 13) ^ r(A, 22)) + ((A & B) ^ (A & C) ^ (B & C))) | 0;
+      Hh = G; G = F; F = E; E = (D + t1) | 0; D = C; C = B; B = A; A = (t1 + t2) | 0;
+    }
+    [A, B, C, D, E, F, G, Hh].forEach((v, i) => { h[i] = (h[i] + v) | 0; });
+  }
+  return h.map((v) => (v >>> 0).toString(16).padStart(8, '0')).join('');
+};
+window.mxSha = async (t) => {
+  try {
+    const b = await crypto.subtle.digest('SHA-256', new TextEncoder().encode(t));
+    return [...new Uint8Array(b)].map((x) => x.toString(16).padStart(2, '0')).join('');
+  } catch (_) { return window.mxShaJs(t); }
+};
+document.querySelectorAll('.mx .lk-form').forEach((form) => form.addEventListener('submit', async (ev) => {
+  ev.preventDefault();
+  const p = window.mxPerson, inp = form.querySelector('.lk-pin'), err = document.querySelector('.mx .lk-err');
+  const pin = (inp.value || '').trim();
+  let ok = false;
+  try { ok = /^[0-9]{4}$/.test(pin) && (await window.mxSha('fm-log:' + p + ':' + pin)) === window.mxLock.hash[p]; } catch (_) {}
+  if (!ok) { err.textContent = '비밀번호가 맞지 않아요'; err.classList.remove('shake'); void err.offsetWidth; err.classList.add('shake'); inp.value = ''; return; }
+  window.mxLock.open.add(p);
+  try { sessionStorage.setItem('fm-unlock', JSON.stringify([...window.mxLock.open])); } catch (_) {}
+  window.mxLockApply();
+  window.mxDraws.forEach((n) => { try { dash.draw(n); } catch (_) {} });
+}));
+document.querySelectorAll('.mx .lk-pin').forEach((i) => i.addEventListener('input', () => {
+  i.value = i.value.replace(/[^0-9]/g, '').slice(0, 4);
+  if (i.value.length === 4) i.form.requestSubmit();
+}));
+document.querySelectorAll('.mx .pseg button').forEach((b) => b.addEventListener('click', () => {
+  const root = document.querySelector('.mx'), wasHidden = root.classList.contains('nosel') || root.classList.contains('locked');
+  window.mxSelected = true;
+  document.querySelectorAll('.mx .pseg button').forEach((x) => x.classList.toggle('on', x === b));
+  if (!window.mxLockApply() && wasHidden) window.mxDraws.forEach((n) => { try { dash.draw(n); } catch (_) {} });
+}));
+window.mxLockApply();
 document.querySelectorAll('.mx .qnav button').forEach((b) => {
   b.addEventListener('click', () => {
     document.querySelectorAll('#' + b.dataset.go).forEach((el) => { el.scrollIntoView({ behavior: 'smooth', block: 'start' }); dash.setLink(el.id); });
