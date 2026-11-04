@@ -1,4 +1,4 @@
-const CACHE = "fm-log-v10";
+const CACHE = "fm-log-v11";
 const ASSETS = ["./", "index.html", "manifest.webmanifest", "vendor/d3.min.js",
   "data/races.json", "data/laps.json", "data/korea_sido.json", "data/other_pbs.json", "data/elevation.json",
   "fonts/Pretendard-Regular.subset.woff2", "fonts/Pretendard-SemiBold.subset.woff2", "fonts/Pretendard-Bold.subset.woff2",

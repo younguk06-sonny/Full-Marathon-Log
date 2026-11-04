@@ -1,6 +1,6 @@
 {
-  "name": "풀마라톤 기록 대시보드",
-  "short_name": "풀마라톤",
+  "name": "대회기록 상세 분석 자료",
+  "short_name": "대회기록 상세 분석 자료",
   "description": "풀마라톤 기록·통계 분석",
   "lang": "ko",
   "start_url": "./",
