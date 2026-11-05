@@ -193,6 +193,25 @@
 .mx:not(.tool) > .toolsec{display:none!important}
 .mx.tool > :not(header):not(.pseg):not(.segrow):not(.toolsec):not(.lockbox):not(.pickbox){display:none!important}
 .mx.tool > .toolsec:not(.tool-on){display:none!important}
+.mx #mbti .mb-card{background:var(--rb-card);border:1px solid var(--rb-line);border-radius:16px;padding:18px 16px;text-align:center}
+.mx .mb-code{display:flex;justify-content:center;gap:8px;margin:4px 0 8px}
+.mx .mb-code span{width:48px;height:56px;border-radius:12px;display:flex;align-items:center;justify-content:center;font-size:28px;font-weight:800;color:#fff}
+.mx .mb-name{font-size:19px;font-weight:800;color:var(--rb-ink)}
+.mx .mb-desc{font-size:13px;color:var(--rb-ink2);margin-top:4px}
+.mx .mb-why{text-align:left;margin-top:14px;display:grid;gap:8px}
+.mx .mb-why div{display:grid;grid-template-columns:2.2rem 1fr;gap:8px;align-items:start;font-size:12.5px;color:var(--rb-ink2);line-height:1.5}
+.mx .mb-why b{display:flex;align-items:center;justify-content:center;height:1.6rem;border-radius:8px;color:#fff;font-size:13px}
+.mx .mb-why .conf{display:inline-block;margin-left:4px;padding:0 6px;border-radius:999px;font-size:10.5px;background:var(--rb-bg);color:var(--rb-muted)}
+.mx .mb-sub{margin-top:12px;background:var(--rb-card);border:1px solid var(--rb-line);border-radius:16px;padding:14px 16px}
+.mx .mb-sub h3{margin:0 0 8px;font-size:13px;color:var(--rb-muted);font-weight:600}
+.mx .mb-axes{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:8px;font-size:12px;color:var(--rb-ink2);line-height:1.6}
+.mx .mb-axes > div{background:var(--rb-bg);border-radius:10px;padding:8px 10px}
+.mx .mb-axes b{color:var(--rb-ink)}
+.mx .mb-all{display:grid;gap:6px}
+.mx .mb-all .r{display:grid;grid-template-columns:3.4rem 3.6rem 1fr;gap:8px;align-items:center;font-size:13px;padding:6px 8px;border-radius:10px}
+.mx .mb-all .r.me{background:color-mix(in srgb,var(--rb-accent) 10%,var(--rb-card))}
+.mx .mb-all .r b{font-weight:800;letter-spacing:.04em;color:var(--rb-accent)}
+.mx .mb-all .r span:last-child{color:var(--rb-ink2)}
 .mx .ovw-h{display:none}
 .mx .ovw{display:grid;gap:12px;grid-template-columns:repeat(2,minmax(0,1fr))}
 .mx .ovw .oc{background:var(--rb-card);border:1px solid var(--rb-line);border-radius:14px;padding:12px 14px;box-shadow:0 1px 2px rgba(15,23,42,.04)}
@@ -290,7 +309,7 @@
     <form class="lk-form" autocomplete="off"><input class="lk-pin" type="password" inputmode="numeric" pattern="[0-9]*" maxlength="4" aria-label="비밀번호 4자리"><button type="submit">확인</button></form>
     <div class="lk-err" aria-live="polite"></div>
   </div>
-  <div class="segrow"><div class="eseg" role="group" aria-label="거리 선택"><button type="button" data-tool="overview" class="on">전체</button><button type="button" data-ev="full">풀</button><button type="button" data-ev="half" hidden>하프</button><button type="button" data-ev="10km" hidden>10K</button></div><div class="tseg" role="group" aria-label="계산 도구"><button type="button" data-tool="predict">피터리겔 공식에 따른 레이스예측</button><button type="button" data-tool="goal">목표 페이스 계산</button></div></div>
+  <div class="segrow"><div class="eseg" role="group" aria-label="거리 선택"><button type="button" data-tool="overview" class="on">전체</button><button type="button" data-ev="full">풀</button><button type="button" data-ev="half" hidden>하프</button><button type="button" data-ev="10km" hidden>10K</button></div><div class="tseg" role="group" aria-label="계산 도구"><button type="button" data-tool="predict">피터리겔 공식에 따른 레이스예측</button><button type="button" data-tool="goal">목표 페이스 계산</button><button type="button" data-tool="mbti">러닝 MBTI</button></div></div>
   <p class="take fullonly">첫 풀 <b data-draw="firstTime" data-source="summary" data-field="firstTime">—</b>에서 PB <b data-draw="pbTime" data-source="summary" data-field="pbTime">—</b>까지 <b data-draw="improve" data-source="summary" data-field="improve">—</b> 단축했어요. <span data-only="ksj">25년 동아부터는 30km까지 4분 초반 페이스를 꾸준히 지키고, 챌린지레이스와 26 동아에서 서브3를 두 번 했어요. 최근 공주·경주는 31km 이후 페이스가 30% 가까이 느려지고 9~10분을 걸어서, 후반 유지가 다음 PB의 열쇠예요.</span><span data-only="hiw" hidden>두 번째 대회부터 매번 직전보다 기록을 줄였어요. 케이던스는 185~188spm으로 그대로인데 보폭이 1.01m에서 1.37m로 늘면서 빨라졌고, PB인 26 동아에서는 34km 이후에도 1km를 4:04 안쪽으로 지켰어요.</span><span data-only="pjh" hidden>30km까지의 스피드는 이미 충분하고, 31km 이후 둔화를 줄여 갈수록 기록이 크게 빨라지고 있어요.</span><span data-only="son" hidden>기록이 좋았던 날은 후반이 거의 느려지지 않았고, 서브 3:10의 열쇠는 31km 이후 페이스 유지예요.</span><span data-only="kim" hidden>네 번 모두 후반이 거의 느려지지 않은 이븐 페이스 러너이고, 케이던스와 보폭이 함께 늘면서 기록이 빨라졌어요.</span></p>
 
   <nav class="qnav fullonly" aria-label="바로가기">
@@ -386,6 +405,22 @@
     <div class="ovw" data-draw="ovw" data-source="races shortRaces otherPbs"></div>
     <div class="omap"><h3>달린 지역</h3><div data-draw="ovwMap" data-source="geo races shortRaces"></div></div>
     <p class="note" style="margin-top:8px;font-size:12px">풀·하프·10K 버튼을 누르면 거리별 자세한 기록이 나와요. "기록증"이라고 적힌 PB는 대회 기록을 아직 안 넣고 기록증만 받은 경우예요.</p>
+  </section>
+
+  <section class="toolsec" id="mbti">
+    <div class="mb-card" data-draw="mbti"></div>
+    <div class="mb-sub">
+      <h3>4가지 질문</h3>
+      <div class="mb-axes">
+        <div><b>C</b> 크루형 · 함께 달릴 때 더 즐거움<br><b>P</b> 개인형 · 혼자 내 페이스로</div>
+        <div><b>L</b> 장거리형 · 하프·풀처럼 길게<br><b>S</b> 단거리형 · 5K·10K 속도와 기록</div>
+        <div><b>A</b> 중독형 · 거의 매일 꾸준히<br><b>I</b> 간헐적형 · 목표 시기에 몰아서</div>
+        <div><b>R</b> 기록형 · PB와 목표 페이스<br><b>F</b> 즐김형 · 과정과 재미</div>
+      </div>
+      <h3 style="margin-top:14px">다섯 명 한눈에</h3>
+      <div class="mb-all" data-draw="mbtiAll"></div>
+      <p class="note" style="margin-top:10px;font-size:12px">기록으로 추정한 결과예요. 함께 달리는지(C/P)는 다른 러너와 같은 대회를 뛴 비율, 얼마나 자주 달리는지(A/I)는 대회 빈도와 가민 기록, 거리 성향(L/S)은 10K·하프 PB로 계산한 풀 예상 기록과 실제 풀 PB 차이로 봤어요. 기준: 러닝 MBTI(C/P · L/S · A/I · R/F) 16가지 유형.</p>
+    </div>
   </section>
 
   <section class="card toolsec" id="predict">
@@ -814,7 +849,7 @@ window.mxEvApply = () => {
   const root = document.querySelector('.mx'); if (root) root.classList.toggle('ev-short', window.mxEvent !== 'full');
   if (window.mxToolApply) window.mxToolApply();
 };
-window.mxDraws.push('ovw', 'ovwMap', ...window.mxSDraws, 'evIntro', 'elevBars', 'elevSelect', 'elevStats', 'elevChart', 'elevImgs');
+window.mxDraws.push('ovw', 'ovwMap', 'mbti', 'mbtiAll', ...window.mxSDraws, 'evIntro', 'elevBars', 'elevSelect', 'elevStats', 'elevChart', 'elevImgs');
 document.querySelectorAll('.mx .eseg button[data-ev]').forEach((b) => b.addEventListener('click', () => {
   if (b.dataset.ev === window.mxEvent && !window.mxTool) return;
   window.mxEvent = b.dataset.ev; window.mxEvApply(); window.mxElevId = null;
@@ -832,7 +867,7 @@ window.mxToolApply = () => {
 };
 document.querySelectorAll('.mx [data-tool]').forEach((b) => b.addEventListener('click', () => {
   window.mxTool = window.mxTool === b.dataset.tool && b.dataset.tool !== 'overview' ? 'overview' : b.dataset.tool; window.mxToolApply();
-  ['ovw', 'ovwMap', 'goal', 'rgPresets', 'riegel'].forEach((n) => { try { dash.draw(n); } catch (_) {} });
+  ['ovw', 'ovwMap', 'mbti', 'mbtiAll', 'goal', 'rgPresets', 'riegel'].forEach((n) => { try { dash.draw(n); } catch (_) {} });
   try { window.scrollTo({ top: 0 }); } catch (_) {}
 }));
 document.querySelectorAll('.mx .eseg button[data-ev]').forEach((b) => b.addEventListener('click', () => {
@@ -1664,6 +1699,61 @@ dash.draw('ovwMap', (el) => {
   ['full', 'half', '10km'].forEach((e) => { const sp = document.createElement('span'), i = document.createElement('i'); i.style.background = col[e]; sp.append(i, nm[e] + ' ' + tot(e) + '회'); leg.appendChild(sp); });
   el.appendChild(leg);
   el.appendChild(Object.assign(document.createElement('div'), { className: 'om-note', textContent: '점 안 숫자는 그 도시에서 뛴 전체 횟수예요. 여러 거리를 뛴 도시는 풀 색으로 표시했어요. 점을 누르면 거리별 대회가 보여요.' }));
+});
+
+// 러닝 MBTI (기록 기반 추정)
+window.mxMbtiCol = { C: '#e8833a', P: '#7b4fd6', L: '#1d63c3', S: '#e0a526', A: '#1e9a6a', I: '#8a94a6', R: '#d9443a', F: '#2ea4c8' };
+window.mxMbti = {
+  ksj: { code: 'PSAR', name: '스피드 헌터형', desc: '혼자 짧고 빠르게 달리면서 기록 향상에 집중하는 타입', why: {
+    P: ['7개 대회 중 4개를 다른 러너 없이 혼자 나갔어요(산불조심·챌린지·공주 등).', '중간'],
+    S: ['10K 35:57로 계산한 풀 예상은 2:45인데 실제 풀 PB는 2:56 — 차이 11분으로 다섯 명 중 가장 커요. 스피드가 지구력보다 앞서 있어요.', '높음'],
+    A: ['2026년에만 풀 4회, 경주는 공주 27일 뒤에 뛰었어요.', '중간'],
+    R: ['첫 풀 3:43:58 → 2:56:21, 서브3 두 번.', '높음'] } },
+  pjh: { code: 'CLAR', name: '러닝 리더형', desc: '사람들과 함께 달리면서 장거리와 기록을 모두 챙기는 타입', why: {
+    C: ['6개 대회 중 5개를 다른 러너와 함께 뛰었어요(26 동아는 네 명이 함께).', '중간'],
+    L: ['10K·하프로 계산한 풀 예상과 실제 PB 차이가 2~4분이라 장거리 쪽이 탄탄해요.', '중간'],
+    A: ['2026년 풀 3회, 대구→동아 21일 간격.', '중간'],
+    R: ['첫 풀 3:44:34 → PB 3:05:11, 39분 단축.', '높음'] } },
+  hiw: { code: 'CLAR', name: '러닝 리더형', desc: '사람들과 함께 달리면서 장거리와 기록을 모두 챙기는 타입', why: {
+    C: ['7개 대회 중 6개를 다른 러너와 함께 뛰었어요.', '중간'],
+    L: ['하프로 계산한 풀 예상(2:44:44)보다 실제 PB(2:43:56)가 더 빨라요. 지구력이 아주 강한 장거리형이에요.', '높음'],
+    A: ['신발 한 켤레로 14개월 동안 372번·2,992km — 거의 매일 달렸어요.', '높음'],
+    R: ['두 번째 대회부터 일곱 번 연속 기록 단축, 첫 풀 대비 58:37.', '높음'] } },
+  son: { code: 'CLAR', name: '러닝 리더형', desc: '사람들과 함께 달리면서 장거리와 기록을 모두 챙기는 타입', why: {
+    C: ['풀 9개 중 6개를 다른 러너와 함께 뛰었어요.', '중간'],
+    L: ['대회 19개 중 15개가 하프·풀이에요. 다만 10K로 계산한 풀 예상과 실제 PB 차이가 8.6분이라 S 성향도 꽤 있어요.', '중간'],
+    A: ['풀·하프·10K 합쳐 19개 대회로 다섯 명 중 가장 많이 나갔어요.', '높음'],
+    R: ['풀 −24:59, 하프 −15:21, 10K −9:08로 세 거리 모두 꾸준히 단축.', '높음'] } },
+  kim: { code: 'PLIR', name: '잠재력형', desc: '자주 달리지는 않지만 장거리와 기록에 대한 욕심은 확실한 타입', why: {
+    P: ['4개 대회 중 3개를 다른 러너 없이 혼자 나갔어요.', '중간'],
+    L: ['10K로 계산한 풀 예상(3:05:04)과 실제 PB(3:05:42) 차이가 38초 — 다섯 명 중 가장 완벽한 지구력형. 네 번 모두 후반 둔화 5% 이하.', '높음'],
+    I: ['대회 간격이 길어요. 343일 쉬고 나간 JTBC에서 20분을 줄여 PB.', '중간'],
+    R: ['첫 풀 3:53:36 → PB 3:05:42, 47:54 단축.', '높음'] } },
+};
+window.mxMbtiOrder = ['ksj', 'pjh', 'hiw', 'son', 'kim'];
+dash.draw('mbti', (el) => {
+  const m = window.mxMbti[window.mxPerson], C = window.mxMbtiCol; el.replaceChildren();
+  if (!m) { el.textContent = '아직 분석 전이에요.'; return; }
+  const nm = (window.mxLock && window.mxLock.names[window.mxPerson]) || '';
+  el.appendChild(Object.assign(document.createElement('div'), { className: 'mb-desc', textContent: nm + '님의 러닝 MBTI' }));
+  const code = document.createElement('div'); code.className = 'mb-code';
+  m.code.split('').forEach((ch) => { const sp = document.createElement('span'); sp.textContent = ch; sp.style.background = C[ch]; code.appendChild(sp); });
+  el.append(code, Object.assign(document.createElement('div'), { className: 'mb-name', textContent: m.code + ' · ' + m.name }), Object.assign(document.createElement('div'), { className: 'mb-desc', textContent: m.desc }));
+  const why = document.createElement('div'); why.className = 'mb-why';
+  m.code.split('').forEach((ch) => {
+    const [t, c] = m.why[ch]; const d = document.createElement('div');
+    const b = document.createElement('b'); b.textContent = ch; b.style.background = C[ch];
+    const sp = document.createElement('span'); sp.textContent = t; sp.appendChild(Object.assign(document.createElement('i'), { className: 'conf', textContent: '확신 ' + c }));
+    d.append(b, sp); why.appendChild(d);
+  });
+  el.appendChild(why);
+});
+dash.draw('mbtiAll', (el) => {
+  el.replaceChildren(...window.mxMbtiOrder.map((p) => {
+    const m = window.mxMbti[p], r = document.createElement('div'); r.className = 'r' + (p === window.mxPerson ? ' me' : '');
+    r.append(Object.assign(document.createElement('span'), { textContent: window.mxLock.names[p] }), Object.assign(document.createElement('b'), { textContent: m.code }), Object.assign(document.createElement('span'), { textContent: m.name }));
+    return r;
+  }));
 });
 
 // 리겔 레이스 예측
