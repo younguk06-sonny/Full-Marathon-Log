@@ -186,7 +186,13 @@
 .mx .pseg button{font:inherit;border:0;background:transparent;padding:7px 16px;border-radius:9px;cursor:pointer;font-size:14px;font-weight:650;color:var(--rb-ink2)}
 .mx .pseg button.on{background:var(--rb-accent);color:#fff}
 .mx .eseg{display:inline-flex;align-self:flex-start;background:var(--rb-card);border:1px solid var(--rb-line);border-radius:10px;padding:3px;gap:2px}
-.mx .eseg.off{display:none}
+.mx .segrow{display:flex;flex-wrap:wrap;gap:8px;align-items:center}
+.mx .tseg{display:inline-flex;flex-wrap:wrap;gap:6px}
+.mx .tseg button{font:inherit;font-size:13px;font-weight:650;border:1px solid var(--rb-line);background:var(--rb-card);color:var(--rb-ink2);padding:6px 12px;border-radius:10px;cursor:pointer}
+.mx .tseg button.on{background:var(--rb-accent);border-color:var(--rb-accent);color:#fff}
+.mx:not(.tool) > .toolsec{display:none!important}
+.mx.tool > :not(header):not(.pseg):not(.segrow):not(.toolsec):not(.lockbox):not(.pickbox){display:none!important}
+.mx.tool.tool-predict > #goal,.mx.tool.tool-goal > #predict{display:none!important}
 .mx .eseg button{font:inherit;border:0;background:transparent;padding:5px 14px;border-radius:8px;cursor:pointer;font-size:13px;font-weight:650;color:var(--rb-ink2)}
 .mx .eseg button.on{background:var(--rb-ink);color:var(--rb-card)}
 .mx .eseg button[hidden]{display:none}
@@ -199,7 +205,9 @@
 .mx .s-laptable thead th:nth-child(-n+2){z-index:3}
 .mx .s-laptable tr.fin td{font-weight:750;border-top:1px solid var(--rb-line)}
 .mx.locked > :not(header):not(.pseg):not(.lockbox){display:none!important}
+.mx.locked > .toolsec{display:none!important}
 .mx.nosel > :not(header):not(.pseg):not(.pickbox){display:none!important}
+.mx.nosel > .toolsec{display:none!important}
 .mx .pickbox{display:none}
 .mx.nosel .pickbox{display:flex;flex-direction:column;align-items:center;gap:8px;background:var(--rb-card);border:1px dashed var(--rb-line);border-radius:16px;padding:44px 20px;text-align:center}
 .mx .pickbox b{font-size:16px}
@@ -261,12 +269,11 @@
     <form class="lk-form" autocomplete="off"><input class="lk-pin" type="password" inputmode="numeric" pattern="[0-9]*" maxlength="4" aria-label="비밀번호 4자리"><button type="submit">확인</button></form>
     <div class="lk-err" aria-live="polite"></div>
   </div>
-  <div class="eseg off" role="group" aria-label="거리 선택"><button type="button" data-ev="full" class="on">풀</button><button type="button" data-ev="half" hidden>하프</button><button type="button" data-ev="10km" hidden>10K</button></div>
+  <div class="segrow"><div class="eseg" role="group" aria-label="거리 선택"><button type="button" data-ev="full" class="on">풀</button><button type="button" data-ev="half" hidden>하프</button><button type="button" data-ev="10km" hidden>10K</button></div><div class="tseg" role="group" aria-label="계산 도구"><button type="button" data-tool="predict">피터리겔 공식에 따른 레이스예측</button><button type="button" data-tool="goal">목표 페이스 계산</button></div></div>
   <p class="take fullonly">첫 풀 <b data-draw="firstTime" data-source="summary" data-field="firstTime">—</b>에서 PB <b data-draw="pbTime" data-source="summary" data-field="pbTime">—</b>까지 <b data-draw="improve" data-source="summary" data-field="improve">—</b> 단축했어요. <span data-only="ksj">25년 동아부터는 30km까지 4분 초반 페이스를 꾸준히 지키고, 챌린지레이스와 26 동아에서 서브3를 두 번 했어요. 최근 공주·경주는 31km 이후 페이스가 30% 가까이 느려지고 9~10분을 걸어서, 후반 유지가 다음 PB의 열쇠예요.</span><span data-only="hiw" hidden>두 번째 대회부터 매번 직전보다 기록을 줄였어요. 케이던스는 185~188spm으로 그대로인데 보폭이 1.01m에서 1.37m로 늘면서 빨라졌고, PB인 26 동아에서는 34km 이후에도 1km를 4:04 안쪽으로 지켰어요.</span><span data-only="pjh" hidden>30km까지의 스피드는 이미 충분하고, 31km 이후 둔화를 줄여 갈수록 기록이 크게 빨라지고 있어요.</span><span data-only="son" hidden>기록이 좋았던 날은 후반이 거의 느려지지 않았고, 서브 3:10의 열쇠는 31km 이후 페이스 유지예요.</span><span data-only="kim" hidden>네 번 모두 후반이 거의 느려지지 않은 이븐 페이스 러너이고, 케이던스와 보폭이 함께 늘면서 기록이 빨라졌어요.</span></p>
 
   <nav class="qnav fullonly" aria-label="바로가기">
     <button type="button" data-go="kpis" class="on">요약·지역</button>
-    <button type="button" data-go="predict">레이스 예측</button>
     <button type="button" data-go="all">전체 기록</button>
     <button type="button" data-go="races">대회별 상세기록</button>
     <button type="button" data-go="certs">기록증</button>
@@ -275,7 +282,6 @@
     <button type="button" data-go="course" hidden>같은 코스</button>
     <button type="button" data-go="elev">해발고도</button>
     <button type="button" data-go="dynamics">다이내믹스</button>
-    <button type="button" data-go="goal">목표 페이스</button>
   </nav>
 
   <section class="overview fullonly" id="kpis">
@@ -354,8 +360,8 @@
     </details>
   </section>
 
-  <section class="card" id="predict">
-    <h2>레이스 예측 · 피터 리겔 공식</h2>
+  <section class="card toolsec" id="predict">
+    <h2>피터리겔 공식에 따른 레이스예측</h2>
     <p class="def" style="margin:4px 0 12px">미국 엔지니어 피터 리겔(Pete Riegel)이 1977년 러너스월드에 처음 발표하고, 1981년 American Scientist 논문 「Athletic Records and Human Endurance」로 정리한 공식이에요. 한 거리의 기록으로 다른 거리 기록을 예측해요.
       <br><b class="formula">T₂ = T₁ × (D₂ ÷ D₁)<sup>1.06</sup></b>
       <br>T₁·D₁은 이미 뛴 기록과 거리, D₂는 예측할 거리(풀 42.195km)예요. 지수 1.06은 거리가 늘수록 같은 페이스를 유지하기 어려워지는 정도를 뜻해요. 1이면 페이스가 그대로라는 뜻이고, 클수록 장거리에서 더 느려진다고 보는 거예요.
@@ -497,7 +503,7 @@
   </section>
 
 
-  <section class="card fullonly" id="goal">
+  <section class="card toolsec" id="goal">
     <h2>목표 페이스 계산</h2>
     <p class="note">목표 기록을 넣으면 워치 거리 기준 페이스와 5km 통과 시간을 PB 대회의 실제 통과 시간과 비교해요. PB 때 30km까지 평균은 <b data-draw="pb30" data-source="insights" data-field="pbPace30">—</b>, 31km 이후는 <b data-draw="pb31" data-source="insights" data-field="pbPaceAfter30">—</b>였어요.</p>
     <div class="goalin">
@@ -775,7 +781,6 @@ window.mxEvApply = () => {
   if (s.status === 'ok') s.data.filter((x) => x.person === window.mxPerson).forEach((x) => have.add(x.event));
   if (!have.has(window.mxEvent)) window.mxEvent = 'full';
   document.querySelectorAll('.mx .eseg').forEach((g) => {
-    g.classList.toggle('off', have.size < 2);
     g.querySelectorAll('button').forEach((b) => { b.hidden = !have.has(b.dataset.ev); b.classList.toggle('on', b.dataset.ev === window.mxEvent); });
   });
   const root = document.querySelector('.mx'); if (root) root.classList.toggle('ev-short', window.mxEvent !== 'full');
@@ -788,6 +793,22 @@ document.querySelectorAll('.mx .eseg button').forEach((b) => b.addEventListener(
   window.mxDraws.forEach((n) => { try { dash.draw(n); } catch (_) {} });
 }));
 dash.onData(() => window.mxEvApply());
+window.mxTool = null;
+window.mxToolApply = () => {
+  const root = document.querySelector('.mx'), t = window.mxTool;
+  root.classList.toggle('tool', !!t); root.classList.toggle('tool-predict', t === 'predict'); root.classList.toggle('tool-goal', t === 'goal');
+  document.querySelectorAll('.mx .tseg button').forEach((b) => b.classList.toggle('on', b.dataset.tool === t));
+  document.querySelectorAll('.mx .eseg button').forEach((b) => b.classList.toggle('on', !t && b.dataset.ev === window.mxEvent));
+};
+document.querySelectorAll('.mx .tseg button').forEach((b) => b.addEventListener('click', () => {
+  window.mxTool = window.mxTool === b.dataset.tool ? null : b.dataset.tool; window.mxToolApply();
+  ['goal', 'rgPresets', 'riegel'].forEach((n) => { try { dash.draw(n); } catch (_) {} });
+  try { window.scrollTo({ top: 0 }); } catch (_) {}
+}));
+document.querySelectorAll('.mx .eseg button').forEach((b) => b.addEventListener('click', () => {
+  if (window.mxTool) { window.mxTool = null; window.mxToolApply(); window.mxDraws.forEach((n) => { try { dash.draw(n); } catch (_) {} }); }
+}));
+
 window.mxApplyPerson = (p) => {
   document.querySelectorAll('[data-only]').forEach((el) => { el.hidden = !el.dataset.only.split(' ').includes(p); });
   const g = window.mxGoalDefault[p];
