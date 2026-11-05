@@ -201,6 +201,16 @@
 .mx .ovw .ok{flex:none;width:2.3rem;font-size:11.5px;font-weight:650;color:var(--rb-muted)}
 .mx .ovw .ov{font-size:17px;font-weight:750;letter-spacing:-.01em;color:var(--rb-ink);line-height:1.25;min-width:0}
 .mx .ovw .ov.pb{color:var(--rb-accent)}
+.mx .ovw .or.tot{margin-top:4px;padding-top:7px;border-top:1px solid var(--rb-line)}
+.mx .ovw .or.tot .ok{color:var(--rb-ink)}
+.mx .omap{margin-top:12px;background:var(--rb-card);border:1px solid var(--rb-line);border-radius:14px;padding:12px 14px}
+.mx .omap h3{margin:0 0 2px;font-size:12.5px;color:var(--rb-muted);font-weight:500}
+.mx .omap .om-wrap{display:grid;grid-template-columns:1.15fr 1fr;gap:10px;align-items:start}
+.mx .omap .om-box{position:relative}
+.mx .omap .om-cap{font-size:11px;color:var(--rb-muted);text-align:center;margin-top:2px}
+.mx .omap .om-leg{display:flex;flex-wrap:wrap;gap:12px;font-size:12px;color:var(--rb-ink2);margin-top:8px}
+.mx .omap .om-leg i{display:inline-block;width:.7rem;height:.7rem;border-radius:50%;margin-right:.3rem;vertical-align:-1px}
+.mx .omap .om-note{font-size:11px;color:var(--rb-muted);margin-top:4px}
 .mx .ovw .ov.none{font-size:13px;font-weight:500;color:var(--rb-muted)}
 .mx .ovw .os{display:block;font-size:10.5px;font-weight:500;color:var(--rb-muted);letter-spacing:0;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
 @media (max-width:520px){.mx .ovw{gap:10px}.mx .ovw .oc{padding:11px 12px}.mx .ovw .ov{font-size:15.5px}.mx .ovw .ok{width:2rem;font-size:11px}}
@@ -374,6 +384,7 @@
   <section class="toolsec" id="ovw">
     <h2 class="ovw-h">한눈에 보기</h2>
     <div class="ovw" data-draw="ovw" data-source="races shortRaces otherPbs"></div>
+    <div class="omap"><h3>달린 지역</h3><div data-draw="ovwMap" data-source="geo races shortRaces"></div></div>
     <p class="note" style="margin-top:8px;font-size:12px">풀·하프·10K 버튼을 누르면 거리별 자세한 기록이 나와요. "기록증"이라고 적힌 PB는 대회 기록을 아직 안 넣고 기록증만 받은 경우예요.</p>
   </section>
 
@@ -803,7 +814,7 @@ window.mxEvApply = () => {
   const root = document.querySelector('.mx'); if (root) root.classList.toggle('ev-short', window.mxEvent !== 'full');
   if (window.mxToolApply) window.mxToolApply();
 };
-window.mxDraws.push('ovw', ...window.mxSDraws, 'evIntro', 'elevBars', 'elevSelect', 'elevStats', 'elevChart', 'elevImgs');
+window.mxDraws.push('ovw', 'ovwMap', ...window.mxSDraws, 'evIntro', 'elevBars', 'elevSelect', 'elevStats', 'elevChart', 'elevImgs');
 document.querySelectorAll('.mx .eseg button[data-ev]').forEach((b) => b.addEventListener('click', () => {
   if (b.dataset.ev === window.mxEvent && !window.mxTool) return;
   window.mxEvent = b.dataset.ev; window.mxEvApply(); window.mxElevId = null;
@@ -821,7 +832,7 @@ window.mxToolApply = () => {
 };
 document.querySelectorAll('.mx [data-tool]').forEach((b) => b.addEventListener('click', () => {
   window.mxTool = window.mxTool === b.dataset.tool && b.dataset.tool !== 'overview' ? 'overview' : b.dataset.tool; window.mxToolApply();
-  ['ovw', 'goal', 'rgPresets', 'riegel'].forEach((n) => { try { dash.draw(n); } catch (_) {} });
+  ['ovw', 'ovwMap', 'goal', 'rgPresets', 'riegel'].forEach((n) => { try { dash.draw(n); } catch (_) {} });
   try { window.scrollTo({ top: 0 }); } catch (_) {}
 }));
 document.querySelectorAll('.mx .eseg button[data-ev]').forEach((b) => b.addEventListener('click', () => {
@@ -1540,6 +1551,12 @@ dash.draw('ovw', (el) => {
       if (sub) vv.appendChild(Object.assign(document.createElement('span'), { className: 'os', textContent: sub }));
       r.append(kk, vv); c.appendChild(r);
     });
+    if (title === '대회 참가 횟수') {
+      const tot = evs.reduce((a, e) => a + e[2].length, 0);
+      const r = document.createElement('div'); r.className = 'or tot';
+      r.append(Object.assign(document.createElement('span'), { className: 'ok', textContent: '전체' }), Object.assign(document.createElement('span'), { className: 'ov', textContent: tot + '회' }));
+      c.appendChild(r);
+    }
     return c;
   };
   const best = (rows) => rows.reduce((a, b) => (b.officialSec < a.officialSec ? b : a));
@@ -1562,6 +1579,91 @@ dash.draw('ovw', (el) => {
       return [otime(l), l.race];
     }),
   );
+});
+
+// 전체 지도: 풀·하프·10K 색 구분, 도시별 횟수
+dash.draw('ovwMap', (el) => {
+  const G = dash.data('geo'), R = dash.data('races'), S = dash.data('shortRaces'), p = window.mxPerson;
+  if (G.status !== 'ok' || R.status !== 'ok') { el.replaceChildren(); return; }
+  const css = (v) => getComputedStyle(el).getPropertyValue(v).trim();
+  const col = { full: css('--rb-accent'), half: css('--c1'), '10km': css('--c2') }, nm = { full: '풀', half: '하프', '10km': '10K' };
+  const rows = R.data.filter((r) => r.person === p).map((r) => Object.assign({ ev: 'full' }, r))
+    .concat(S.status === 'ok' ? S.data.filter((r) => r.person === p).map((r) => Object.assign({ ev: r.event }, r)) : []);
+  const cities = {};
+  rows.forEach((r) => {
+    const c = cities[r.city] || (cities[r.city] = { city: r.city, sido: r.sido, lat: r.lat, lon: r.lon, n: { full: 0, half: 0, '10km': 0 }, list: [] });
+    if (r.ev === 'full' && !c.n.full) { c.lat = r.lat; c.lon = r.lon; }
+    c.n[r.ev]++; c.list.push(r);
+  });
+  const C = Object.values(cities).map((c) => Object.assign(c, { tot: c.n.full + c.n.half + c.n['10km'], ev: c.n.full ? 'full' : c.n.half ? 'half' : '10km' }));
+  const sidoEv = {}; C.forEach((c) => { const o = sidoEv[c.sido]; if (!o || (o !== 'full' && (c.ev === 'full' || (o === '10km' && c.ev === 'half')))) sidoEv[c.sido] = c.ev; });
+  const rings = G.data.flatMap((g) => (typeof g.rings === 'string' ? JSON.parse(g.rings) : g.rings).filter((r) => r[0][0] < 130.5).map((r) => ({ sido: g.sido, r })));
+  const inBox = { x0: 126.35, x1: 127.25, y0: 37.2, y1: 37.72 };
+  const isIn = (c) => c.lon >= inBox.x0 && c.lon <= inBox.x1 && c.lat >= inBox.y0 && c.lat <= inBox.y1;
+  const tipBox = document.createElement('div'); tipBox.className = 'om-box';
+  const draw = (box, bb, W, maxH, list, inset) => {
+    const k = Math.cos(36 * Math.PI / 180), pad = 6;
+    const minX = bb.x0 * k, maxX = bb.x1 * k, minY = bb.y0, maxY = bb.y1;
+    const sc = Math.min((W - pad * 2) / (maxX - minX), (maxH - pad * 2) / (maxY - minY)), H = Math.round((maxY - minY) * sc + pad * 2);
+    const offX = (W - ((maxX - minX) * sc + pad * 2)) / 2;
+    const px = (lon) => offX + pad + (lon * k - minX) * sc, py = (lat) => pad + (maxY - lat) * sc;
+    const svg = d3.select(box).append('svg').attr('width', '100%').attr('viewBox', `0 0 ${W} ${H}`);
+    const cid = 'omc' + Math.random().toString(36).slice(2, 7);
+    svg.append('clipPath').attr('id', cid).append('rect').attr('x', 0).attr('y', 0).attr('width', W).attr('height', H).attr('rx', 8);
+    const gm = svg.append('g').attr('clip-path', `url(#${cid})`);
+    if (inset) gm.append('rect').attr('width', W).attr('height', H).style('fill', css('--rb-bg'));
+    gm.selectAll('path').data(rings).join('path')
+      .attr('d', (x) => 'M' + x.r.map((q) => px(q[0]).toFixed(1) + ',' + py(q[1]).toFixed(1)).join('L') + 'Z')
+      .style('fill', (x) => (sidoEv[x.sido] ? col[sidoEv[x.sido]] : css('--rb-land'))).style('fill-opacity', (x) => (sidoEv[x.sido] ? 0.22 : 1))
+      .style('stroke', css('--rb-card')).style('stroke-width', inset ? '1.2' : '0.8');
+    if (!inset) {
+      const ins = C.filter(isIn), n = ins.reduce((a, c) => a + c.tot, 0);
+      if (ins.length) {
+        svg.append('rect').attr('x', px(inBox.x0)).attr('y', py(inBox.y1)).attr('width', px(inBox.x1) - px(inBox.x0)).attr('height', py(inBox.y0) - py(inBox.y1)).style('fill', 'none').style('stroke', css('--rb-ink2')).style('stroke-dasharray', '3 2').style('stroke-width', '1');
+        svg.append('text').attr('x', px(inBox.x1)).attr('y', py(inBox.y1) - 4).attr('text-anchor', 'end').style('font-size', '10.5px').style('font-weight', '700').style('fill', css('--rb-ink2')).style('paint-order', 'stroke').style('stroke', css('--rb-card')).style('stroke-width', '3px').text('수도권 ' + n + '회');
+      }
+    }
+    const tip = tipFor(box), placed = [];
+    const hit = (b) => placed.some((q) => !(b.x1 < q.x0 || b.x0 > q.x1 || b.y1 < q.y0 || b.y0 > q.y1));
+    list.slice().sort((a, b) => b.tot - a.tot).forEach((c) => {
+      const x = px(c.lon), y = py(c.lat), rad = Math.min(13, 7 + c.tot * 1.3);
+      placed.push({ x0: x - rad, x1: x + rad, y0: y - rad, y1: y + rad });
+    });
+    const g = svg.append('g');
+    list.forEach((c) => {
+      const x = px(c.lon), y = py(c.lat), rad = Math.min(13, 7 + c.tot * 1.3);
+      const lines = ['full', 'half', '10km'].filter((e) => c.n[e]).map((e) => nm[e] + ' ' + c.n[e] + '회: ' + c.list.filter((r) => r.ev === e).map((r) => r.race.split(' ')[0]).join(', '));
+      g.append('circle').attr('cx', x).attr('cy', y).attr('r', rad + 5).style('fill', 'transparent').style('cursor', 'pointer')
+        .on('mouseenter click', () => tip.show(x / W * box.clientWidth, y / H * box.clientHeight - rad, c.city + ' · ' + c.tot + '회', lines)).on('mouseleave', () => tip.hide());
+      g.append('circle').attr('cx', x).attr('cy', y).attr('r', rad).style('fill', col[c.ev]).style('stroke', css('--rb-card')).style('stroke-width', '1.8').style('pointer-events', 'none');
+      g.append('text').attr('x', x).attr('y', y).attr('dy', '0.35em').attr('text-anchor', 'middle').style('fill', '#fff').style('font-size', '10.5px').style('font-weight', '800').style('pointer-events', 'none').text(c.tot);
+      const tw = c.city.length * 11 + 2, th = 13;
+      const cands = [['start', x + rad + 3, y], ['end', x - rad - 3, y], ['middle', x, y - rad - 8], ['middle', x, y + rad + 9]];
+      let pick = cands[0];
+      for (const cd of cands) {
+        const [a, tx, ty] = cd, bx0 = a === 'start' ? tx : a === 'end' ? tx - tw : tx - tw / 2;
+        const b = { x0: bx0, x1: bx0 + tw, y0: ty - th / 2, y1: ty + th / 2 };
+        if (b.x0 >= 0 && b.x1 <= W && !hit(b)) { pick = cd; placed.push(b); break; }
+      }
+      g.append('text').attr('x', pick[1]).attr('y', pick[2]).attr('dy', '0.35em').attr('text-anchor', pick[0]).style('fill', css('--rb-ink')).style('font-size', '11px').style('font-weight', '650')
+        .style('paint-order', 'stroke').style('stroke', css('--rb-card')).style('stroke-width', '3px').style('stroke-linejoin', 'round').style('pointer-events', 'none').text(c.city);
+    });
+  };
+  el.replaceChildren();
+  const wrap = document.createElement('div'); wrap.className = 'om-wrap'; el.appendChild(wrap);
+  const b1 = document.createElement('div'); b1.className = 'om-box'; const b2 = document.createElement('div'); b2.className = 'om-box';
+  wrap.append(b1, b2);
+  const lons = rings.flatMap((x) => x.r.map((q) => q[0])), lats = rings.flatMap((x) => x.r.map((q) => q[1]));
+  const W1 = b1.clientWidth || 200, W2 = b2.clientWidth || 170;
+  draw(b1, { x0: d3.min(lons), x1: d3.max(lons), y0: d3.min(lats), y1: d3.max(lats) }, W1, W1 < 220 ? 280 : 340, C.filter((c) => !isIn(c)), false);
+  const ins = C.filter(isIn);
+  if (ins.length) { draw(b2, inBox, W2, 260, ins, true); b2.appendChild(Object.assign(document.createElement('div'), { className: 'om-cap', textContent: '수도권 확대' })); }
+  else wrap.style.gridTemplateColumns = '1fr';
+  const tot = (e) => rows.filter((r) => r.ev === e).length;
+  const leg = document.createElement('div'); leg.className = 'om-leg';
+  ['full', 'half', '10km'].forEach((e) => { const sp = document.createElement('span'), i = document.createElement('i'); i.style.background = col[e]; sp.append(i, nm[e] + ' ' + tot(e) + '회'); leg.appendChild(sp); });
+  el.appendChild(leg);
+  el.appendChild(Object.assign(document.createElement('div'), { className: 'om-note', textContent: '점 안 숫자는 그 도시에서 뛴 전체 횟수예요. 여러 거리를 뛴 도시는 풀 색으로 표시했어요. 점을 누르면 거리별 대회가 보여요.' }));
 });
 
 // 리겔 레이스 예측
