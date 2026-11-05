@@ -192,6 +192,7 @@
 .mx .eseg button[hidden]{display:none}
 .mx.ev-short > .fullonly{display:none!important}
 .mx:not(.ev-short) > .shortonly{display:none!important}
+.mx.ev-short .fullonly-in{display:none!important}
 .mx .s-laptable td.best{font-weight:800;color:var(--rb-accent)}
 .mx .s-laptable tr.fin td{font-weight:750;border-top:1px solid var(--rb-line)}
 .mx.locked > :not(header):not(.pseg):not(.lockbox){display:none!important}
@@ -433,10 +434,10 @@
     <p class="swipe">표는 옆으로 밀어서 더 볼 수 있어요</p>
   </section>
 
-  <section class="card fullonly" id="elev">
+  <section class="card" id="elev">
     <h2>대회별 해발고도</h2>
-    <p class="note">다섯 사람이 뛴 <b data-draw="evCount" data-source="elevation">—</b>개 대회의 코스 고저. 막대를 누르면 그 대회 고도 그래프가 아래에 나와요.</p>
-    <p class="def" style="margin:-6px 0 10px">여러 명이 함께 뛴 대회는 고도 변화가 가장 크게 잡힌(총 상승이 가장 큰) 기록을 대표로 썼어요. 해발고도는 워치 기압계 값이라 같은 대회도 기기·날씨에 따라 절대값이 달라요(25 동아는 −40~−6m로 기록됐어요). 그래프는 가민 캡처의 고도 차트를 읽어 시간 축을 거리로 바꾼 근사치예요.</p>
+    <p class="note"><span data-draw="evIntro">—</span>의 코스 고저. 막대를 누르면 그 대회 고도 그래프가 아래에 나와요.</p>
+    <p class="def fullonly-in" style="margin:-6px 0 10px">여러 명이 함께 뛴 대회는 고도 변화가 가장 크게 잡힌(총 상승이 가장 큰) 기록을 대표로 썼어요. 해발고도는 워치 기압계 값이라 같은 대회도 기기·날씨에 따라 절대값이 달라요(25 동아는 −40~−6m로 기록됐어요). 그래프는 가민 캡처의 고도 차트를 읽어 시간 축을 거리로 바꾼 근사치예요.</p>
     <div class="chart elevbar dash-skeleton" data-draw="elevBars" data-source="elevation"></div>
     <div class="elev-head">
       <select class="elev-sel" data-draw="elevSelect" data-source="elevation" aria-label="대회 선택"></select>
@@ -493,7 +494,7 @@
 <script>
 // Claude 대시보드용 dash API를 브라우저에서 직접 돌리는 작은 실행기
 window.dash = (() => {
-  const files = { races: 'data/races.json', laps: 'data/laps.json', geo: 'data/korea_sido.json', otherPbs: 'data/other_pbs.json', elevation: 'data/elevation.json', shortRaces: 'data/short_races.json', shortLaps: 'data/short_laps.json' };
+  const files = { races: 'data/races.json', laps: 'data/laps.json', geo: 'data/korea_sido.json', otherPbs: 'data/other_pbs.json', elevation: 'data/elevation.json', shortRaces: 'data/short_races.json', shortLaps: 'data/short_laps.json', shortElevation: 'data/short_elevation.json' };
   const data = {}, calcs = {}, draws = {}, listeners = [];
   let ready = false;
   const run = (name) => document.querySelectorAll('[data-draw="' + name + '"]').forEach((el) => { try { draws[name](el); } catch (e) { console.error(name, e); } });
@@ -743,6 +744,7 @@ window.mxEvent = 'full';
 window.mxEvNames = { full: '풀', half: '하프', '10km': '10K' };
 window.mxEvDist = { half: 21.0975, '10km': 10 };
 window.mxShortNote = {
+  'son|half': '울산부터는 가민 기록이에요. 케이던스는 181spm 그대로인데 보폭이 1.24m에서 1.28m로 늘었고, 서울레이스와 평택항은 공식 기록이 1:31:09로 초 단위까지 같아요. 두 대회 모두 15km 이후 1km당 10~15초씩 느려져서, 후반 유지가 서브 1:30의 열쇠예요.',
   'son|10km': '평택항부터는 1km 랩이 10초 안쪽으로 고르게 유지되고, 케이던스는 180대 그대로인데 보폭이 1.28m에서 1.38m로 늘면서 빨라졌어요.',
 };
 window.mxS = (id) => {
@@ -761,10 +763,11 @@ window.mxEvApply = () => {
   });
   const root = document.querySelector('.mx'); if (root) root.classList.toggle('ev-short', window.mxEvent !== 'full');
 };
-window.mxDraws.push(...window.mxSDraws);
+window.mxDraws.push(...window.mxSDraws, 'evIntro', 'elevBars', 'elevSelect', 'elevStats', 'elevChart', 'elevImgs');
 document.querySelectorAll('.mx .eseg button').forEach((b) => b.addEventListener('click', () => {
   if (b.dataset.ev === window.mxEvent) return;
-  window.mxEvent = b.dataset.ev; window.mxEvApply();
+  window.mxEvent = b.dataset.ev; window.mxEvApply(); window.mxElevId = null;
+  ['evIntro', 'elevBars', 'elevSelect', 'elevStats', 'elevChart', 'elevImgs'].forEach((n) => { try { dash.draw(n); } catch (_) {} });
   window.mxDraws.forEach((n) => { try { dash.draw(n); } catch (_) {} });
 }));
 dash.onData(() => window.mxEvApply());
@@ -1483,19 +1486,24 @@ document.querySelectorAll('#rg-km, #rg-time').forEach((i) => i.addEventListener(
 
 // 대회별 해발고도
 window.mxElevId = null;
+window.mxEvDs = () => (window.mxEvent === 'full' ? 'elevation' : 'shortElevation');
 window.mxEv = () => {
-  const d = dash.data('elevation');
+  const d = dash.data(window.mxEvDs());
   if (d.status !== 'ok') return null;
-  return d.data.map((e) => Object.assign({}, e, {
+  return d.data.filter((e) => window.mxEvent === 'full' || e.event === window.mxEvent).map((e) => Object.assign({}, e, {
     profile: typeof e.profile === 'string' ? JSON.parse(e.profile) : (e.profile || []),
     sources: typeof e.sources === 'string' ? JSON.parse(e.sources) : (e.sources || []),
   }));
 };
 window.mxEvCur = () => { const ev = window.mxEv(); if (!ev) return null; return ev.find((e) => e.id === window.mxElevId) || ev[ev.length - 1]; };
 window.mxElevPick = (id) => { window.mxElevId = id; ['elevBars', 'elevSelect', 'elevStats', 'elevChart', 'elevImgs'].forEach((n) => dash.draw(n)); };
+dash.draw('evIntro', (el) => {
+  const ev = window.mxEv(); const n = ev ? ev.length : 0;
+  el.textContent = window.mxEvent === 'full' ? '다섯 사람이 뛴 ' + n + '개 풀코스 대회' : n + '개 ' + window.mxEvNames[window.mxEvent] + ' 대회(가민으로 고도를 잰 대회만)';
+});
 dash.draw('evCount', (el) => { const ev = window.mxEv(); el.textContent = ev ? String(ev.length) : '—'; });
 dash.draw('elevBars', (el) => {
-  if (!window.mxState(el, 'elevation')) return;
+  if (!window.mxState(el, window.mxEvDs())) return;
   const ev = window.mxEv(), cur = window.mxEvCur(); el.replaceChildren();
   const W = el.clientWidth || 600, nar = W < 560, H = nar ? 240 : 220, L = 42, R = 6, T = 18, B = nar ? 64 : 44;
   const svg = d3.select(el).append('svg').attr('width', '100%').attr('viewBox', `0 0 ${W} ${H}`);
@@ -1533,7 +1541,7 @@ dash.draw('elevStats', (el) => {
   el.replaceChildren(...items.map(([l, v]) => { const d = document.createElement('div'); d.className = 'st'; const a = document.createElement('div'); a.className = 'l'; a.textContent = l; const b = document.createElement('div'); b.className = 'v'; b.textContent = v; d.append(a, b); return d; }));
 });
 dash.draw('elevChart', (el) => {
-  if (!window.mxState(el, 'elevation')) return;
+  if (!window.mxState(el, window.mxEvDs())) return;
   const e = window.mxEvCur(); el.replaceChildren();
   if (!e.profile.length) { const n = document.createElement('div'); n.className = 'elev-none'; n.textContent = '이 대회는 갤럭시워치 기록이라 고도 그래프가 없어요. 총 상승과 최저·최고만 있어요.'; el.appendChild(n); return; }
   const W = el.clientWidth || 600, H = 230, L = 44, R = 10, T = 14, B = 26;
