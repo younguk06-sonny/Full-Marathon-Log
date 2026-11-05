@@ -364,6 +364,16 @@
     <p class="swipe">표는 옆으로 밀어서 더 볼 수 있어요</p>
   </section>
 
+  <section class="card shortonly" id="s-course" hidden>
+    <h2>같은 코스 비교</h2>
+    <p class="note">같은 코스를 두 번 이상 뛴 대회끼리 1km 랩 페이스(위가 빠름)와 5km 구간, 누적, 직전 대비 차이를 비교해요.</p>
+    <div class="seg" data-draw="sCourseSeg" data-source="shortRaces"></div>
+    <div class="chart" data-draw="sCourseChart" data-source="shortLaps shortRaces"></div>
+    <div class="legend" data-draw="sCourseLegend" data-source="shortRaces"></div>
+    <div class="tbox" style="margin-top:12px" data-draw="sCourseRows" data-source="shortLaps shortRaces"></div>
+    <p class="swipe">표는 옆으로 밀어서 더 볼 수 있어요</p>
+  </section>
+
   <section class="shortonly" id="s-dyn">
     <h2>러닝 다이내믹스</h2>
     <p class="note" data-draw="sDynNote" data-source="shortRaces">—</p>
@@ -840,7 +850,7 @@ window.mxS = (id) => {
   if (r.status !== 'ok' || !Array.isArray(r.data)) return r;
   return Object.assign({}, r, { data: r.data.filter((x) => x.person === window.mxPerson && x.event === window.mxEvent).sort((a, b) => (a.date < b.date ? -1 : a.date > b.date ? 1 : (a.km || 0) - (b.km || 0))) });
 };
-window.mxSDraws = ['sDynNote', 'sZones', 'sTake', 'sTiles', 'sEvName', 'sAll', 'sTrend', 'sLapChart', 'sLapLegend', 'sLapRows', 'sDyn', 'sCerts'];
+window.mxSDraws = ['sCourseSeg', 'sCourseChart', 'sCourseLegend', 'sCourseRows', 'sDynNote', 'sZones', 'sTake', 'sTiles', 'sEvName', 'sAll', 'sTrend', 'sLapChart', 'sLapLegend', 'sLapRows', 'sDyn', 'sCerts'];
 window.mxEvApply = () => {
   const s = dash.data('shortRaces'), have = new Set(['full']);
   if (s.status === 'ok') s.data.filter((x) => x.person === window.mxPerson).forEach((x) => have.add(x.event));
@@ -1455,7 +1465,7 @@ dash.draw('sLapChart', (el) => {
   const all = series.flat().map((l) => l.sec), lo = Math.floor(d3.min(all) / 15) * 15, hi = Math.ceil(d3.max(all) / 15) * 15;
   const x = d3.scaleLinear([1, K], [L + 6, W - R - 6]), y = d3.scaleLinear([lo, hi], [T, H - B]);
   yAxis(svg.append('g'), y, d3.range(lo, hi + 1, (hi - lo) / 15 > 6 ? 30 : 15), F.ms, W - R, L);
-  d3.range(1, K + 1).filter((k) => K <= 12 || (W >= 600 && K <= 22) || k === 1 || k === K || k % 5 === 0).forEach((k) => svg.append('text').attr('x', x(k)).attr('y', H - 6).attr('text-anchor', 'middle').style('font-size', '11.5px').style('fill', 'var(--rb-muted)').text(k + (k === K ? 'km' : '')));
+  d3.range(1, K + 1).filter((k) => K <= 12 || (W >= 600 && K <= 22) || k === 1 || k % 5 === 0 || (k === K && K % 5 >= 3)).forEach((k) => svg.append('text').attr('x', x(k)).attr('y', H - 6).attr('text-anchor', 'middle').style('font-size', '11.5px').style('fill', 'var(--rb-muted)').text(k + (k === K || (k % 5 === 0 && k + 3 > K) ? 'km' : '')));
   series.forEach((sr, i) => {
     svg.append('path').attr('d', d3.line((l) => x(l.km), (l) => y(l.sec))(sr)).style('fill', 'none').style('stroke', pal[i]).attr('stroke-width', i === series.length - 1 ? 2.6 : 2).attr('stroke-linejoin', 'round');
     sr.forEach((l) => svg.append('circle').attr('cx', x(l.km)).attr('cy', y(l.sec)).attr('r', 2.4).style('fill', pal[i]));
@@ -1522,6 +1532,76 @@ dash.draw('sDyn', (el) => {
   });
   svg.append('text').attr('x', L).attr('y', H - 2).style('font-size', '12px').style('fill', 'var(--rb-muted)').text(rows[0].race.split(' ')[0]);
   if (rows.length > 1) svg.append('text').attr('x', W - R).attr('y', H - 2).attr('text-anchor', 'end').style('font-size', '12px').style('fill', 'var(--rb-muted)').text(rows[rows.length - 1].race.split(' ')[0]);
+});
+// 하프·10K 같은 코스 비교
+window.mxSCourse = null;
+window.mxSCourses = () => {
+  const s = window.mxS('shortRaces'); if (s.status !== 'ok') return [];
+  const cnt = {}; s.data.forEach((r) => { cnt[r.course] = (cnt[r.course] || 0) + 1; });
+  return [...new Set(s.data.map((r) => r.course))].filter((c) => cnt[c] >= 2);
+};
+window.mxSCourseEds = () => { const s = window.mxS('shortRaces'); return s.status === 'ok' ? s.data.filter((r) => r.course === window.mxSCourse) : []; };
+dash.draw('sCourseSeg', (el) => {
+  const list = window.mxSCourses(), sec = document.getElementById('s-course');
+  if (sec) sec.hidden = !list.length;
+  if (!list.length) { el.replaceChildren(); return; }
+  if (!list.includes(window.mxSCourse)) window.mxSCourse = list[0];
+  el.replaceChildren(...list.map((c) => {
+    const b = document.createElement('button'); b.type = 'button'; b.textContent = c; b.className = c === window.mxSCourse ? 'on' : '';
+    b.addEventListener('click', () => { window.mxSCourse = c; ['sCourseSeg', 'sCourseChart', 'sCourseLegend', 'sCourseRows'].forEach((n) => dash.draw(n)); });
+    return b;
+  }));
+});
+dash.draw('sCourseChart', (el) => {
+  const eds = window.mxSCourseEds(), lp = window.mxS('shortLaps');
+  if (eds.length < 2 || lp.status !== 'ok') { el.replaceChildren(); return; }
+  const pal = window.mxSPal(eds.length); el.replaceChildren();
+  const series = eds.map((r) => lp.data.filter((l) => l.race === r.race && l.distKm === 1));
+  const K = d3.max(series, (x) => x.length) || 1;
+  const W = el.clientWidth || 600, H = W < 480 ? 220 : 240, L = 38, R = 10, T = 12, B = 24;
+  const svg = d3.select(el).append('svg').attr('width', '100%').attr('viewBox', `0 0 ${W} ${H}`);
+  const all = series.flat().map((l) => l.sec), lo = Math.floor(d3.min(all) / 15) * 15, hi = Math.ceil(d3.max(all) / 15) * 15;
+  const x = d3.scaleLinear([1, K], [L + 6, W - R - 6]), y = d3.scaleLinear([lo, hi], [T, H - B]);
+  yAxis(svg.append('g'), y, d3.range(lo, hi + 1, (hi - lo) / 15 > 6 ? 30 : 15), F.ms, W - R, L);
+  d3.range(1, K + 1).filter((k) => K <= 12 || k === 1 || k % 5 === 0 || (k === K && K % 5 >= 3)).forEach((k) => svg.append('text').attr('x', x(k)).attr('y', H - 6).attr('text-anchor', 'middle').style('font-size', '11.5px').style('fill', 'var(--rb-muted)').text(k + (k === K || (k % 5 === 0 && k + 3 > K) ? 'km' : '')));
+  series.forEach((sr, i) => {
+    svg.append('path').attr('d', d3.line((l) => x(l.km), (l) => y(l.sec))(sr)).style('fill', 'none').style('stroke', pal[i]).attr('stroke-width', i === series.length - 1 ? 2.6 : 2).attr('stroke-linejoin', 'round');
+    sr.forEach((l) => svg.append('circle').attr('cx', x(l.km)).attr('cy', y(l.sec)).attr('r', 2.4).style('fill', pal[i]));
+  });
+  const tip = tipFor(el), rule = svg.append('line').attr('y1', T).attr('y2', H - B).style('stroke', 'var(--rb-line)').attr('opacity', 0);
+  svg.append('rect').attr('x', L).attr('y', T).attr('width', W - L - R).attr('height', H - T - B).style('fill', 'transparent')
+    .on('pointermove pointerdown', (ev) => {
+      const k = Math.max(1, Math.min(K, Math.round(x.invert(d3.pointer(ev)[0])))); rule.attr('x1', x(k)).attr('x2', x(k)).attr('opacity', 1);
+      tip.show(x(k) / W * el.clientWidth, T + 20, k + 'km 랩', eds.map((r, i) => r.race + '  ' + (series[i][k - 1] ? F.ms(series[i][k - 1].sec) : '—')));
+    }).on('pointerleave', () => { tip.hide(); rule.attr('opacity', 0); });
+});
+dash.draw('sCourseLegend', (el) => {
+  const eds = window.mxSCourseEds(); if (eds.length < 2) { el.replaceChildren(); return; }
+  const pal = window.mxSPal(eds.length);
+  el.replaceChildren(...eds.map((r, i) => { const sp = document.createElement('span'), sw = document.createElement('i'); sw.style.background = pal[i]; sp.append(sw, r.race + ' 공식 ' + r.officialTime + ' (워치 ' + F.hms(r.timeSec) + ')'); return sp; }));
+});
+dash.draw('sCourseRows', (el) => {
+  const eds = window.mxSCourseEds(), lp = window.mxS('shortLaps');
+  if (eds.length < 2 || lp.status !== 'ok') { el.replaceChildren(); return; }
+  const by = eds.map((r) => lp.data.filter((l) => l.race === r.race).sort((a, b) => a.km - b.km));
+  const K = Math.max(...by.map((L) => L.filter((l) => l.distKm === 1).length));
+  const cuts = []; for (let k = 5; k < K; k += 5) cuts.push(k); cuts.push(null);
+  const seg = by.map((L) => { let prev = 0; return cuts.map((c) => { const upto = L.filter((l) => (c == null ? true : l.km <= c)); const cum = upto.reduce((a, l) => a + l.sec, 0); const v = [cum - prev, cum]; prev = cum; return v; }); });
+  const t = document.createElement('table'), th = document.createElement('thead'), tr0 = document.createElement('tr');
+  const head = ['구간']; eds.forEach((r, i) => { head.push(r.race + ' 구간', r.race + ' 누적'); if (i) head.push('직전 대비', '누적 단축'); });
+  head.forEach((h) => tr0.appendChild(Object.assign(document.createElement('th'), { textContent: h }))); th.appendChild(tr0);
+  const tb = document.createElement('tbody');
+  cuts.forEach((c, j) => {
+    const tr = document.createElement('tr'); if (c == null) tr.className = 'fin';
+    tr.appendChild(Object.assign(document.createElement('td'), { textContent: c == null ? '결승' : c + 'km' }));
+    eds.forEach((r, i) => {
+      tr.appendChild(Object.assign(document.createElement('td'), { textContent: F.hms(seg[i][j][0]) }));
+      tr.appendChild(Object.assign(document.createElement('td'), { textContent: F.hms(seg[i][j][1]) }));
+      if (i) [seg[i][j][0] - seg[i - 1][j][0], seg[i][j][1] - seg[i - 1][j][1]].forEach((d) => { const td = document.createElement('td'); td.textContent = F.sgn(d); td.className = d < 0 ? 'good' : d > 0 ? 'bad' : ''; tr.appendChild(td); });
+    });
+    tb.appendChild(tr);
+  });
+  t.append(th, tb); el.replaceChildren(t);
 });
 dash.draw('sDynNote', (el) => {
   const s = window.mxS('shortRaces'); if (s.status !== 'ok' || !s.data.length) { el.textContent = ''; return; }
