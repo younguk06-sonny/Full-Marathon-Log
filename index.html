@@ -194,6 +194,9 @@
 .mx:not(.ev-short) > .shortonly{display:none!important}
 .mx.ev-short .fullonly-in{display:none!important}
 .mx .s-laptable td.best{font-weight:800;color:var(--rb-accent)}
+.mx .s-laptable th:nth-child(1),.mx .s-laptable td:nth-child(1){position:sticky;left:0;z-index:2;background:var(--rb-card);min-width:4.2rem;width:4.2rem}
+.mx .s-laptable th:nth-child(2),.mx .s-laptable td:nth-child(2){position:sticky;left:4.2rem;z-index:2;background:color-mix(in srgb,var(--rb-gold) 10%,var(--rb-card));box-shadow:inset -1px 0 0 var(--rb-line)}
+.mx .s-laptable thead th:nth-child(-n+2){z-index:3}
 .mx .s-laptable tr.fin td{font-weight:750;border-top:1px solid var(--rb-line)}
 .mx.locked > :not(header):not(.pseg):not(.lockbox){display:none!important}
 .mx.nosel > :not(header):not(.pseg):not(.pickbox){display:none!important}
@@ -308,7 +311,7 @@
 
   <section class="card shortonly" id="s-laps">
     <h2>1km 랩 비교</h2>
-    <p class="note">대회마다 1km 랩 페이스(위가 빠름). 표에서 파란 굵은 글씨는 그 구간에서 가장 빨랐던 대회예요.</p>
+    <p class="note">대회마다 1km 랩 페이스(위가 빠름). 표는 PB 대회를 맨 왼쪽에 고정했고, 파란 굵은 글씨는 그 구간에서 가장 빨랐던 대회예요.</p>
     <div class="chart" data-draw="sLapChart" data-source="shortLaps shortRaces"></div>
     <div class="legend" data-draw="sLapLegend" data-source="shortRaces"></div>
     <div class="tbox" style="margin-top:12px" data-draw="sLapRows" data-source="shortLaps shortRaces"></div>
@@ -317,15 +320,29 @@
 
   <section class="shortonly" id="s-dyn">
     <h2>러닝 다이내믹스</h2>
-    <p class="note">대회별 평균값 추이. 색 구간과 지표 설명은 풀 화면의 러닝 다이내믹스와 같아요. 가민 없이 뛴 대회의 케이던스·보폭은 걸음 수로 계산한 값이에요.</p>
+    <p class="note" data-draw="sDynNote" data-source="shortRaces">—</p>
+    <p class="def" style="margin:-4px 0 12px">색 구간은 가민이 여러 수준의 러너를 조사해 만든 백분위 기준이에요. 빨강·주황은 경험이 적거나 느린 러너에게, 초록·파랑·보라는 숙련되거나 빠른 러너에게 흔한 값이에요. 수직 진폭·수직 비율 기준은 가슴 심박계(HRM-Pro·HRM-Run 등) 값이고, 허리에 차는 러닝 다이내믹스 포드는 조금 높게 잡혀요. 키가 큰 러너는 케이던스가 약간 낮고 보폭·수직 진폭이 약간 큰 편이에요.</p>
     <div class="grid dyn">
-      <div class="card"><h3>케이던스 (spm)</h3><div class="chart small" data-draw="sDyn" data-metric="cadenceSpm" data-source="shortRaces"></div></div>
-      <div class="card"><h3>보폭 (m)</h3><div class="chart small" data-draw="sDyn" data-metric="strideM" data-source="shortRaces"></div></div>
-      <div class="card"><h3>지면 접촉 시간 (ms)</h3><div class="chart small" data-draw="sDyn" data-metric="gctMs" data-source="shortRaces"></div></div>
-      <div class="card"><h3>수직 진폭 (cm)</h3><div class="chart small" data-draw="sDyn" data-metric="vertOscCm" data-source="shortRaces"></div></div>
-      <div class="card"><h3>수직 비율 (%)</h3><div class="chart small" data-draw="sDyn" data-metric="vertRatioPct" data-source="shortRaces"></div></div>
-      <div class="card"><h3>평균 심박 (bpm)</h3><div class="chart small" data-draw="sDyn" data-metric="avgHr" data-source="shortRaces"></div></div>
-      <div class="card"><h3>평균 파워 (W)</h3><div class="chart small" data-draw="sDyn" data-metric="powerW" data-source="shortRaces"></div></div>
+      <div class="card"><h3>케이던스 (spm)</h3><div class="chart small" data-draw="sDyn" data-metric="cadenceSpm" data-source="shortRaces"></div>
+        <p class="def">1분 동안 디딘 걸음 수(양발 합계). 높을수록 한 걸음이 짧고 가벼워져 착지 충격이 줄어드는 편이에요.</p>
+        <div class="zones" data-draw="sZones" data-metric="cadenceSpm" data-source="shortRaces">—</div></div>
+      <div class="card"><h3>지면 접촉 시간 (ms)</h3><div class="chart small" data-draw="sDyn" data-metric="gctMs" data-source="shortRaces"></div>
+        <p class="def">한 걸음마다 발이 땅에 닿아 있는 시간. 짧을수록 탄성 있게 튀어 나가는 주법이에요. 걷는 동안은 측정되지 않아요.</p>
+        <div class="zones" data-draw="sZones" data-metric="gctMs" data-source="shortRaces">—</div></div>
+      <div class="card"><h3>수직 진폭 (cm)</h3><div class="chart small" data-draw="sDyn" data-metric="vertOscCm" data-source="shortRaces"></div>
+        <p class="def">한 걸음마다 상체가 위아래로 튀는 높이. 낮을수록 위로 새는 힘이 적어요. 다만 보폭이 크면 함께 커지기 쉬워요.</p>
+        <div class="zones" data-draw="sZones" data-metric="vertOscCm" data-source="shortRaces">—</div></div>
+      <div class="card"><h3>수직 비율 (%)</h3><div class="chart small" data-draw="sDyn" data-metric="vertRatioPct" data-source="shortRaces"></div>
+        <p class="def">수직 진폭 ÷ 보폭. 앞으로 간 거리 대비 얼마나 위로 튀었는지를 뜻하고, 낮을수록 효율적인 주법이에요. 키와는 상관이 없어요.</p>
+        <div class="zones" data-draw="sZones" data-metric="vertRatioPct" data-source="shortRaces">—</div></div>
+      <div class="card"><h3>보폭 (m)</h3><div class="chart small" data-draw="sDyn" data-metric="strideM" data-source="shortRaces"></div>
+        <p class="def">한 발이 땅에 닿은 지점부터 다음 발이 닿은 지점까지의 거리. 속도 = 케이던스 × 보폭이라, 케이던스가 같다면 보폭이 길수록 빨라요. 가민 색 구간은 없어요.</p></div>
+      <div class="card"><h3>평균 페이스 (/km)</h3><div class="chart small" data-draw="sDyn" data-metric="paceSec" data-source="shortRaces"></div>
+        <p class="def">워치 기록 ÷ 워치 거리로 계산한 1km 평균 시간. 워치 거리가 공식 거리보다 길게 잡히면 공식 기록으로 나눈 페이스보다 조금 빨라요.</p></div>
+      <div class="card"><h3>평균 심박 (bpm)</h3><div class="chart small" data-draw="sDyn" data-metric="avgHr" data-source="shortRaces"></div>
+        <p class="def">레이스 전체 평균 심박. 심박 구간은 사람마다 최대 심박·젖산역치가 달라 정해진 백분위가 없어요. 같은 페이스에서 낮을수록 유산소 능력이 좋아졌다는 신호예요.</p></div>
+      <div class="card"><h3>평균 파워 (W)</h3><div class="chart small" data-draw="sDyn" data-metric="powerW" data-source="shortRaces"></div>
+        <p class="def">가민 러닝 파워의 레이스 평균. 속도·경사·바람(지원 시)·체중으로 추정한 값이라 다른 브랜드와 직접 비교하긴 어려워요.</p></div>
     </div>
   </section>
 
@@ -752,7 +769,7 @@ window.mxS = (id) => {
   if (r.status !== 'ok' || !Array.isArray(r.data)) return r;
   return Object.assign({}, r, { data: r.data.filter((x) => x.person === window.mxPerson && x.event === window.mxEvent).sort((a, b) => (a.date < b.date ? -1 : a.date > b.date ? 1 : (a.km || 0) - (b.km || 0))) });
 };
-window.mxSDraws = ['sTake', 'sTiles', 'sEvName', 'sAll', 'sTrend', 'sLapChart', 'sLapLegend', 'sLapRows', 'sDyn', 'sCerts'];
+window.mxSDraws = ['sDynNote', 'sZones', 'sTake', 'sTiles', 'sEvName', 'sAll', 'sTrend', 'sLapChart', 'sLapLegend', 'sLapRows', 'sDyn', 'sCerts'];
 window.mxEvApply = () => {
   const s = dash.data('shortRaces'), have = new Set(['full']);
   if (s.status === 'ok') s.data.filter((x) => x.person === window.mxPerson).forEach((x) => have.add(x.event));
@@ -1350,7 +1367,7 @@ dash.draw('sLapChart', (el) => {
   const all = series.flat().map((l) => l.sec), lo = Math.floor(d3.min(all) / 15) * 15, hi = Math.ceil(d3.max(all) / 15) * 15;
   const x = d3.scaleLinear([1, K], [L + 6, W - R - 6]), y = d3.scaleLinear([lo, hi], [T, H - B]);
   yAxis(svg.append('g'), y, d3.range(lo, hi + 1, (hi - lo) / 15 > 6 ? 30 : 15), F.ms, W - R, L);
-  d3.range(1, K + 1).forEach((k) => svg.append('text').attr('x', x(k)).attr('y', H - 6).attr('text-anchor', 'middle').style('font-size', '11.5px').style('fill', 'var(--rb-muted)').text(k + (k === K ? 'km' : '')));
+  d3.range(1, K + 1).filter((k) => K <= 12 || (W >= 600 && K <= 22) || k === 1 || k === K || k % 5 === 0).forEach((k) => svg.append('text').attr('x', x(k)).attr('y', H - 6).attr('text-anchor', 'middle').style('font-size', '11.5px').style('fill', 'var(--rb-muted)').text(k + (k === K ? 'km' : '')));
   series.forEach((sr, i) => {
     svg.append('path').attr('d', d3.line((l) => x(l.km), (l) => y(l.sec))(sr)).style('fill', 'none').style('stroke', pal[i]).attr('stroke-width', i === series.length - 1 ? 2.6 : 2).attr('stroke-linejoin', 'round');
     sr.forEach((l) => svg.append('circle').attr('cx', x(l.km)).attr('cy', y(l.sec)).attr('r', 2.4).style('fill', pal[i]));
@@ -1370,11 +1387,12 @@ dash.draw('sLapLegend', (el) => {
 dash.draw('sLapRows', (el) => {
   const s = window.mxS('shortRaces'), lp = window.mxS('shortLaps');
   if (s.status !== 'ok' || lp.status !== 'ok' || !s.data.length) { el.replaceChildren(); return; }
-  const races = s.data, by = races.map((r) => lp.data.filter((l) => l.race === r.race));
+  const pbR = s.data.reduce((a, b) => (b.officialSec < a.officialSec ? b : a));
+  const races = [pbR, ...s.data.filter((r) => r !== pbR)], by = races.map((r) => lp.data.filter((l) => l.race === r.race));
   const K = d3.max(by, (x) => x.filter((l) => l.distKm === 1).length) || 0;
   const t = document.createElement('table'); t.className = 's-laptable';
   const th = document.createElement('thead'), tr0 = document.createElement('tr');
-  ['구간', ...races.map((r) => r.race)].forEach((h) => tr0.appendChild(Object.assign(document.createElement('th'), { textContent: h }))); th.appendChild(tr0);
+  ['구간', ...races.map((r, i) => r.race + (i === 0 ? ' PB' : ''))].forEach((h) => tr0.appendChild(Object.assign(document.createElement('th'), { textContent: h }))); th.appendChild(tr0);
   const tb = document.createElement('tbody');
   for (let k = 1; k <= K; k++) {
     const tr = document.createElement('tr'); tr.appendChild(Object.assign(document.createElement('td'), { textContent: k + 'km' }));
@@ -1390,14 +1408,15 @@ dash.draw('sLapRows', (el) => {
 dash.draw('sDyn', (el) => {
   const metric = el.dataset.metric, s = window.mxS('shortRaces');
   if (s.status !== 'ok') { el.replaceChildren(); return; }
-  const rows = s.data.filter((r) => r[metric] != null); el.replaceChildren();
+  const src = s.data.map((r) => (metric === 'paceSec' ? Object.assign({}, r, { paceSec: r.timeSec / r.distKm }) : r));
+  const rows = src.filter((r) => r[metric] != null); el.replaceChildren();
   if (!rows.length) { el.appendChild(Object.assign(document.createElement('div'), { className: 'elev-none', textContent: '기록 없음' })); return; }
   const best = s.data.reduce((a, b) => (b.officialSec < a.officialSec ? b : a));
-  const f = metric === 'strideM' ? (v) => v.toFixed(2) : (v) => String(v);
+  const f = metric === 'paceSec' ? F.ms : metric === 'strideM' ? (v) => v.toFixed(2) : (v) => String(v);
   const W = el.clientWidth || 300, H = 140, L = 6, R = 6, T = 54, B = 32;
   const svg = d3.select(el).append('svg').attr('width', '100%').attr('viewBox', `0 0 ${W} ${H}`);
   const v = rows.map((r) => r[metric]), lo = d3.min(v), hi = d3.max(v), pad = (hi - lo) * 0.15 || Math.abs(hi) * 0.05 || 1;
-  const x = d3.scaleLinear([0, Math.max(1, rows.length - 1)], [L + 14, W - R - 14]), y = d3.scaleLinear([lo - pad, hi + pad], [H - B, T]);
+  const x = d3.scaleLinear([0, Math.max(1, rows.length - 1)], [L + 14, W - R - 14]), y = d3.scaleLinear([lo - pad, hi + pad], metric === 'paceSec' ? [T, H - B] : [H - B, T]);
   svg.append('text').attr('x', 0).attr('y', 14).style('font-size', '13px').style('font-weight', '700').style('fill', 'var(--rb-ink)').text(rows.length > 1 ? f(v[0]) + ' → ' + f(v[v.length - 1]) : f(v[0]));
   const br = rows.find((r) => r.race === best.race);
   svg.append('text').attr('x', 0).attr('y', 30).style('font-size', '11.5px').style('fill', 'var(--rb-muted)').text(br ? 'PB 대회 ' + f(br[metric]) : '');
@@ -1415,6 +1434,35 @@ dash.draw('sDyn', (el) => {
   });
   svg.append('text').attr('x', L).attr('y', H - 2).style('font-size', '12px').style('fill', 'var(--rb-muted)').text(rows[0].race.split(' ')[0]);
   if (rows.length > 1) svg.append('text').attr('x', W - R).attr('y', H - 2).attr('text-anchor', 'end').style('font-size', '12px').style('fill', 'var(--rb-muted)').text(rows[rows.length - 1].race.split(' ')[0]);
+});
+dash.draw('sDynNote', (el) => {
+  const s = window.mxS('shortRaces'); if (s.status !== 'ok' || !s.data.length) { el.textContent = ''; return; }
+  const rows = s.data, best = rows.reduce((a, b) => (b.officialSec < a.officialSec ? b : a));
+  const cad = rows.map((r) => r.cadenceSpm).filter((v) => v != null), st = rows.filter((r) => r.strideM != null);
+  el.replaceChildren();
+  const b = (t) => Object.assign(document.createElement('b'), { textContent: t });
+  el.append('대회별 평균값 추이. 케이던스는 ', b(Math.min(...cad) + '–' + Math.max(...cad) + 'spm'), ', 보폭은 ', b(st[0].strideM.toFixed(2) + 'm'), '에서 PB 때 ', b((best.strideM != null ? best.strideM : st[st.length - 1].strideM).toFixed(2) + 'm'), '예요. 가민 없이 뛴 대회의 케이던스·보폭은 걸음 수로 계산한 값이고, 나머지 지표는 비어 있어요.');
+});
+dash.draw('sZones', (el) => {
+  const metric = el.dataset.metric, Z = window.mxZones, z = Z[metric], s = window.mxS('shortRaces');
+  if (!z || s.status !== 'ok') { el.textContent = '—'; return; }
+  const rows = s.data.filter((r) => r[metric] != null);
+  if (!rows.length) { el.textContent = '—'; return; }
+  const best = s.data.reduce((p, q) => (q.officialSec < p.officialSec ? q : p));
+  const last = rows[rows.length - 1], pbRow = rows.find((r) => r.race === best.race) || last;
+  const zl = Z.zoneOf(metric, last[metric]), zp = Z.zoneOf(metric, pbRow[metric]);
+  const row = document.createElement('div'); row.className = 'zr';
+  [0, 1, 2, 3, 4].forEach((k) => {
+    const c = document.createElement('div'); c.className = 'zc' + (k === zl ? ' me' : '');
+    const bar = document.createElement('i'); bar.style.background = Z.colors[k];
+    c.append(bar, z.label[k], document.createElement('br'), Z.pct[k]);
+    row.appendChild(c);
+  });
+  const me = document.createElement('div'); me.className = 'zme';
+  const t1 = document.createElement('b'); t1.textContent = '최근 ' + last[metric];
+  const t2 = document.createElement('b'); t2.textContent = 'PB 대회 ' + pbRow[metric];
+  me.append(t1, ' ' + Z.names[zl] + '(' + Z.pct[zl] + ') · ', t2, ' ' + Z.names[zp] + '(' + Z.pct[zp] + ')');
+  el.replaceChildren(row, me);
 });
 dash.draw('sCerts', (el) => {
   const s = window.mxS('shortRaces'); if (s.status !== 'ok') { el.replaceChildren(); return; }
