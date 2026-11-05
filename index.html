@@ -192,7 +192,19 @@
 .mx .tseg button.on{background:var(--rb-accent);border-color:var(--rb-accent);color:#fff}
 .mx:not(.tool) > .toolsec{display:none!important}
 .mx.tool > :not(header):not(.pseg):not(.segrow):not(.toolsec):not(.lockbox):not(.pickbox){display:none!important}
-.mx.tool.tool-predict > #goal,.mx.tool.tool-goal > #predict{display:none!important}
+.mx.tool > .toolsec:not(.tool-on){display:none!important}
+.mx .ovw-h{font-size:16px;margin:2px 0 10px}
+.mx .ovw{display:grid;gap:12px;grid-template-columns:repeat(2,minmax(0,1fr))}
+.mx .ovw .oc{background:var(--rb-card);border:1px solid var(--rb-line);border-radius:14px;padding:14px 16px}
+.mx .ovw .oc h3{margin:0 0 8px;font-size:13.5px;color:var(--rb-muted);font-weight:650}
+.mx .ovw .or{display:grid;grid-template-columns:2.6rem 1fr;align-items:baseline;gap:8px;padding:7px 0;border-top:1px solid var(--rb-line2)}
+.mx .ovw .or:first-of-type{border-top:0}
+.mx .ovw .ok{font-size:12.5px;font-weight:700;color:var(--rb-ink2)}
+.mx .ovw .ov{font-size:19px;font-weight:750;letter-spacing:-.01em;color:var(--rb-ink)}
+.mx .ovw .ov.pb{color:var(--rb-accent)}
+.mx .ovw .ov.none{font-size:14px;font-weight:500;color:var(--rb-muted)}
+.mx .ovw .os{display:block;font-size:11.5px;font-weight:500;color:var(--rb-muted);letter-spacing:0;margin-top:1px}
+@media (max-width:520px){.mx .ovw{grid-template-columns:1fr}.mx .ovw .ov{font-size:18px}}
 .mx .eseg button{font:inherit;border:0;background:transparent;padding:5px 14px;border-radius:8px;cursor:pointer;font-size:13px;font-weight:650;color:var(--rb-ink2)}
 .mx .eseg button.on{background:var(--rb-ink);color:var(--rb-card)}
 .mx .eseg button[hidden]{display:none}
@@ -269,7 +281,7 @@
     <form class="lk-form" autocomplete="off"><input class="lk-pin" type="password" inputmode="numeric" pattern="[0-9]*" maxlength="4" aria-label="비밀번호 4자리"><button type="submit">확인</button></form>
     <div class="lk-err" aria-live="polite"></div>
   </div>
-  <div class="segrow"><div class="eseg" role="group" aria-label="거리 선택"><button type="button" data-ev="full" class="on">풀</button><button type="button" data-ev="half" hidden>하프</button><button type="button" data-ev="10km" hidden>10K</button></div><div class="tseg" role="group" aria-label="계산 도구"><button type="button" data-tool="predict">피터리겔 공식에 따른 레이스예측</button><button type="button" data-tool="goal">목표 페이스 계산</button></div></div>
+  <div class="segrow"><div class="eseg" role="group" aria-label="거리 선택"><button type="button" data-tool="overview" class="on">전체</button><button type="button" data-ev="full">풀</button><button type="button" data-ev="half" hidden>하프</button><button type="button" data-ev="10km" hidden>10K</button></div><div class="tseg" role="group" aria-label="계산 도구"><button type="button" data-tool="predict">피터리겔 공식에 따른 레이스예측</button><button type="button" data-tool="goal">목표 페이스 계산</button></div></div>
   <p class="take fullonly">첫 풀 <b data-draw="firstTime" data-source="summary" data-field="firstTime">—</b>에서 PB <b data-draw="pbTime" data-source="summary" data-field="pbTime">—</b>까지 <b data-draw="improve" data-source="summary" data-field="improve">—</b> 단축했어요. <span data-only="ksj">25년 동아부터는 30km까지 4분 초반 페이스를 꾸준히 지키고, 챌린지레이스와 26 동아에서 서브3를 두 번 했어요. 최근 공주·경주는 31km 이후 페이스가 30% 가까이 느려지고 9~10분을 걸어서, 후반 유지가 다음 PB의 열쇠예요.</span><span data-only="hiw" hidden>두 번째 대회부터 매번 직전보다 기록을 줄였어요. 케이던스는 185~188spm으로 그대로인데 보폭이 1.01m에서 1.37m로 늘면서 빨라졌고, PB인 26 동아에서는 34km 이후에도 1km를 4:04 안쪽으로 지켰어요.</span><span data-only="pjh" hidden>30km까지의 스피드는 이미 충분하고, 31km 이후 둔화를 줄여 갈수록 기록이 크게 빨라지고 있어요.</span><span data-only="son" hidden>기록이 좋았던 날은 후반이 거의 느려지지 않았고, 서브 3:10의 열쇠는 31km 이후 페이스 유지예요.</span><span data-only="kim" hidden>네 번 모두 후반이 거의 느려지지 않은 이븐 페이스 러너이고, 케이던스와 보폭이 함께 늘면서 기록이 빨라졌어요.</span></p>
 
   <nav class="qnav fullonly" aria-label="바로가기">
@@ -358,6 +370,12 @@
       <p class="note" style="margin-top:12px">기록증을 누르면 크게 보여요. 다시 누르면 작아져요.</p>
       <div class="certs" data-draw="sCerts" data-source="shortRaces"></div>
     </details>
+  </section>
+
+  <section class="toolsec" id="ovw">
+    <h2 class="ovw-h">한눈에 보기</h2>
+    <div class="ovw" data-draw="ovw" data-source="races shortRaces otherPbs"></div>
+    <p class="note" style="margin-top:8px">풀·하프·10K 버튼을 누르면 거리별 자세한 기록이 나와요. 하프·10K 대회 기록을 아직 안 넣은 러너는 PB만 기록증 기준으로 보여요.</p>
   </section>
 
   <section class="card toolsec" id="predict">
@@ -781,31 +799,33 @@ window.mxEvApply = () => {
   if (s.status === 'ok') s.data.filter((x) => x.person === window.mxPerson).forEach((x) => have.add(x.event));
   if (!have.has(window.mxEvent)) window.mxEvent = 'full';
   document.querySelectorAll('.mx .eseg').forEach((g) => {
-    g.querySelectorAll('button').forEach((b) => { b.hidden = !have.has(b.dataset.ev); b.classList.toggle('on', b.dataset.ev === window.mxEvent); });
+    g.querySelectorAll('button[data-ev]').forEach((b) => { b.hidden = !have.has(b.dataset.ev); b.classList.toggle('on', b.dataset.ev === window.mxEvent); });
   });
   const root = document.querySelector('.mx'); if (root) root.classList.toggle('ev-short', window.mxEvent !== 'full');
+  if (window.mxToolApply) window.mxToolApply();
 };
-window.mxDraws.push(...window.mxSDraws, 'evIntro', 'elevBars', 'elevSelect', 'elevStats', 'elevChart', 'elevImgs');
-document.querySelectorAll('.mx .eseg button').forEach((b) => b.addEventListener('click', () => {
-  if (b.dataset.ev === window.mxEvent) return;
+window.mxDraws.push('ovw', ...window.mxSDraws, 'evIntro', 'elevBars', 'elevSelect', 'elevStats', 'elevChart', 'elevImgs');
+document.querySelectorAll('.mx .eseg button[data-ev]').forEach((b) => b.addEventListener('click', () => {
+  if (b.dataset.ev === window.mxEvent && !window.mxTool) return;
   window.mxEvent = b.dataset.ev; window.mxEvApply(); window.mxElevId = null;
   ['evIntro', 'elevBars', 'elevSelect', 'elevStats', 'elevChart', 'elevImgs'].forEach((n) => { try { dash.draw(n); } catch (_) {} });
   window.mxDraws.forEach((n) => { try { dash.draw(n); } catch (_) {} });
 }));
 dash.onData(() => window.mxEvApply());
-window.mxTool = null;
+window.mxTool = 'overview';
 window.mxToolApply = () => {
   const root = document.querySelector('.mx'), t = window.mxTool;
-  root.classList.toggle('tool', !!t); root.classList.toggle('tool-predict', t === 'predict'); root.classList.toggle('tool-goal', t === 'goal');
-  document.querySelectorAll('.mx .tseg button').forEach((b) => b.classList.toggle('on', b.dataset.tool === t));
-  document.querySelectorAll('.mx .eseg button').forEach((b) => b.classList.toggle('on', !t && b.dataset.ev === window.mxEvent));
+  root.classList.toggle('tool', !!t);
+  document.querySelectorAll('.mx > .toolsec').forEach((sec) => sec.classList.toggle('tool-on', sec.id === (t === 'overview' ? 'ovw' : t)));
+  document.querySelectorAll('.mx [data-tool]').forEach((b) => b.classList.toggle('on', b.dataset.tool === t));
+  document.querySelectorAll('.mx .eseg button[data-ev]').forEach((b) => b.classList.toggle('on', !t && b.dataset.ev === window.mxEvent));
 };
-document.querySelectorAll('.mx .tseg button').forEach((b) => b.addEventListener('click', () => {
-  window.mxTool = window.mxTool === b.dataset.tool ? null : b.dataset.tool; window.mxToolApply();
-  ['goal', 'rgPresets', 'riegel'].forEach((n) => { try { dash.draw(n); } catch (_) {} });
+document.querySelectorAll('.mx [data-tool]').forEach((b) => b.addEventListener('click', () => {
+  window.mxTool = window.mxTool === b.dataset.tool && b.dataset.tool !== 'overview' ? 'overview' : b.dataset.tool; window.mxToolApply();
+  ['ovw', 'goal', 'rgPresets', 'riegel'].forEach((n) => { try { dash.draw(n); } catch (_) {} });
   try { window.scrollTo({ top: 0 }); } catch (_) {}
 }));
-document.querySelectorAll('.mx .eseg button').forEach((b) => b.addEventListener('click', () => {
+document.querySelectorAll('.mx .eseg button[data-ev]').forEach((b) => b.addEventListener('click', () => {
   if (window.mxTool) { window.mxTool = null; window.mxToolApply(); window.mxDraws.forEach((n) => { try { dash.draw(n); } catch (_) {} }); }
 }));
 
@@ -912,7 +932,7 @@ document.querySelectorAll('.mx .lk-pin').forEach((i) => i.addEventListener('inpu
 }));
 document.querySelectorAll('.mx .pseg button').forEach((b) => b.addEventListener('click', () => {
   const root = document.querySelector('.mx'), wasHidden = root.classList.contains('nosel') || root.classList.contains('locked');
-  window.mxSelected = true;
+  window.mxSelected = true; window.mxTool = 'overview'; window.mxToolApply();
   document.querySelectorAll('.mx .pseg button').forEach((x) => x.classList.toggle('on', x === b));
   if (!window.mxLockApply() && wasHidden) window.mxDraws.forEach((n) => { try { dash.draw(n); } catch (_) {} });
 }));
@@ -1499,6 +1519,50 @@ dash.draw('sCerts', (el) => {
     card.addEventListener('click', () => { const was = card.classList.contains('open'); el.querySelectorAll('.cert.open').forEach((c) => c.classList.remove('open')); if (!was) { card.classList.add('open'); card.scrollIntoView({ behavior: 'smooth', block: 'start' }); } });
     return card;
   }));
+});
+
+// 전체 한눈에 보기
+dash.draw('ovw', (el) => {
+  const R = dash.data('races'), S = dash.data('shortRaces'), O = dash.data('otherPbs'), p = window.mxPerson;
+  if (R.status !== 'ok') { el.replaceChildren(); return; }
+  const by = (rows) => rows.slice().sort((a, b) => (a.date < b.date ? -1 : 1));
+  const evs = [['full', '풀', by(R.data.filter((r) => r.person === p)), null],
+    ['half', '하프', by(S.status === 'ok' ? S.data.filter((r) => r.person === p && r.event === 'half') : []), '하프'],
+    ['10km', '10K', by(S.status === 'ok' ? S.data.filter((r) => r.person === p && r.event === '10km') : []), '10km']];
+  const otime = (r) => r.officialTime || F.hms(r.officialSec);
+  const card = (title, fn) => {
+    const c = document.createElement('div'); c.className = 'oc';
+    c.appendChild(Object.assign(document.createElement('h3'), { textContent: title }));
+    evs.forEach(([k, nm, rows, opb]) => {
+      const [v, sub, cls] = fn(rows, opb);
+      const r = document.createElement('div'); r.className = 'or';
+      const kk = Object.assign(document.createElement('span'), { className: 'ok', textContent: nm });
+      const vv = Object.assign(document.createElement('span'), { className: 'ov' + (cls ? ' ' + cls : ''), textContent: v });
+      if (sub) vv.appendChild(Object.assign(document.createElement('span'), { className: 'os', textContent: sub }));
+      r.append(kk, vv); c.appendChild(r);
+    });
+    return c;
+  };
+  const best = (rows) => rows.reduce((a, b) => (b.officialSec < a.officialSec ? b : a));
+  const ymd = (d) => d.slice(2).replace(/-/g, '.');
+  el.replaceChildren(
+    card('1. 대회 참가 횟수', (rows) => (rows.length ? [rows.length + '회', ymd(rows[0].date) + ' 첫 대회'] : ['—', '아직 기록 없음', 'none'])),
+    card('2. 최고 기록 (PB)', (rows, opb) => {
+      if (rows.length) { const b = best(rows); return [otime(b), ymd(b.date) + ' ' + b.name, 'pb']; }
+      const o = opb && O.status === 'ok' ? O.data.find((x) => x.person === p && x.event === opb) : null;
+      return o ? [o.time, o.date.slice(2).replace(/-/g, '.') + ' ' + o.race + ' (기록증)', 'pb'] : ['—', '아직 기록 없음', 'none'];
+    }),
+    card('3. 첫 대회 대비 단축', (rows) => {
+      if (rows.length < 2) return ['—', rows.length ? '대회 1회' : '아직 기록 없음', 'none'];
+      const b = best(rows), d = rows[0].officialSec - b.officialSec;
+      return d > 0 ? ['−' + F.hms(d).replace(/^0:/, ''), '첫 ' + otime(rows[0]) + ' → PB ' + otime(b)] : ['±0', '첫 대회가 PB', 'none'];
+    }),
+    card('4. 최근 대회', (rows) => {
+      if (!rows.length) return ['—', '아직 기록 없음', 'none'];
+      const l = rows[rows.length - 1], pv = rows[rows.length - 2];
+      return [otime(l), ymd(l.date) + ' ' + l.name + (pv ? ' · 직전 대비 ' + window.mxSDiff(l.officialSec - pv.officialSec) : '')];
+    }),
+  );
 });
 
 // 리겔 레이스 예측
