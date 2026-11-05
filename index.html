@@ -564,7 +564,7 @@ window.dash = (() => {
     params: () => ({}), setParams() {}, resetParams() {}, refresh() {},
   };
   api._boot = async () => {
-    await Promise.all(Object.entries(files).map(async ([id, url]) => { const r = await fetch(url); data[id] = await r.json(); }));
+    await Promise.all(Object.entries(files).map(async ([id, url]) => { const r = await fetch(url, { cache: 'no-cache' }); data[id] = await r.json(); }));
     let left = Object.keys(calcs), guard = 10;
     while (left.length && guard--) {
       left = left.filter((id) => {
