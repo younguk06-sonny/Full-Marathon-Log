@@ -193,18 +193,17 @@
 .mx:not(.tool) > .toolsec{display:none!important}
 .mx.tool > :not(header):not(.pseg):not(.segrow):not(.toolsec):not(.lockbox):not(.pickbox){display:none!important}
 .mx.tool > .toolsec:not(.tool-on){display:none!important}
-.mx .ovw-h{font-size:16px;margin:2px 0 10px}
+.mx .ovw-h{display:none}
 .mx .ovw{display:grid;gap:12px;grid-template-columns:repeat(2,minmax(0,1fr))}
-.mx .ovw .oc{background:var(--rb-card);border:1px solid var(--rb-line);border-radius:14px;padding:14px 16px}
-.mx .ovw .oc h3{margin:0 0 8px;font-size:13.5px;color:var(--rb-muted);font-weight:650}
-.mx .ovw .or{display:grid;grid-template-columns:2.6rem 1fr;align-items:baseline;gap:8px;padding:7px 0;border-top:1px solid var(--rb-line2)}
-.mx .ovw .or:first-of-type{border-top:0}
-.mx .ovw .ok{font-size:12.5px;font-weight:700;color:var(--rb-ink2)}
-.mx .ovw .ov{font-size:19px;font-weight:750;letter-spacing:-.01em;color:var(--rb-ink)}
+.mx .ovw .oc{background:var(--rb-card);border:1px solid var(--rb-line);border-radius:14px;padding:12px 14px;box-shadow:0 1px 2px rgba(15,23,42,.04)}
+.mx .ovw .oc h3{margin:0 0 6px;font-size:12.5px;color:var(--rb-muted);font-weight:500}
+.mx .ovw .or{display:flex;align-items:baseline;gap:8px;padding:3px 0}
+.mx .ovw .ok{flex:none;width:2.3rem;font-size:11.5px;font-weight:650;color:var(--rb-muted)}
+.mx .ovw .ov{font-size:17px;font-weight:750;letter-spacing:-.01em;color:var(--rb-ink);line-height:1.25;min-width:0}
 .mx .ovw .ov.pb{color:var(--rb-accent)}
-.mx .ovw .ov.none{font-size:14px;font-weight:500;color:var(--rb-muted)}
-.mx .ovw .os{display:block;font-size:11.5px;font-weight:500;color:var(--rb-muted);letter-spacing:0;margin-top:1px}
-@media (max-width:520px){.mx .ovw{grid-template-columns:1fr}.mx .ovw .ov{font-size:18px}}
+.mx .ovw .ov.none{font-size:13px;font-weight:500;color:var(--rb-muted)}
+.mx .ovw .os{display:block;font-size:10.5px;font-weight:500;color:var(--rb-muted);letter-spacing:0;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+@media (max-width:520px){.mx .ovw{gap:10px}.mx .ovw .oc{padding:11px 12px}.mx .ovw .ov{font-size:15.5px}.mx .ovw .ok{width:2rem;font-size:11px}}
 .mx .eseg button{font:inherit;border:0;background:transparent;padding:5px 14px;border-radius:8px;cursor:pointer;font-size:13px;font-weight:650;color:var(--rb-ink2)}
 .mx .eseg button.on{background:var(--rb-ink);color:var(--rb-card)}
 .mx .eseg button[hidden]{display:none}
@@ -375,7 +374,7 @@
   <section class="toolsec" id="ovw">
     <h2 class="ovw-h">한눈에 보기</h2>
     <div class="ovw" data-draw="ovw" data-source="races shortRaces otherPbs"></div>
-    <p class="note" style="margin-top:8px">풀·하프·10K 버튼을 누르면 거리별 자세한 기록이 나와요. 하프·10K 대회 기록을 아직 안 넣은 러너는 PB만 기록증 기준으로 보여요.</p>
+    <p class="note" style="margin-top:8px;font-size:12px">풀·하프·10K 버튼을 누르면 거리별 자세한 기록이 나와요. "기록증"이라고 적힌 PB는 대회 기록을 아직 안 넣고 기록증만 받은 경우예요.</p>
   </section>
 
   <section class="card toolsec" id="predict">
@@ -1546,21 +1545,21 @@ dash.draw('ovw', (el) => {
   const best = (rows) => rows.reduce((a, b) => (b.officialSec < a.officialSec ? b : a));
   const ymd = (d) => d.slice(2).replace(/-/g, '.');
   el.replaceChildren(
-    card('1. 대회 참가 횟수', (rows) => (rows.length ? [rows.length + '회', ymd(rows[0].date) + ' 첫 대회'] : ['—', '아직 기록 없음', 'none'])),
-    card('2. 최고 기록 (PB)', (rows, opb) => {
-      if (rows.length) { const b = best(rows); return [otime(b), ymd(b.date) + ' ' + b.name, 'pb']; }
+    card('대회 참가 횟수', (rows) => (rows.length ? [rows.length + '회', ''] : ['—', '', 'none'])),
+    card('최고 기록 (PB)', (rows, opb) => {
+      if (rows.length) { const b = best(rows); return [otime(b), b.race, 'pb']; }
       const o = opb && O.status === 'ok' ? O.data.find((x) => x.person === p && x.event === opb) : null;
-      return o ? [o.time, o.date.slice(2).replace(/-/g, '.') + ' ' + o.race + ' (기록증)', 'pb'] : ['—', '아직 기록 없음', 'none'];
+      return o ? [o.time, o.date.slice(2, 7).replace(/-/g, '.') + ' 기록증', 'pb'] : ['—', '', 'none'];
     }),
-    card('3. 첫 대회 대비 단축', (rows) => {
-      if (rows.length < 2) return ['—', rows.length ? '대회 1회' : '아직 기록 없음', 'none'];
+    card('첫 대회 대비 단축', (rows) => {
+      if (rows.length < 2) return ['—', '', 'none'];
       const b = best(rows), d = rows[0].officialSec - b.officialSec;
-      return d > 0 ? ['−' + F.hms(d).replace(/^0:/, ''), '첫 ' + otime(rows[0]) + ' → PB ' + otime(b)] : ['±0', '첫 대회가 PB', 'none'];
+      return d > 0 ? [F.hms(d).replace(/^0:/, ''), '첫 ' + otime(rows[0])] : ['±0', '', 'none'];
     }),
-    card('4. 최근 대회', (rows) => {
-      if (!rows.length) return ['—', '아직 기록 없음', 'none'];
+    card('최근 대회', (rows) => {
+      if (!rows.length) return ['—', '', 'none'];
       const l = rows[rows.length - 1], pv = rows[rows.length - 2];
-      return [otime(l), ymd(l.date) + ' ' + l.name + (pv ? ' · 직전 대비 ' + window.mxSDiff(l.officialSec - pv.officialSec) : '')];
+      return [otime(l), l.race];
     }),
   );
 });
